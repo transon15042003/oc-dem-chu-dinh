@@ -1,11 +1,15 @@
 import type { MetadataRoute } from "next";
 
 import { getPublishedArticles } from "@/lib/articles/queries";
+import { getActivePromotions } from "@/lib/promotions/queries";
 import { siteConfig, siteRoutes } from "@/config/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url.replace(/\/$/, "");
-  const articles = await getPublishedArticles();
+  const [articles, promotions] = await Promise.all([
+    getPublishedArticles(),
+    getActivePromotions(),
+  ]);
 
   const staticEntries = siteRoutes.map((route) => ({
     url: `${base}${route.path === "/" ? "" : route.path}`,
@@ -21,5 +25,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticEntries, ...articleEntries];
+  const promotionEntries = promotions.map((promotion) => ({
+    url: `${base}/khuyen-mai/${promotion.slug}`,
+    lastModified: new Date(promotion.updated_at),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticEntries, ...articleEntries, ...promotionEntries];
 }

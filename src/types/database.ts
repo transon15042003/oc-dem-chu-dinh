@@ -56,5 +56,22 @@ export type Promotion = {
   updated_at: string;
 };
 
+export type PromotionSummary = Pick<
+  Promotion,
+  | "id"
+  | "title"
+  | "slug"
+  | "excerpt"
+  | "cover_image_url"
+  | "status"
+  | "published_at"
+  | "starts_at"
+  | "ends_at"
+  | "discount_label"
+  | "promo_code"
+  | "created_at"
+  | "updated_at"
+>;
+
 export const CONTENT_IMAGE_BUCKET = "content-images" as const;
 export const MAX_CONTENT_IMAGE_BYTES = 2 * 1024 * 1024;
