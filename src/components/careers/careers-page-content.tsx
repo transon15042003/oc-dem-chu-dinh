@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { Check, MapPin, Phone } from "lucide-react";
 
 import { CareerApplicationSection } from "@/components/careers/career-application-form";
@@ -10,12 +9,25 @@ import { Button } from "@/components/ui/button";
 import {
   careerBenefits,
   careerInterviewAddress,
-  careerJobs,
   careerRequirements,
 } from "@/data/careers";
+import {
+  getPublishedCareerPositions,
+  getPublishedListingCareerPositions,
+} from "@/lib/careers/queries";
 import { formatHotline, hotlineHref, publicEnv } from "@/lib/env";
 
-export function CareersPageContent() {
+export async function CareersPageContent() {
+  const [listingPositions, formPositions] = await Promise.all([
+    getPublishedListingCareerPositions(),
+    getPublishedCareerPositions(),
+  ]);
+
+  const positionOptions = formPositions.map((position) => ({
+    value: position.slug,
+    label: position.title,
+  }));
+
   const hotline = publicEnv.hotline || "0938186391";
   const zaloUrl = publicEnv.zaloUrl;
 
@@ -34,17 +46,21 @@ export function CareersPageContent() {
 
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <div className="grid gap-6 lg:grid-cols-3">
-            {careerJobs.map((job) => (
-              <CareerJobCard key={job.id} job={job} />
-            ))}
-          </div>
+          {listingPositions.length > 0 ? (
+            <div className="grid gap-6 lg:grid-cols-3">
+              {listingPositions.map((position) => (
+                <CareerJobCard key={position.id} position={position} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-border p-10 text-center text-muted-foreground">
+              Đang cập nhật tin tuyển dụng. Vui lòng quay lại sau hoặc nộp hồ sơ qua form bên dưới.
+            </div>
+          )}
         </ScrollReveal>
       </section>
 
-      <Suspense fallback={null}>
-        <CareerApplicationSection />
-      </Suspense>
+      <CareerApplicationSection positionOptions={positionOptions} />
 
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <ScrollReveal>

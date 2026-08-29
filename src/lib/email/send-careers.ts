@@ -1,8 +1,8 @@
 import { siteConfig } from "@/config/site";
 import { branches } from "@/data/branches";
-import { getCareerPositionLabel } from "@/data/careers";
 import { sendTransactionalEmail } from "@/lib/email/client";
 import { formatField, wrapEmailHtml } from "@/lib/email/format";
+import { getCareerPositionBySlug } from "@/lib/careers/queries";
 import type { CareerApplicationFormValues } from "@/lib/validations/careers";
 
 function resolveBranchLabel(branchId: string): string {
@@ -13,7 +13,8 @@ function resolveBranchLabel(branchId: string): string {
 export async function sendCareerApplicationEmail(
   data: CareerApplicationFormValues,
 ): Promise<void> {
-  const positionLabel = getCareerPositionLabel(data.position);
+  const position = await getCareerPositionBySlug(data.positionSlug);
+  const positionLabel = position?.title ?? data.positionSlug;
   const branchLabel = resolveBranchLabel(data.branchId);
   const email = data.email.trim() || "—";
   const experience = data.experience?.trim() || "—";

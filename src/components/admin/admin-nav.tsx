@@ -18,6 +18,7 @@ const navItems = [
   { href: "/admin/articles", label: "Tin tức", roles: ["admin", "editor"] as UserRole[] },
   { href: "/admin/promotions", label: "Khuyến mãi", roles: ["admin", "editor"] as UserRole[] },
   { href: "/admin/event-bookings", label: "Đặt tiệc", roles: ["admin", "editor"] as UserRole[] },
+  { href: "/admin/careers", label: "Tuyển dụng", roles: ["admin", "editor"] as UserRole[] },
   { href: "/admin/users", label: "Người dùng", roles: ["admin"] as UserRole[] },
 ];
 

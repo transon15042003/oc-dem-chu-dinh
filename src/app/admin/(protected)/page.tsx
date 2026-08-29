@@ -48,6 +48,16 @@ export default async function AdminDashboardPage() {
             Xem yêu cầu đặt tiệc từ form trang chủ
           </p>
         </Link>
+        <Link
+          href="/admin/careers"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
+          <h2 className="font-semibold">Tuyển dụng</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Quản lý vị trí tuyển dụng và hồ sơ ứng viên
+          </p>
+        </Link>
       </div>
 
       {session.profile.role === "admin" ? (

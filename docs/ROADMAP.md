@@ -55,7 +55,7 @@
 - Chuyển từ portfolio clone sang **sản phẩm vận hành thật**
 - Marketing cập nhật **Article** và **Promotion** qua admin `/admin`
 - Form đặt tiệc (**Event Booking**) tách khỏi đặt bàn; lưu DB + email (v2.1)
-- **Tuyển dụng**: form email only — không DB (v2.2)
+- **Tuyển dụng**: CRUD vị trí + hồ sơ ứng tuyển qua admin; lưu DB + email (v2.2)
 - **Menu CRUD**: defer v2.4 (menu vẫn static `src/data/`)
 
 ### Stack v2 (đã chốt)
@@ -147,10 +147,12 @@ M2 — Admin ✅
 
 ```
 M1 — Public page ✅
-└── /tuyen-dung + form ứng tuyển
+├── /tuyen-dung — thẻ vị trí + form ứng tuyển (dữ liệu từ Supabase)
+└── POST /api/careers → lưu career_applications + Resend
 
-M2 — Email ✅
-└── POST /api/careers → Resend only (không DB)
+M2 — Admin CMS ✅
+├── /admin/careers — CRUD vị trí tuyển dụng (draft/publish, thẻ trang / chỉ form)
+└── /admin/career-applications — xem hồ sơ ứng viên
 ```
 
 ### Milestones v2.3 — Table Reservation → DB (tùy chọn)
@@ -184,7 +186,7 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 | Hạng mục | Trạng thái |
 |----------|------------|
 | Event Booking form + admin | ✅ v2.1 |
-| Careers `/tuyen-dung` + email | ✅ v2.2 |
+| Careers `/tuyen-dung` + admin CMS | ✅ v2.2 |
 
 ### Env bổ sung (v2)
 
@@ -214,7 +216,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 | 20 | Admin `/admin` cùng app; Auth email+password; roles `admin` / `editor` | 2026-08-29 |
 | 21 | Article: `draft` / `published`; Promotion: `promo_code` + auto-hide expired | 2026-08-29 |
 | 22 | Tiptap WYSIWYG; ảnh content max 2MB (Supabase Storage) | 2026-08-29 |
-| 23 | Event Booking v2.1: email + DB; Careers v2.2: email only; Menu admin v2.4 | 2026-08-29 |
+| 23 | Event Booking v2.1: email + DB; Careers v2.2: admin CMS + DB; Menu admin v2.4 | 2026-08-29 |
 ---
 
 ## Env variables (do bạn config)

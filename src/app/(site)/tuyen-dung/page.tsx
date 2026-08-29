@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { CareersPageContent } from "@/components/careers/careers-page-content";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
@@ -9,5 +11,9 @@ export const metadata = createPageMetadata({
 });
 
 export default function CareersPage() {
-  return <CareersPageContent />;
+  return (
+    <Suspense fallback={null}>
+      <CareersPageContent />
+    </Suspense>
+  );
 }
