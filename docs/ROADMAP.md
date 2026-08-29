@@ -102,8 +102,13 @@ v2.0 — Content System          ← slice hiện tại (in progress)
 ├── RLS + Storage bucket content-images ✅
 ├── Supabase client + middleware + /admin/login ✅
 ├── /admin/users — tạo user + đổi role (admin only) ✅
-├── /admin: CRUD Article + Promotion, Tiptap, upload ảnh ⏳
-├── Public: /tin-tuc, /khuyen-mai (+ detail), sitemap động ⏳
+├── /admin: CRUD Article + Promotion, Tiptap, upload ảnh
+│   ├── Article CRUD + Tiptap + upload ảnh ✅
+│   └── Promotion CRUD ⏳
+├── Public: /tin-tuc, /khuyen-mai (+ detail), sitemap động
+│   ├── /tin-tuc list + detail ✅
+│   ├── sitemap articles ✅
+│   └── /khuyen-mai ⏳
 └── ADR-0002, 0003, 0004 ✅
 
 v2.1 — Event Booking
