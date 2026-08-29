@@ -6,10 +6,13 @@ Hệ thống nhánh theo [Git Flow](https://nvie.com/posts/a-successful-git-bran
 
 | Nhánh | Mục đích | Deploy |
 |-------|----------|--------|
-| `main` | Production — code đã QA, sẵn sàng live | Vercel Production |
-| `develop` | Tích hợp tính năng — staging nội bộ | Vercel Preview (tùy chọn) |
+| `main` | Production — code đã QA, sẵn sàng live | Vercel **Production** |
+| `develop` | Tích hợp tính năng — **staging nội bộ (chỉ dev)** | Vercel **Preview** (branch domain cố định) |
+| `feature/*` | Tính năng đang làm | Vercel Preview (URL tạm mỗi PR) |
 
 **Quy tắc:** Không commit trực tiếp lên `main` hoặc `develop`. Mọi thay đổi đi qua Pull Request.
+
+> Chi tiết URL, env, custom domain: [`DEPLOY.md`](./DEPLOY.md) · ADR: [`adr/0005-staging-develop-branch-domain.md`](./adr/0005-staging-develop-branch-domain.md)
 
 ## Nhánh phụ
 
@@ -63,9 +66,36 @@ chore(deps): bump next to 16.3.3
 ## Pull Request
 
 - Target `develop` cho feature
-- Target `main` cho release / hotfix
-- CI phải pass (lint + build) trước khi merge
-- Squash merge cho feature; merge commit cho release
+- Target `main` cho release / hotfix (hoặc PR `develop` → `main` khi release nhỏ)
+- CI phải pass (`Lint & Build`) trước khi merge
+- Squash merge cho feature → `develop`
+- Merge commit cho `release/*` / `hotfix/*` → `main`
+- **Không** merge `develop` → `main` khi chưa QA trên staging
+
+## Deploy & staging (mô hình A)
+
+Một Vercel project, production branch `main`, staging = branch domain của `develop`.
+
+| Hành động | Kết quả deploy |
+|-----------|----------------|
+| Merge PR vào `develop` | **Staging** tự deploy (~1–2 phút) |
+| Merge PR vào `main` | **Production** tự deploy |
+| Push lên `feature/*` (chưa merge) | Chỉ Preview URL trên PR — không ảnh hưởng staging/production |
+
+**Staging URL:** https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app  
+**Production URL:** https://oc-dem-chu-dinh.vercel.app
+
+### Quy tắc khi push
+
+1. **Feature:** `feature/*` → PR → `develop` → kiểm tra staging → PR `develop` → `main`
+2. **Không force-push** lên `main` / `develop` (branch protection chặn)
+3. **Không** push secret (`.env.local`, service role key) lên Git
+4. Form email trên staging **gửi thật** (Resend Preview env) — cẩn thận khi test
+5. Supabase **chung 1 project** — dữ liệu staging = production DB (phân biệt bằng `draft` / QA discipline)
+
+### Custom domain staging
+
+Khi có domain (vd `ocdemchudinh.vn`): gắn `staging.<domain>` vào Git branch `develop` trên Vercel → cập nhật `NEXT_PUBLIC_SITE_URL` (Preview).
 
 ## Branch protection (GitHub)
 
