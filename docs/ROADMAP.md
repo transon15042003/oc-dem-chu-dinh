@@ -46,37 +46,96 @@
 
 ---
 
-## v2 — Nâng cấp (defer)
+## v2 — Sản phẩm thật (đang lên kế hoạch)
 
-### Pages thêm vào v2
+> Phiên `/grill-with-docs` 2026-08-29. Mục tiêu: chủ quán / marketing vận hành nội dung qua UI, không cần dev commit MDX.
 
-| Trang | Mô tả |
-|-------|--------|
-| Tin tức | List + chi tiết bài viết (Article) |
-| Khuyến mãi | List + chi tiết chương trình ưu đãi (Promotion) |
-| Tuyển dụng | Trang tuyển dụng + form ứng tuyển |
+### Mục tiêu
 
-### Tính năng thêm vào v2
+- Chuyển từ portfolio clone sang **sản phẩm vận hành thật**
+- Marketing cập nhật **Article** và **Promotion** qua admin `/admin`
+- Form đặt tiệc (**Event Booking**) tách khỏi đặt bàn; lưu DB + email (v2.1)
+- **Tuyển dụng**: form email only — không DB (v2.2)
+- **Menu CRUD**: defer v2.4 (menu vẫn static `src/data/`)
 
-| Tính năng | Ghi chú |
-|-----------|---------|
-| Lightbox gallery nâng cao | Zoom / pan ảnh không gian (site gốc có) |
-| Event Booking flow | Form đặt tiệc riêng (sinh nhật, công ty…) — khác Table Reservation |
-| Admin panel | CRUD menu, bài viết, khuyến mãi, xem đơn đặt bàn |
-| Form đặt bàn thật | Gửi email / webhook / lưu database |
-| Đa ngôn ngữ (i18n) | EN/VI nếu cần |
+### Stack v2 (đã chốt)
 
-### Stack thêm vào v2
+| Layer | Công nghệ | Ghi chú |
+|-------|-----------|---------|
+| Database + Auth + Storage | **Supabase** (project mới) | Content, Event Booking, RLS — ADR-0002 |
+| Admin | `/admin` trong cùng Next.js app | ADR-0003 |
+| Auth | Supabase Auth — **email + password** | Roles: `admin` / `editor` |
+| Rich text | **Tiptap** WYSIWYG | Admin soạn Article / Promotion |
+| Ảnh nội dung | Supabase Storage | Max **2MB** / file, bucket `content-images` |
+| Email | Resend (giữ từ v1) | Booking, contact, event, careers |
+| i18n | Defer | Site gốc 100% VI |
 
-| Layer | Công nghệ gợi ý | Lý do |
-|-------|-----------------|-------|
-| CMS / Content | MDX mở rộng hoặc headless CMS (Sanity, Contentful) | Tin tức, khuyến mãi cần cập nhật thường xuyên |
-| Database | Supabase hoặc PostgreSQL + Prisma | Lưu reservation, job applications |
-| Auth | NextAuth hoặc Supabase Auth | Bảo vệ admin panel |
-| Email | Resend / Nodemailer | Thông báo đặt bàn |
-| Testing | Jest + Testing Library | Coverage form & components quan trọng |
-| Component docs | Storybook | Document design system khi project lớn hơn |
-| Analytics | Vercel Analytics / GA4 | Theo dõi traffic thật |
+### Routes public (v2)
+
+| Route | Nội dung |
+|-------|----------|
+| `/tin-tuc` | Danh sách Article (`published` only) |
+| `/tin-tuc/[slug]` | Chi tiết Article |
+| `/khuyen-mai` | Danh sách Promotion (chưa hết hạn) |
+| `/khuyen-mai/[slug]` | Chi tiết Promotion |
+| `/tuyen-dung` | Trang tuyển dụng + form (v2.2) |
+| `/admin/*` | Panel nội bộ (auth required) |
+
+### Content model (tóm tắt)
+
+**Article:** `title`, `slug`, `excerpt`, `body` (HTML Tiptap), `cover_image`, `status` (`draft` \| `published`), `published_at`, timestamps.
+
+**Promotion:** Article fields + `starts_at`, `ends_at`, `discount_label`, `promo_code`. Hết hạn → **auto-hide** khỏi list public (ADR-0004).
+
+**Roles:**
+
+| Role | Quyền |
+|------|--------|
+| `editor` | CRUD Article + Promotion (draft/publish) |
+| `admin` | Editor + quản lý user/role |
+
+### Milestones v2
+
+```
+v2.0 — Content System          ← slice hiện tại (in progress)
+├── Supabase project + migrations ✅ (ref: ianpabkxuzjnksrgsvtr — xem docs/SUPABASE.md)
+├── RLS + Storage bucket content-images ✅
+├── Supabase client + middleware + /admin/login ✅
+├── /admin/users — tạo user + đổi role (admin only) ✅
+├── /admin: CRUD Article + Promotion, Tiptap, upload ảnh ⏳
+├── Public: /tin-tuc, /khuyen-mai (+ detail), sitemap động ⏳
+└── ADR-0002, 0003, 0004 ✅
+
+v2.1 — Event Booking
+├── Form riêng (khác Table Reservation) — nút "Đặt tiệc ngay" trỏ đúng luồng
+├── POST /api/event-booking → Supabase + Resend email
+└── Admin: xem danh sách Event Booking
+
+v2.2 — Careers
+├── /tuyen-dung + form ứng tuyển
+└── POST /api/careers → Resend email only (không DB)
+
+v2.3 — Table Reservation → DB (tùy chọn)
+└── Migrate đặt bàn từ email-only sang lưu Supabase + admin xem đơn
+
+v2.4 — Menu admin
+└── CRUD Menu Item qua admin (thay static menu.ts)
+
+Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
+```
+
+### Env bổ sung (v2)
+
+```env
+# Supabase (public)
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+# Supabase (server only — KHÔNG commit)
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+> Thêm vào Vercel Production + Preview. Chi tiết bootstrap admin: [`docs/SUPABASE.md`](./SUPABASE.md).
 
 ---
 
@@ -88,6 +147,12 @@
 | 2 | Phạm vi v1: 5 trang + homepage features (xem bảng trên) | 2026-08-28 |
 | 3 | Stack v1: Next.js 15 + TS + Tailwind + shadcn + Framer Motion | 2026-08-28 |
 | 4 | Repo public + branch protection `main`/`develop` (xem ADR-0001) | 2026-08-29 |
+| 18 | **v2 mục tiêu:** sản phẩm thật — marketing cập nhật content qua UI | 2026-08-29 |
+| 19 | **v2.0 slice:** Content System (Supabase + `/admin` + public pages) | 2026-08-29 |
+| 20 | Admin `/admin` cùng app; Auth email+password; roles `admin` / `editor` | 2026-08-29 |
+| 21 | Article: `draft` / `published`; Promotion: `promo_code` + auto-hide expired | 2026-08-29 |
+| 22 | Tiptap WYSIWYG; ảnh content max 2MB (Supabase Storage) | 2026-08-29 |
+| 23 | Event Booking v2.1: email + DB; Careers v2.2: email only; Menu admin v2.4 | 2026-08-29 |
 ---
 
 ## Env variables (do bạn config)

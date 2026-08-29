@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -37,3 +37,5 @@ jobs:
           NEXT_PUBLIC_SITE_URL: https://example.com
           NEXT_PUBLIC_HOTLINE: "0900000000"
           NEXT_PUBLIC_EMAIL: test@example.com
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example

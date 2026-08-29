@@ -4,10 +4,10 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 export const metadata = createPageMetadata({
   title: "Liên hệ",
   description:
-    "Liên hệ & đặt bàn Ốc Đêm Chú Đỉnh — hotline, email, form phản hồi và bản đồ chi nhánh.",
+    "Liên hệ Ốc Đêm Chú Đỉnh — hotline, email, form phản hồi và bản đồ chi nhánh.",
   path: "/lien-he",
 });
 
-export default function ContactPage() {
+export default function LienHePage() {
   return <ContactPageContent />;
 }
