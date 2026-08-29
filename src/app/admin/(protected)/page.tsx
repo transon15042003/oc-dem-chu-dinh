@@ -28,12 +28,16 @@ export default async function AdminDashboardPage() {
             Viết và quản lý bài viết tại /tin-tuc
           </p>
         </Link>
-        <div className="rounded-xl border border-dashed border-border p-6">
+        <Link
+          href="/admin/promotions"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
           <h2 className="font-semibold">Khuyến mãi</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            CRUD Promotion — đang phát triển v2.0
+            Quản lý chương trình ưu đãi tại /khuyen-mai
           </p>
-        </div>
+        </Link>
       </div>
 
       {session.profile.role === "admin" ? (

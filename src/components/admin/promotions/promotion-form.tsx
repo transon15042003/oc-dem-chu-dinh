@@ -6,51 +6,70 @@ import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 
 import {
-  createArticle,
-  deleteArticle,
-  initialArticleActionState,
-  updateArticle,
-  type ArticleActionState,
-} from "@/app/admin/(protected)/articles/actions";
-import { ArticleBodyPreview } from "@/components/admin/articles/article-body-preview";
+  createPromotion,
+  deletePromotion,
+  initialPromotionActionState,
+  updatePromotion,
+  type PromotionActionState,
+} from "@/app/admin/(protected)/promotions/actions";
+import { PromotionBodyPreview } from "@/components/admin/promotions/promotion-body-preview";
 import { RichTextEditor } from "@/components/editor/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CONTENT_CATEGORIES } from "@/lib/content/categories";
-import type { ContentCategory } from "@/lib/content/categories";
-import { cn } from "@/lib/utils";
 import { slugifyTitle } from "@/lib/articles/slug";
-import type { Article, PublicationStatus } from "@/types/database";
+import { isPromotionActive, toDatetimeLocalValue } from "@/lib/promotions/datetime";
+import { cn } from "@/lib/utils";
+import type { Promotion, PublicationStatus } from "@/types/database";
 
-type ArticleFormProps = {
+type PromotionFormProps = {
   mode: "create" | "edit";
-  article?: Article;
+  promotion?: Promotion;
 };
 
 type ContentMode = "edit" | "preview";
 
-export function ArticleForm({ mode, article }: ArticleFormProps) {
+function defaultStartsAt(): string {
+  const date = new Date();
+  date.setMinutes(0, 0, 0);
+  return toDatetimeLocalValue(date.toISOString());
+}
+
+function defaultEndsAt(): string {
+  const date = new Date();
+  date.setDate(date.getDate() + 30);
+  date.setMinutes(0, 0, 0);
+  return toDatetimeLocalValue(date.toISOString());
+}
+
+export function PromotionForm({ mode, promotion }: PromotionFormProps) {
   const boundUpdateAction =
-    mode === "edit" && article
-      ? updateArticle.bind(null, article.id)
-      : createArticle;
+    mode === "edit" && promotion
+      ? updatePromotion.bind(null, promotion.id)
+      : createPromotion;
 
   const [state, formAction, pending] = useActionState(
     boundUpdateAction,
-    initialArticleActionState,
+    initialPromotionActionState,
   );
 
-  const [title, setTitle] = useState(article?.title ?? "");
-  const [slug, setSlug] = useState(article?.slug ?? "");
-  const [slugTouched, setSlugTouched] = useState(Boolean(article?.slug));
-  const [excerpt, setExcerpt] = useState(article?.excerpt ?? "");
-  const [bodyHtml, setBodyHtml] = useState(article?.body ?? "");
-  const [category, setCategory] = useState<ContentCategory | "">(article?.category ?? "");
-  const [status, setStatus] = useState<PublicationStatus>(article?.status ?? "draft");
+  const [title, setTitle] = useState(promotion?.title ?? "");
+  const [slug, setSlug] = useState(promotion?.slug ?? "");
+  const [slugTouched, setSlugTouched] = useState(Boolean(promotion?.slug));
+  const [excerpt, setExcerpt] = useState(promotion?.excerpt ?? "");
+  const [discountLabel, setDiscountLabel] = useState(promotion?.discount_label ?? "");
+  const [promoCode, setPromoCode] = useState(promotion?.promo_code ?? "");
+  const [bodyHtml, setBodyHtml] = useState(promotion?.body ?? "");
+  const [status, setStatus] = useState<PublicationStatus>(promotion?.status ?? "draft");
+  const [startsAt, setStartsAt] = useState(
+    promotion ? toDatetimeLocalValue(promotion.starts_at) : defaultStartsAt(),
+  );
+  const [endsAt, setEndsAt] = useState(
+    promotion ? toDatetimeLocalValue(promotion.ends_at) : defaultEndsAt(),
+  );
   const [contentMode, setContentMode] = useState<ContentMode>("edit");
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(
-    article?.cover_image_url ?? null,
+    promotion?.cover_image_url ?? null,
   );
   const coverBlobRef = useRef<string | null>(null);
 
@@ -68,6 +87,12 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
       setSlug(slugifyTitle(value));
     }
   }
+
+  const canViewOnSite = isPromotionActive({
+    status,
+    starts_at: new Date(startsAt).toISOString(),
+    ends_at: new Date(endsAt).toISOString(),
+  });
 
   return (
     <form action={formAction} className="space-y-6">
@@ -95,42 +120,60 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
             }}
             required
             disabled={pending}
-            placeholder="vi-du-bai-viet"
+            placeholder="vi-du-khuyen-mai"
           />
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="category">Danh mục</Label>
-          <select
-            id="category"
-            name="category"
-            value={category}
-            onChange={(event) => setCategory(event.target.value as ContentCategory | "")}
+          <Label htmlFor="discountLabel">Nhãn ưu đãi</Label>
+          <Input
+            id="discountLabel"
+            name="discountLabel"
+            value={discountLabel}
+            onChange={(event) => setDiscountLabel(event.target.value)}
             disabled={pending}
-            className="h-9 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
-          >
-            <option value="">Chọn danh mục</option>
-            {CONTENT_CATEGORIES.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+            placeholder="Giảm 20%"
+          />
         </div>
-        <div className="flex items-end pb-2">
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              name="isFeatured"
-              value="true"
-              defaultChecked={article?.is_featured}
-              disabled={pending}
-              className="size-4 rounded border-input"
-            />
-            Bài viết nổi bật (hiển thị trên đầu /tin-tuc)
-          </label>
+        <div className="space-y-2">
+          <Label htmlFor="promoCode">Mã khuyến mãi</Label>
+          <Input
+            id="promoCode"
+            name="promoCode"
+            value={promoCode}
+            onChange={(event) => setPromoCode(event.target.value)}
+            disabled={pending}
+            placeholder="OC20"
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="startsAt">Bắt đầu</Label>
+          <Input
+            id="startsAt"
+            name="startsAt"
+            type="datetime-local"
+            value={startsAt}
+            onChange={(event) => setStartsAt(event.target.value)}
+            required
+            disabled={pending}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="endsAt">Kết thúc</Label>
+          <Input
+            id="endsAt"
+            name="endsAt"
+            type="datetime-local"
+            value={endsAt}
+            onChange={(event) => setEndsAt(event.target.value)}
+            required
+            disabled={pending}
+          />
         </div>
       </div>
 
@@ -144,14 +187,14 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
           disabled={pending}
           rows={3}
           className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm"
-          placeholder="Tóm tắt hiển thị trên danh sách tin tức"
+          placeholder="Tóm tắt hiển thị trên danh sách khuyến mãi"
         />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="coverImage">Ảnh bìa (tối đa 2MB)</Label>
         {coverPreviewUrl ? (
-          <div className="relative mb-2 aspect-[16/9] max-w-md overflow-hidden rounded-lg border border-border">
+          <div className="relative mb-2 aspect-video max-w-md overflow-hidden rounded-lg border border-border">
             <Image
               src={coverPreviewUrl}
               alt=""
@@ -161,7 +204,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
             />
           </div>
         ) : null}
-        <input type="hidden" name="coverImageUrl" value={article?.cover_image_url ?? ""} />
+        <input type="hidden" name="coverImageUrl" value={promotion?.cover_image_url ?? ""} />
         <Input
           id="coverImage"
           name="coverImage"
@@ -183,7 +226,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
               return;
             }
 
-            setCoverPreviewUrl(article?.cover_image_url ?? null);
+            setCoverPreviewUrl(promotion?.cover_image_url ?? null);
           }}
         />
       </div>
@@ -207,20 +250,25 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
 
         <div className={contentMode === "edit" ? "block" : "hidden"}>
           <RichTextEditor
-            key={article?.id ?? "new"}
+            key={promotion?.id ?? "new"}
             name="body"
-            defaultValue={article?.body ?? ""}
+            defaultValue={promotion?.body ?? ""}
             onChange={setBodyHtml}
           />
         </div>
 
         {contentMode === "preview" ? (
-          <ArticleBodyPreview
+          <PromotionBodyPreview
             title={title}
             excerpt={excerpt}
             body={bodyHtml}
             coverImageUrl={coverPreviewUrl}
-            category={category || null}
+            startsAt={startsAt}
+            endsAt={endsAt}
+            discountLabel={discountLabel}
+            promoCode={promoCode}
+            slug={slug}
+            variant="detail"
           />
         ) : null}
       </div>
@@ -248,16 +296,20 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
 
       <div className="flex flex-wrap gap-3">
         <Button type="submit" disabled={pending}>
-          {pending ? "Đang lưu..." : mode === "create" ? "Tạo bài viết" : "Lưu thay đổi"}
+          {pending ? "Đang lưu..." : mode === "create" ? "Tạo khuyến mãi" : "Lưu thay đổi"}
         </Button>
-        {mode === "edit" && article ? (
+        {mode === "edit" && promotion ? (
           <>
-            {status === "published" ? (
-              <Button type="button" variant="outline" render={<Link href={`/tin-tuc/${slug}`} target="_blank" />}>
+            {canViewOnSite ? (
+              <Button
+                type="button"
+                variant="outline"
+                render={<Link href={`/khuyen-mai/${slug}`} target="_blank" />}
+              >
                 Xem trên site
               </Button>
             ) : null}
-            <DeleteArticleButton articleId={article.id} title={article.title} />
+            <DeletePromotionButton promotionId={promotion.id} title={promotion.title} />
           </>
         ) : null}
       </div>
@@ -294,17 +346,17 @@ function ContentModeButton({
   );
 }
 
-function DeleteArticleButton({ articleId, title }: { articleId: string; title: string }) {
+function DeletePromotionButton({ promotionId, title }: { promotionId: string; title: string }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
 
   async function handleDelete() {
-    const confirmed = window.confirm(`Xóa bài viết "${title}"? Hành động không thể hoàn tác.`);
+    const confirmed = window.confirm(`Xóa khuyến mãi "${title}"? Hành động không thể hoàn tác.`);
 
     if (!confirmed) return;
 
     setPending(true);
-    const result: ArticleActionState = await deleteArticle(articleId);
+    const result: PromotionActionState = await deletePromotion(promotionId);
 
     if (!result.ok) {
       window.alert(result.message);
@@ -312,13 +364,13 @@ function DeleteArticleButton({ articleId, title }: { articleId: string; title: s
       return;
     }
 
-    router.push("/admin/articles");
+    router.push("/admin/promotions");
     router.refresh();
   }
 
   return (
     <Button type="button" variant="destructive" disabled={pending} onClick={() => void handleDelete()}>
-      {pending ? "Đang xóa..." : "Xóa bài"}
+      {pending ? "Đang xóa..." : "Xóa"}
     </Button>
   );
 }

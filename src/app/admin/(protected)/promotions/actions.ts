@@ -4,41 +4,34 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { ensureUniqueSlug, slugifyTitle } from "@/lib/articles/slug";
-import { getExistingArticleSlugs } from "@/lib/articles/queries";
+import { toIsoFromDatetimeLocal } from "@/lib/promotions/datetime";
+import { getExistingPromotionSlugs } from "@/lib/promotions/queries";
 import { requireRole } from "@/lib/auth/session";
 import { uploadContentImage } from "@/lib/content/upload-image";
 import { createClient } from "@/lib/supabase/server";
-import { articleFormSchema } from "@/lib/validations/article";
+import { promotionFormSchema } from "@/lib/validations/promotion";
 import type { PublicationStatus } from "@/types/database";
 
-export type ArticleActionState = {
+export type PromotionActionState = {
   ok: boolean;
   message: string;
 };
 
-const initialArticleActionState: ArticleActionState = { ok: false, message: "" };
+const initialPromotionActionState: PromotionActionState = { ok: false, message: "" };
 
-function parseArticleForm(formData: FormData) {
-  return articleFormSchema.safeParse({
+function parsePromotionForm(formData: FormData) {
+  return promotionFormSchema.safeParse({
     title: formData.get("title"),
     slug: formData.get("slug"),
     excerpt: formData.get("excerpt") ?? "",
     body: formData.get("body"),
     status: formData.get("status"),
     coverImageUrl: formData.get("coverImageUrl") ?? "",
-    category: formData.get("category") ?? "",
-    isFeatured: formData.get("isFeatured") === "true" ? "true" : "false",
+    startsAt: formData.get("startsAt"),
+    endsAt: formData.get("endsAt"),
+    discountLabel: formData.get("discountLabel") ?? "",
+    promoCode: formData.get("promoCode") ?? "",
   });
-}
-
-function articleMetaFromForm(parsed: {
-  category?: string;
-  isFeatured?: "true" | "false";
-}) {
-  return {
-    category: parsed.category || null,
-    is_featured: parsed.isFeatured === "true",
-  };
 }
 
 async function resolveCoverImageUrl(
@@ -73,7 +66,7 @@ async function resolveSlug(
   excludeId?: string,
 ): Promise<string> {
   const baseSlug = slugInput.trim() || slugifyTitle(title);
-  const existing = await getExistingArticleSlugs(excludeId);
+  const existing = await getExistingPromotionSlugs(excludeId);
   return ensureUniqueSlug(baseSlug, existing);
 }
 
@@ -88,12 +81,12 @@ function publishedAtForStatus(
   return null;
 }
 
-export async function createArticle(
-  _prev: ArticleActionState,
+export async function createPromotion(
+  _prev: PromotionActionState,
   formData: FormData,
-): Promise<ArticleActionState> {
+): Promise<PromotionActionState> {
   const session = await requireRole(["admin", "editor"]);
-  const parsed = parseArticleForm(formData);
+  const parsed = parsePromotionForm(formData);
 
   if (!parsed.success) {
     return {
@@ -110,16 +103,10 @@ export async function createArticle(
   const slug = await resolveSlug(parsed.data.title, parsed.data.slug);
   const status = parsed.data.status;
   const publishedAt = publishedAtForStatus(status, null);
-  const meta = articleMetaFromForm(parsed.data);
 
   const supabase = await createClient();
-
-  if (meta.is_featured) {
-    await supabase.from("articles").update({ is_featured: false });
-  }
-
   const { data, error } = await supabase
-    .from("articles")
+    .from("promotions")
     .insert({
       title: parsed.data.title,
       slug,
@@ -128,8 +115,10 @@ export async function createArticle(
       cover_image_url: cover.url,
       status,
       published_at: publishedAt,
-      category: meta.category,
-      is_featured: meta.is_featured,
+      starts_at: toIsoFromDatetimeLocal(parsed.data.startsAt),
+      ends_at: toIsoFromDatetimeLocal(parsed.data.endsAt),
+      discount_label: parsed.data.discountLabel || null,
+      promo_code: parsed.data.promoCode || null,
       author_id: session.userId,
     })
     .select("id")
@@ -139,18 +128,18 @@ export async function createArticle(
     return { ok: false, message: error.message };
   }
 
-  revalidatePath("/admin/articles");
-  revalidatePath("/tin-tuc");
-  redirect(`/admin/articles/${data.id}/edit`);
+  revalidatePath("/admin/promotions");
+  revalidatePath("/khuyen-mai");
+  redirect(`/admin/promotions/${data.id}/edit`);
 }
 
-export async function updateArticle(
-  articleId: string,
-  _prev: ArticleActionState,
+export async function updatePromotion(
+  promotionId: string,
+  _prev: PromotionActionState,
   formData: FormData,
-): Promise<ArticleActionState> {
+): Promise<PromotionActionState> {
   await requireRole(["admin", "editor"]);
-  const parsed = parseArticleForm(formData);
+  const parsed = parsePromotionForm(formData);
 
   if (!parsed.success) {
     return {
@@ -161,13 +150,13 @@ export async function updateArticle(
 
   const supabase = await createClient();
   const { data: existing, error: fetchError } = await supabase
-    .from("articles")
+    .from("promotions")
     .select("published_at, cover_image_url, slug")
-    .eq("id", articleId)
+    .eq("id", promotionId)
     .single();
 
   if (fetchError || !existing) {
-    return { ok: false, message: "Không tìm thấy bài viết." };
+    return { ok: false, message: "Không tìm thấy khuyến mãi." };
   }
 
   const cover = await resolveCoverImageUrl(formData, existing.cover_image_url);
@@ -175,17 +164,12 @@ export async function updateArticle(
     return { ok: false, message: cover.error };
   }
 
-  const slug = await resolveSlug(parsed.data.title, parsed.data.slug, articleId);
+  const slug = await resolveSlug(parsed.data.title, parsed.data.slug, promotionId);
   const status = parsed.data.status;
   const publishedAt = publishedAtForStatus(status, existing.published_at);
-  const meta = articleMetaFromForm(parsed.data);
-
-  if (meta.is_featured) {
-    await supabase.from("articles").update({ is_featured: false }).neq("id", articleId);
-  }
 
   const { error } = await supabase
-    .from("articles")
+    .from("promotions")
     .update({
       title: parsed.data.title,
       slug,
@@ -194,40 +178,42 @@ export async function updateArticle(
       cover_image_url: cover.url,
       status,
       published_at: publishedAt,
-      category: meta.category,
-      is_featured: meta.is_featured,
+      starts_at: toIsoFromDatetimeLocal(parsed.data.startsAt),
+      ends_at: toIsoFromDatetimeLocal(parsed.data.endsAt),
+      discount_label: parsed.data.discountLabel || null,
+      promo_code: parsed.data.promoCode || null,
     })
-    .eq("id", articleId);
+    .eq("id", promotionId);
 
   if (error) {
     return { ok: false, message: error.message };
   }
 
-  revalidatePath("/admin/articles");
-  revalidatePath(`/admin/articles/${articleId}/edit`);
-  revalidatePath("/tin-tuc");
-  revalidatePath(`/tin-tuc/${existing.slug}`);
+  revalidatePath("/admin/promotions");
+  revalidatePath(`/admin/promotions/${promotionId}/edit`);
+  revalidatePath("/khuyen-mai");
+  revalidatePath(`/khuyen-mai/${existing.slug}`);
   if (slug !== existing.slug) {
-    revalidatePath(`/tin-tuc/${slug}`);
+    revalidatePath(`/khuyen-mai/${slug}`);
   }
 
-  return { ok: true, message: "Đã lưu bài viết." };
+  return { ok: true, message: "Đã lưu khuyến mãi." };
 }
 
-export async function deleteArticle(articleId: string): Promise<ArticleActionState> {
+export async function deletePromotion(promotionId: string): Promise<PromotionActionState> {
   await requireRole(["admin", "editor"]);
 
   const supabase = await createClient();
-  const { error } = await supabase.from("articles").delete().eq("id", articleId);
+  const { error } = await supabase.from("promotions").delete().eq("id", promotionId);
 
   if (error) {
     return { ok: false, message: error.message };
   }
 
-  revalidatePath("/admin/articles");
-  revalidatePath("/tin-tuc");
+  revalidatePath("/admin/promotions");
+  revalidatePath("/khuyen-mai");
 
-  return { ok: true, message: "Đã xóa bài viết." };
+  return { ok: true, message: "Đã xóa khuyến mãi." };
 }
 
-export { initialArticleActionState };
+export { initialPromotionActionState };

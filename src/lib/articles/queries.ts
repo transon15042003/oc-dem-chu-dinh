@@ -4,18 +4,22 @@ import { createClient } from "@/lib/supabase/server";
 import type { Article, ArticleSummary } from "@/types/database";
 
 const articleColumns =
-  "id, title, slug, excerpt, body, cover_image_url, status, published_at, author_id, created_at, updated_at" as const;
+  "id, title, slug, excerpt, body, cover_image_url, status, published_at, category, is_featured, author_id, created_at, updated_at" as const;
 
 const articleListColumns =
-  "id, title, slug, excerpt, cover_image_url, status, published_at, created_at, updated_at" as const;
+  "id, title, slug, excerpt, body, cover_image_url, status, published_at, category, is_featured, created_at, updated_at" as const;
 
-export const getPublishedArticles = cache(async (): Promise<ArticleSummary[]> => {
+const articleAdminListColumns =
+  "id, title, slug, excerpt, cover_image_url, status, published_at, category, is_featured, created_at, updated_at" as const;
+
+export const getPublishedArticles = cache(async (): Promise<Article[]> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("articles")
     .select(articleListColumns)
     .eq("status", "published")
+    .order("is_featured", { ascending: false })
     .order("published_at", { ascending: false, nullsFirst: false });
 
   if (error) {
@@ -23,7 +27,7 @@ export const getPublishedArticles = cache(async (): Promise<ArticleSummary[]> =>
     return [];
   }
 
-  return (data ?? []) as ArticleSummary[];
+  return (data ?? []) as Article[];
 });
 
 export const getPublishedArticleBySlug = cache(async (slug: string): Promise<Article | null> => {
@@ -49,7 +53,7 @@ export const getAdminArticles = cache(async (): Promise<ArticleSummary[]> => {
 
   const { data, error } = await supabase
     .from("articles")
-    .select(articleListColumns)
+    .select(articleAdminListColumns)
     .order("updated_at", { ascending: false });
 
   if (error) {
