@@ -465,17 +465,32 @@ M5 — Polish & deploy
 ## Deploy Vercel (M5) ✅
 
 **Production URL:** https://oc-dem-chu-dinh.vercel.app  
+**Staging URL (`develop`):** https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app  
 **Dashboard:** https://vercel.com/tran-sons-projects-703bf65b/oc-dem-chu-dinh/settings
+
+> Chi tiết đầy đủ: [`docs/DEPLOY.md`](./DEPLOY.md) · Git Flow: [`docs/GITFLOW.md`](./GITFLOW.md)
+
+### Môi trường (đã chốt v2)
+
+| Môi trường | Branch | Đối tượng | Supabase | Email form |
+|------------|--------|-----------|----------|------------|
+| Production | `main` | Khách / chủ quán | Chung 1 project | Gửi thật |
+| Staging | `develop` | Chỉ dev | Chung 1 project | Gửi thật |
+| Preview PR | `feature/*` | Dev (tạm) | Chung 1 project | Gửi thật |
+
+Custom domain staging (`staging.<domain>`) → gắn branch `develop` khi mua domain.
 
 ### Chuẩn bị
 
-1. Push repo lên GitHub (hoặc `vercel deploy` từ máy local).
-2. Import project trên [vercel.com/new](https://vercel.com/new) — framework **Next.js** (auto-detect).
-3. Thêm **Environment Variables** (Production + Preview):
+1. Push repo lên GitHub — Vercel auto-deploy theo branch.
+2. **Production branch** = `main` trên Vercel.
+3. Thêm **Environment Variables** (Production + Preview + Development):
 
 | Biến | Bắt buộc | Ghi chú |
 |------|----------|---------|
-| `NEXT_PUBLIC_SITE_URL` | ✅ | URL production, vd `https://oc-dem-chu-dinh.vercel.app` |
+| `NEXT_PUBLIC_SITE_URL` | ✅ | Production: URL production · **Preview: URL staging** |
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ v2 | Cùng project mọi môi trường |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ v2 | |
 | `NEXT_PUBLIC_HOTLINE` | ✅ | Hiển thị trên site |
 | `NEXT_PUBLIC_EMAIL` | ✅ | |
 | `NEXT_PUBLIC_ZALO_URL` | | |
@@ -488,7 +503,7 @@ M5 — Polish & deploy
 | `BOOKING_FROM_EMAIL` | ✅ | Domain đã verify Resend |
 | `BOOKING_NOTIFICATION_EMAIL` | ✅ | Email nhận thông báo |
 
-4. Deploy → gửi **Preview URL** cho chủ duyệt trước khi promote Production.
+4. QA trên **staging** (`develop`) trước khi merge lên `main`.
 
 ### CLI (tùy chọn)
 
@@ -501,4 +516,4 @@ npx vercel --prod   # production
 
 - Kiểm tra `/robots.txt`, `/sitemap.xml`
 - Test share link Facebook/Zalo (OG image từ CDN gốc)
-- Google Search Console: submit sitemap
+- Google Search Console: submit sitemap (production domain)
