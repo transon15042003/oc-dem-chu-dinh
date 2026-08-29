@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { CACHE_TAGS } from "@/lib/cache/tags";
 import { ensureUniqueSlug, slugifyTitle } from "@/lib/articles/slug";
 import { toIsoFromDatetimeLocal } from "@/lib/promotions/datetime";
 import { getExistingPromotionSlugs } from "@/lib/promotions/queries";
@@ -130,6 +131,7 @@ export async function createPromotion(
 
   revalidatePath("/admin/promotions");
   revalidatePath("/khuyen-mai");
+  revalidateTag(CACHE_TAGS.promotions, "max");
   redirect(`/admin/promotions/${data.id}/edit`);
 }
 
@@ -196,6 +198,11 @@ export async function updatePromotion(
   if (slug !== existing.slug) {
     revalidatePath(`/khuyen-mai/${slug}`);
   }
+  revalidateTag(CACHE_TAGS.promotions, "max");
+  revalidateTag(`promotion:${existing.slug}`, "max");
+  if (slug !== existing.slug) {
+    revalidateTag(`promotion:${slug}`, "max");
+  }
 
   return { ok: true, message: "Đã lưu khuyến mãi." };
 }
@@ -212,6 +219,7 @@ export async function deletePromotion(promotionId: string): Promise<PromotionAct
 
   revalidatePath("/admin/promotions");
   revalidatePath("/khuyen-mai");
+  revalidateTag(CACHE_TAGS.promotions, "max");
 
   return { ok: true, message: "Đã xóa khuyến mãi." };
 }

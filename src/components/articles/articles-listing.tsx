@@ -6,11 +6,11 @@ import { useMemo, useState } from "react";
 import { ArticleFeaturedCard } from "@/components/articles/article-featured-card";
 import { ArticleGridCard } from "@/components/articles/article-grid-card";
 import { CONTENT_CATEGORIES, type ContentCategory } from "@/lib/content/categories";
-import type { Article } from "@/types/database";
+import type { ArticleSummary } from "@/types/database";
 import { cn } from "@/lib/utils";
 
 type ArticlesListingProps = {
-  articles: Article[];
+  articles: ArticleSummary[];
   initialSearch?: string;
 };
 

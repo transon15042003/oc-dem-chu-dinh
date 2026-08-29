@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { CACHE_TAGS } from "@/lib/cache/tags";
 import { ensureUniqueSlug, slugifyTitle } from "@/lib/articles/slug";
 import { getExistingArticleSlugs } from "@/lib/articles/queries";
 import { requireRole } from "@/lib/auth/session";
@@ -141,6 +142,7 @@ export async function createArticle(
 
   revalidatePath("/admin/articles");
   revalidatePath("/tin-tuc");
+  revalidateTag(CACHE_TAGS.articles, "max");
   redirect(`/admin/articles/${data.id}/edit`);
 }
 
@@ -210,6 +212,11 @@ export async function updateArticle(
   if (slug !== existing.slug) {
     revalidatePath(`/tin-tuc/${slug}`);
   }
+  revalidateTag(CACHE_TAGS.articles, "max");
+  revalidateTag(`article:${existing.slug}`, "max");
+  if (slug !== existing.slug) {
+    revalidateTag(`article:${slug}`, "max");
+  }
 
   return { ok: true, message: "Đã lưu bài viết." };
 }
@@ -226,6 +233,7 @@ export async function deleteArticle(articleId: string): Promise<ArticleActionSta
 
   revalidatePath("/admin/articles");
   revalidatePath("/tin-tuc");
+  revalidateTag(CACHE_TAGS.articles, "max");
 
   return { ok: true, message: "Đã xóa bài viết." };
 }

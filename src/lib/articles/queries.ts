@@ -1,37 +1,40 @@
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
+import { CACHE_TAGS, CONTENT_REVALIDATE_SECONDS } from "@/lib/cache/tags";
 import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { Article, ArticleSummary } from "@/types/database";
 
 const articleColumns =
   "id, title, slug, excerpt, body, cover_image_url, status, published_at, category, is_featured, author_id, created_at, updated_at" as const;
 
-const articleListColumns =
-  "id, title, slug, excerpt, body, cover_image_url, status, published_at, category, is_featured, created_at, updated_at" as const;
+const articleSummaryPublicColumns =
+  "id, title, slug, excerpt, cover_image_url, status, published_at, category, is_featured, created_at, updated_at" as const;
 
 const articleAdminListColumns =
   "id, title, slug, excerpt, cover_image_url, status, published_at, category, is_featured, created_at, updated_at" as const;
 
-export const getPublishedArticles = cache(async (): Promise<Article[]> => {
-  const supabase = await createClient();
+async function fetchPublishedArticleSummaries(): Promise<ArticleSummary[]> {
+  const supabase = createPublicClient();
 
   const { data, error } = await supabase
     .from("articles")
-    .select(articleListColumns)
+    .select(articleSummaryPublicColumns)
     .eq("status", "published")
     .order("is_featured", { ascending: false })
     .order("published_at", { ascending: false, nullsFirst: false });
 
   if (error) {
-    console.error("[articles] getPublishedArticles:", error.message);
+    console.error("[articles] fetchPublishedArticleSummaries:", error.message);
     return [];
   }
 
-  return (data ?? []) as Article[];
-});
+  return (data ?? []) as ArticleSummary[];
+}
 
-export const getPublishedArticleBySlug = cache(async (slug: string): Promise<Article | null> => {
-  const supabase = await createClient();
+async function fetchPublishedArticleBySlug(slug: string): Promise<Article | null> {
+  const supabase = createPublicClient();
 
   const { data, error } = await supabase
     .from("articles")
@@ -41,11 +44,35 @@ export const getPublishedArticleBySlug = cache(async (slug: string): Promise<Art
     .maybeSingle();
 
   if (error) {
-    console.error("[articles] getPublishedArticleBySlug:", error.message);
+    console.error("[articles] fetchPublishedArticleBySlug:", error.message);
     return null;
   }
 
   return (data as Article | null) ?? null;
+}
+
+export const getPublishedArticleSummaries = cache(
+  unstable_cache(fetchPublishedArticleSummaries, ["published-article-summaries"], {
+    revalidate: CONTENT_REVALIDATE_SECONDS,
+    tags: [CACHE_TAGS.articles],
+  }),
+);
+
+export const getPublishedArticleBySlug = cache(async (slug: string): Promise<Article | null> => {
+  return unstable_cache(
+    () => fetchPublishedArticleBySlug(slug),
+    ["published-article", slug],
+    {
+      revalidate: CONTENT_REVALIDATE_SECONDS,
+      tags: [CACHE_TAGS.articles, `article:${slug}`],
+    },
+  )();
+});
+
+/** @deprecated Prefer getPublishedArticleSummaries for list/sidebar views. */
+export const getPublishedArticles = cache(async (): Promise<Article[]> => {
+  const summaries = await getPublishedArticleSummaries();
+  return summaries as Article[];
 });
 
 export const getAdminArticles = cache(async (): Promise<ArticleSummary[]> => {
@@ -93,4 +120,9 @@ export async function getExistingArticleSlugs(excludeId?: string): Promise<strin
   return (data ?? [])
     .filter((row) => row.id !== excludeId)
     .map((row) => row.slug as string);
+}
+
+export async function getPublishedArticleSlugs(): Promise<string[]> {
+  const articles = await getPublishedArticleSummaries();
+  return articles.map((article) => article.slug);
 }

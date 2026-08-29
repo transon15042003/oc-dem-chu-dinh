@@ -2,12 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Clock } from "lucide-react";
 
-import { formatArticleDateShort, formatReadingTime } from "@/lib/articles/display";
+import { formatArticleDateShort, formatReadingTimeForSummary } from "@/lib/articles/display";
 import { getContentCategoryLabel } from "@/lib/content/categories";
-import type { Article } from "@/types/database";
+import type { ArticleSummary } from "@/types/database";
 
 type ArticleGridCardProps = {
-  article: Article;
+  article: ArticleSummary;
 };
 
 export function ArticleGridCard({ article }: ArticleGridCardProps) {
@@ -61,7 +61,7 @@ export function ArticleGridCard({ article }: ArticleGridCardProps) {
             <ChevronRight className="size-3" aria-hidden />
           </Link>
           <span className="text-[10px] font-bold text-muted-foreground">
-            {formatReadingTime(article.body)}
+            {formatReadingTimeForSummary(article.excerpt)}
           </span>
         </div>
       </div>
