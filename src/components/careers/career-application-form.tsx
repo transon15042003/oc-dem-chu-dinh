@@ -256,7 +256,7 @@ export function CareerApplicationSection({ positionOptions }: CareerApplicationS
   return (
     <section
       id={careersApplicationSectionId}
-      className="scroll-mt-28 border-y border-border bg-muted/20 py-12 sm:py-16"
+      className="scroll-mt-site-header border-y border-border bg-muted/20 py-12 sm:py-16"
     >
       <div className="mx-auto max-w-3xl space-y-6 px-4 sm:px-6 lg:px-8">
         <div className="text-center">

@@ -12,7 +12,7 @@ type HeaderProps = {
 
 export function Header({ currentPath = "/" }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-brand-dark/95 backdrop-blur-md">
+    <header className="border-b border-border bg-brand-dark/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
         <Link href="/" className="group flex items-center gap-3">
           <div className="flex size-11 items-center justify-center rounded-full border border-brand-gold/40 bg-brand-red/20 text-sm font-bold text-brand-gold transition-colors group-hover:border-brand-gold">

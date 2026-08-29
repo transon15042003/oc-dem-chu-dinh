@@ -57,7 +57,7 @@ function MenuCategorySection({
     <ScrollReveal as="section" className="space-y-5">
       <div
         id={`menu-${category.id}`}
-        className="scroll-mt-44 flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between"
+        className="scroll-mt-site-chrome flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
           <span className="h-7 w-1.5 shrink-0 rounded-full bg-brand-red shadow" />
@@ -192,7 +192,7 @@ export function MenuPageContent() {
         </div>
       </section>
 
-      <section className="sticky top-14 z-30 bg-brand-dark/95 py-3.5 backdrop-blur-md">
+      <section className="sticky top-site-header z-30 bg-brand-dark/95 py-3.5 backdrop-blur-md">
         <div className="mx-auto max-w-7xl space-y-3 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
             <div className="relative w-full sm:w-96">
@@ -264,7 +264,7 @@ export function MenuPageContent() {
 
       <div
         id="menu-dishes"
-        className="mx-auto max-w-7xl scroll-mt-44 space-y-12 px-4 pb-10 sm:space-y-16 sm:px-6 sm:pb-16 lg:px-8"
+        className="mx-auto max-w-7xl scroll-mt-site-chrome space-y-12 px-4 pb-10 sm:space-y-16 sm:px-6 sm:pb-16 lg:px-8"
       >
         {showPoster ? (
           <ScrollReveal as="section" className="space-y-4">

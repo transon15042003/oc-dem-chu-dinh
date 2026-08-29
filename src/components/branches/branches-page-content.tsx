@@ -73,7 +73,7 @@ export function BranchesPageContent() {
                 as="article"
                 id={branch.id}
                 delay={branchIndex * 0.06}
-                className="scroll-mt-28 overflow-hidden rounded-3xl border border-brand-gold/20 bg-brand-dark-soft shadow-xl"
+                className="scroll-mt-site-header overflow-hidden rounded-3xl border border-brand-gold/20 bg-brand-dark-soft shadow-xl"
               >
                 <div className="grid grid-cols-1 lg:grid-cols-12">
                   <div className="flex flex-col justify-between space-y-6 p-6 sm:p-8 lg:col-span-7">
