@@ -1,9 +1,11 @@
 import Link from "next/link";
 
-import { requireAdminSession } from "@/lib/auth/session";
+import { getSessionProfile } from "@/lib/auth/session";
 
 export default async function AdminDashboardPage() {
-  const session = await requireAdminSession();
+  // Layout đã requireAdminSession; getSessionProfile dùng React cache() — không gọi Supabase lại.
+  const session = await getSessionProfile();
+  if (!session) return null;
 
   return (
     <div className="space-y-6">
@@ -16,22 +18,36 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-dashed border-border p-6">
+        <Link
+          href="/admin/articles"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
           <h2 className="font-semibold">Tin tức</h2>
-          <p className="mt-2 text-sm text-muted-foreground">CRUD Article — đang phát triển v2.0</p>
-        </div>
-        <div className="rounded-xl border border-dashed border-border p-6">
+          <p className="mt-2 text-sm text-muted-foreground">
+            Viết và quản lý bài viết tại /tin-tuc
+          </p>
+        </Link>
+        <Link
+          href="/admin/promotions"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
           <h2 className="font-semibold">Khuyến mãi</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            CRUD Promotion — đang phát triển v2.0
+            Quản lý chương trình ưu đãi tại /khuyen-mai
           </p>
-        </div>
+        </Link>
       </div>
 
       {session.profile.role === "admin" ? (
         <p className="text-sm">
           Quản lý tài khoản:{" "}
-          <Link href="/admin/users" className="font-medium text-brand-red hover:underline">
+          <Link
+            href="/admin/users"
+            prefetch={false}
+            className="font-medium text-brand-red hover:underline"
+          >
             /admin/users
           </Link>
         </p>

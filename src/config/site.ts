@@ -31,6 +31,8 @@ export const mainNav: NavItem[] = [
   { label: "Trang chủ", href: "/" },
   { label: "Giới thiệu", href: "/gioi-thieu" },
   { label: "Thực đơn", href: "/thuc-don" },
+  { label: "Tin tức", href: "/tin-tuc" },
+  { label: "Khuyến mãi", href: "/khuyen-mai" },
   { label: "Chi nhánh", href: "/chi-nhanh" },
   { label: "Liên hệ", href: "/lien-he" },
 ];
@@ -41,6 +43,8 @@ export const siteRoutes = [
   { path: "/" as const, changeFrequency: "weekly" as const, priority: 1 },
   { path: "/gioi-thieu" as const, changeFrequency: "monthly" as const, priority: 0.8 },
   { path: "/thuc-don" as const, changeFrequency: "weekly" as const, priority: 0.9 },
+  { path: "/tin-tuc" as const, changeFrequency: "weekly" as const, priority: 0.85 },
+  { path: "/khuyen-mai" as const, changeFrequency: "weekly" as const, priority: 0.85 },
   { path: "/chi-nhanh" as const, changeFrequency: "monthly" as const, priority: 0.85 },
   { path: "/lien-he" as const, changeFrequency: "monthly" as const, priority: 0.8 },
 ];

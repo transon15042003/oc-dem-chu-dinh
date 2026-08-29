@@ -15,6 +15,8 @@ type AdminNavProps = {
 
 const navItems = [
   { href: "/admin", label: "Tổng quan", roles: ["admin", "editor"] as UserRole[] },
+  { href: "/admin/articles", label: "Tin tức", roles: ["admin", "editor"] as UserRole[] },
+  { href: "/admin/promotions", label: "Khuyến mãi", roles: ["admin", "editor"] as UserRole[] },
   { href: "/admin/users", label: "Người dùng", roles: ["admin"] as UserRole[] },
 ];
 
@@ -46,9 +48,12 @@ export function AdminNav({ role, email }: AdminNavProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={false}
                 className={cn(
                   "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  pathname === item.href
+                  pathname === item.href ||
+                    (item.href !== "/admin" && pathname.startsWith(`${item.href}/`)) ||
+                    (item.href !== "/admin" && pathname.startsWith(item.href))
                     ? "bg-brand-red text-on-red"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}

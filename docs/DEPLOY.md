@@ -44,6 +44,8 @@ QA trên staging OK → PR develop → main   →  Production deploy
 
 Dashboard: https://vercel.com/tran-sons-projects-703bf65b/oc-dem-chu-dinh/settings/environment-variables
 
+**Server region:** `vercel.json` đặt `sin1` (Singapore) để gần Supabase `ap-southeast-1` — giảm latency admin/auth.
+
 ---
 
 ## GitHub — đã cấu hình ✅

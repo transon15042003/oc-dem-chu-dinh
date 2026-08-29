@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useOptimistic, useTransition } from "react";
 
 import {
   createAdminUser,
@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Profile } from "@/types/database";
+import type { Profile, UserRole } from "@/types/database";
 
 const initialState: UserActionState = { ok: false, message: "" };
 
@@ -92,7 +92,20 @@ type UsersTableProps = {
   currentUserId: string;
 };
 
+type RoleOptimisticUpdate = {
+  userId: string;
+  role: UserRole;
+};
+
 export function UsersTable({ users, currentUserId }: UsersTableProps) {
+  const [optimisticUsers, applyOptimisticRole] = useOptimistic(
+    users,
+    (currentUsers, update: RoleOptimisticUpdate) =>
+      currentUsers.map((user) =>
+        user.id === update.userId ? { ...user, role: update.role } : user,
+      ),
+  );
+
   return (
     <div className="overflow-x-auto rounded-xl border border-border">
       <table className="min-w-full text-sm">
@@ -105,7 +118,7 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {optimisticUsers.map((user) => (
             <tr key={user.id} className="border-t border-border">
               <td className="px-4 py-3">{user.email}</td>
               <td className="px-4 py-3">{user.full_name ?? "—"}</td>
@@ -114,7 +127,11 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
                 {user.id === currentUserId ? (
                   <span className="text-muted-foreground">Tài khoản hiện tại</span>
                 ) : (
-                  <RoleForm userId={user.id} currentRole={user.role} />
+                  <RoleForm
+                    userId={user.id}
+                    currentRole={user.role}
+                    onOptimisticRole={applyOptimisticRole}
+                  />
                 )}
               </td>
             </tr>
@@ -125,14 +142,33 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
   );
 }
 
-function RoleForm({ userId, currentRole }: { userId: string; currentRole: Profile["role"] }) {
-  const [state, action, pending] = useActionState(updateUserRole, initialState);
+type RoleFormProps = {
+  userId: string;
+  currentRole: Profile["role"];
+  onOptimisticRole: (update: RoleOptimisticUpdate) => void;
+};
+
+function RoleForm({ userId, currentRole, onOptimisticRole }: RoleFormProps) {
+  const [state, formAction, pending] = useActionState(updateUserRole, initialState);
+  const [, startTransition] = useTransition();
+
+  function handleSubmit(formData: FormData) {
+    const role = formData.get("role");
+
+    startTransition(() => {
+      if (role === "admin" || role === "editor") {
+        onOptimisticRole({ userId, role });
+      }
+      formAction(formData);
+    });
+  }
 
   return (
-    <form action={action} className="flex flex-wrap items-center gap-2">
+    <form action={handleSubmit} className="flex flex-wrap items-center gap-2">
       <input type="hidden" name="userId" value={userId} />
       <select
         name="role"
+        key={currentRole}
         defaultValue={currentRole}
         disabled={pending}
         className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm"
@@ -144,7 +180,7 @@ function RoleForm({ userId, currentRole }: { userId: string; currentRole: Profil
         ))}
       </select>
       <Button type="submit" size="sm" variant="outline" disabled={pending}>
-        Lưu
+        {pending ? "Đang lưu..." : "Lưu"}
       </Button>
       {state.message && !state.ok ? (
         <span className="text-xs text-destructive">{state.message}</span>

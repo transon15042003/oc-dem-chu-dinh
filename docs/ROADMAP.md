@@ -94,35 +94,88 @@
 | `editor` | CRUD Article + Promotion (draft/publish) |
 | `admin` | Editor + quản lý user/role |
 
-### Milestones v2
+### Milestones v2.0
 
 ```
-v2.0 — Content System          ← slice hiện tại (in progress)
-├── Supabase project + migrations ✅ (ref: ianpabkxuzjnksrgsvtr — xem docs/SUPABASE.md)
-├── RLS + Storage bucket content-images ✅
-├── Supabase client + middleware + /admin/login ✅
-├── /admin/users — tạo user + đổi role (admin only) ✅
-├── /admin: CRUD Article + Promotion, Tiptap, upload ảnh ⏳
-├── Public: /tin-tuc, /khuyen-mai (+ detail), sitemap động ⏳
-└── ADR-0002, 0003, 0004 ✅
+M1 — Supabase Foundation ✅
+├── Supabase project + migrations (ref: ianpabkxuzjnksrgsvtr)
+├── RLS + Storage bucket content-images
+├── ADR-0002, 0003, 0004
+└── docs/SUPABASE.md
 
-v2.1 — Event Booking
-├── Form riêng (khác Table Reservation) — nút "Đặt tiệc ngay" trỏ đúng luồng
-├── POST /api/event-booking → Supabase + Resend email
-└── Admin: xem danh sách Event Booking
+M2 — Admin Shell & Auth ✅
+├── Supabase client + middleware + /admin/login
+├── /admin/users — tạo user + đổi role (admin only)
+├── Admin perf (cache, skeletons, optimistic UI)
+└── Staging deploy model (develop branch domain)
 
-v2.2 — Careers
-├── /tuyen-dung + form ứng tuyển
-└── POST /api/careers → Resend email only (không DB)
+M3 — Article System ✅
+├── /admin/articles — CRUD + Tiptap + upload ảnh
+├── Tab Soạn / Xem trước (shared prose-article styles)
+├── Public /tin-tuc + /tin-tuc/[slug]
+├── Sitemap động (articles)
+└── Seed 6 bài từ site gốc
 
-v2.3 — Table Reservation → DB (tùy chọn)
-└── Migrate đặt bàn từ email-only sang lưu Supabase + admin xem đơn
+M4 — Promotion System ✅
+├── /admin/promotions — CRUD + Tiptap + upload ảnh
+├── Public /khuyen-mai + /khuyen-mai/[slug] (auto-hide expired)
+├── Sitemap động (promotions)
+└── Nav + admin dashboard link
 
-v2.4 — Menu admin
-└── CRUD Menu Item qua admin (thay static menu.ts)
+M5 — v2.0 Polish & Deploy ⏳
+├── Merge feature branches → develop → QA staging
+├── QA: auth, CRUD, public pages, RLS
+└── Merge develop → main (production)
+```
+
+**Ước tính v2.0:** ~5–7 ngày full-time (còn M4–M5)
+
+### Milestones v2.1 — Event Booking
+
+```
+M1 — Form & API
+├── Form riêng (khác Table Reservation)
+├── POST /api/event-booking → Supabase + Resend
+└── Nút "Đặt tiệc ngay" trỏ đúng luồng
+
+M2 — Admin
+└── /admin/event-bookings — xem danh sách
+```
+
+### Milestones v2.2 — Careers
+
+```
+M1 — Public page
+└── /tuyen-dung + form ứng tuyển
+
+M2 — Email
+└── POST /api/careers → Resend only (không DB)
+```
+
+### Milestones v2.3 — Table Reservation → DB (tùy chọn)
+
+```
+M1 — Migrate booking từ email-only sang Supabase
+M2 — Admin xem danh sách đặt bàn
+```
+
+### Milestones v2.4 — Menu Admin
+
+```
+M1 — CRUD Menu Item qua admin (thay static menu.ts)
+```
 
 Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
-```
+
+### Tiến độ v2.0 (tóm tắt)
+
+| Hạng mục | Trạng thái |
+|----------|------------|
+| Supabase + RLS + Storage | ✅ |
+| Admin auth + users | ✅ |
+| Article CRUD + public /tin-tuc | ✅ |
+| Promotion CRUD + public /khuyen-mai | ✅ M4 |
+| v2.0 deploy | ⏳ M5 |
 
 ### Env bổ sung (v2)
 
