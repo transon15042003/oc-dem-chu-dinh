@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { bookingSectionId, mainNav, siteConfig } from "@/config/site";
+import { bookingSectionId, mainNav } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 type HeaderProps = {
@@ -14,17 +14,13 @@ export function Header({ currentPath = "/" }: HeaderProps) {
   return (
     <header className="border-b border-border bg-brand-dark/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl flex-nowrap items-center gap-3 px-4 py-3 xl:gap-4 xl:py-4">
-        <Link href="/" className="group flex shrink-0 items-center gap-2.5 sm:gap-3">
+        <Link
+          href="/"
+          aria-label="Ốc Đêm Chú Đỉnh — Trang chủ"
+          className="group flex shrink-0 items-center"
+        >
           <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-brand-gold/40 bg-brand-red/20 text-sm font-bold text-brand-gold transition-colors group-hover:border-brand-gold sm:size-11">
             Đỉnh
-          </div>
-          <div className="hidden min-w-0 sm:block">
-            <p className="truncate font-heading text-sm font-bold uppercase tracking-wide text-foreground xl:text-base">
-              {siteConfig.name}
-            </p>
-            <p className="hidden truncate text-xs text-brand-cream-muted xl:block">
-              {siteConfig.tagline}
-            </p>
           </div>
         </Link>
 
