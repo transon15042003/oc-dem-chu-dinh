@@ -36,7 +36,7 @@ npm run flow:feature:finish
 npm run flow:release -- 0.2.0
 # Bump version, changelog, QA trên release/0.2.0
 npm run flow:release:finish -- 0.2.0
-# Mở PR: release/0.2.0 → main (squash merge)
+# Mở PR: release/0.2.0 → main (merge commit)
 # Sau merge main: tag v0.2.0, merge back develop
 ```
 
@@ -69,17 +69,36 @@ chore(deps): bump next to 16.3.3
 
 ## Branch protection (GitHub)
 
-Sau khi repo được tạo, bật trên GitHub → Settings → Branches:
+> Quyết định chi tiết: [`docs/adr/0001-branch-protection.md`](./adr/0001-branch-protection.md)
 
-### `main`
-- Require pull request before merging (1 approval nếu có reviewer)
-- Require status checks: `CI`
-- Require branches up to date
-- Không cho push trực tiếp
+Repo **public** (portfolio) để dùng branch protection miễn phí trên GitHub Free.
 
-### `develop`
-- Require pull request before merging
-- Require status checks: `CI`
+### Repo settings
+
+| Setting | Giá trị |
+|---------|---------|
+| Visibility | Public |
+| Default branch | `main` |
+| Automatically delete head branches | ✅ |
+| Allow squash merging | ✅ |
+| Allow merge commits | ✅ |
+| Allow rebase merging | ❌ |
+
+### `main` và `develop` (cùng rule)
+
+| Rule | Giá trị |
+|------|---------|
+| Require pull request before merging | ✅ |
+| Required approvals | 0 (solo dev) |
+| Require status checks to pass | ✅ `Lint & Build` |
+| Require branches up to date | ✅ |
+| Include administrators (enforce) | ❌ — admin bypass khi khẩn cấp |
+| Allow force pushes | ❌ |
+| Allow deletions | ❌ |
+
+### Nhánh không protect
+
+`feature/*`, `release/*`, `hotfix/*` — nhánh tạm; merge qua PR rồi auto-delete.
 
 ## Scripts npm
 
