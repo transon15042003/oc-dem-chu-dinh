@@ -68,7 +68,7 @@
 
 /* Light — gần site gốc (nền sáng ấm, chữ đậm) */
 :root {
-  --site-header-height: 7.25rem;
+  --site-header-height: 6.5rem;
   --site-subnav-height: 3.5rem;
   --brand-red: #d61f26;
   --brand-red-hover: #b91c1c;
