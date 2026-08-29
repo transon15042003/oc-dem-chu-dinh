@@ -18,10 +18,16 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-dashed border-border p-6">
+        <Link
+          href="/admin/articles"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
           <h2 className="font-semibold">Tin tức</h2>
-          <p className="mt-2 text-sm text-muted-foreground">CRUD Article — đang phát triển v2.0</p>
-        </div>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Viết và quản lý bài viết tại /tin-tuc
+          </p>
+        </Link>
         <div className="rounded-xl border border-dashed border-border p-6">
           <h2 className="font-semibold">Khuyến mãi</h2>
           <p className="mt-2 text-sm text-muted-foreground">

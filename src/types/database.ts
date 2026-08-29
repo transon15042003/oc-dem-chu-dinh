@@ -25,6 +25,19 @@ export type Article = {
   updated_at: string;
 };
 
+export type ArticleSummary = Pick<
+  Article,
+  | "id"
+  | "title"
+  | "slug"
+  | "excerpt"
+  | "cover_image_url"
+  | "status"
+  | "published_at"
+  | "created_at"
+  | "updated_at"
+>;
+
 export type Promotion = {
   id: string;
   title: string;
