@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ốc Đêm Chú Đỉnh
 
-## Getting Started
+Clone website nhà hàng [Ốc Đêm Chú Đỉnh](https://ocdemchudinh.hgdigital.vn/) — portfolio project với yêu cầu từ chủ quán.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS v4
+- shadcn/ui
+- Framer Motion (M5)
+
+## Bắt đầu
 
 ```bash
+cp .env.example .env.local
+# Điền hotline, email, Zalo, Messenger, Maps...
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Mở [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tài liệu dự án
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [`CONTEXT.md`](./CONTEXT.md) — domain glossary
+- [`docs/ROADMAP.md`](./docs/ROADMAP.md) — roadmap v1/v2, milestones, env vars
+- [`docs/GITFLOW.md`](./docs/GITFLOW.md) — quy trình nhánh Git Flow, CI, PR
 
-## Learn More
+## Git Flow
 
-To learn more about Next.js, take a look at the following resources:
+Nhánh chính: `main` (production) · `develop` (tích hợp)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run flow:feature -- ten-tinh-nang   # bắt đầu feature
+npm run flow:feature:finish             # push & mở PR → develop
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Chi tiết: [`docs/GITFLOW.md`](./docs/GITFLOW.md)
 
-## Deploy on Vercel
+## Milestone hiện tại
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**M1 — Foundation** ✅
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**M2 — Trang chủ** ✅
+
+- Hero slider + stats counter (animated)
+- 6 món bán chạy (carousel)
+- 4 dịch vụ đặt tiệc
+- Video trải nghiệm + gallery lightbox (12 ảnh)
+- Không gian highlight + 9 reviews carousel
+- Form đặt bàn (RHF + Zod, mock submit)
+
+**Tiếp theo: M3 — Data & inner pages**
+
+## Scripts
+
+| Command | Mô tả |
+|---------|--------|
+| `npm run dev` | Chạy dev server |
+| `npm run build` | Build production |
+| `npm run start` | Chạy production server |
+| `npm run lint` | ESLint |

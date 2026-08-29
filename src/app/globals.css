@@ -1,26 +1,208 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-dark-soft: var(--brand-dark-soft);
+  --color-brand-red: var(--brand-red);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-cream-muted: var(--brand-cream-muted);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-footer: var(--footer-bg);
+  --color-footer-foreground: var(--footer-text);
+  --color-menu-hero-from: var(--menu-hero-from);
+  --color-menu-hero-via: var(--menu-hero-via);
+  --color-menu-hero-to: var(--menu-hero-to);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-on-dark: var(--on-dark);
+  --color-on-red: var(--on-red);
+  --color-brand-red-hover: var(--brand-red-hover);
+  --color-slogan-mid: var(--slogan-mid);
+  --color-slogan-end: var(--slogan-end);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Light — gần site gốc (nền sáng ấm, chữ đậm) */
+:root {
+  --brand-red: #d61f26;
+  --brand-red-hover: #b91c1c;
+  --brand-gold: #c98912;
+  --brand-dark: #faf7f2;
+  --brand-dark-soft: #ffffff;
+  --brand-cream: #2a2118;
+  --brand-cream-muted: #6b5f52;
+
+  /* Cố định — overlay, gradient đậm, chữ trên nền đỏ/tối */
+  --ink: #14141c;
+  --ink-soft: #1f1f2a;
+  --on-dark: #ffffff;
+  --on-red: #ffffff;
+  --slogan-mid: #991b1b;
+  --slogan-end: #78350f;
+
+  --background: var(--brand-dark);
+  --foreground: var(--brand-cream);
+  --card: var(--brand-dark-soft);
+  --card-foreground: var(--brand-cream);
+  --popover: var(--brand-dark-soft);
+  --popover-foreground: var(--brand-cream);
+  --primary: var(--brand-red);
+  --primary-foreground: #ffffff;
+  --secondary: #f0ebe4;
+  --secondary-foreground: var(--brand-cream);
+  --muted: #f0ebe4;
+  --muted-foreground: var(--brand-cream-muted);
+  --accent: #fde8e8;
+  --accent-foreground: var(--brand-cream);
+  --destructive: #dc2626;
+  --border: rgb(42 33 24 / 12%);
+  --input: rgb(42 33 24 / 10%);
+  --ring: var(--brand-gold);
+  --chart-1: var(--brand-red);
+  --chart-2: var(--brand-gold);
+  --chart-3: #8b5cf6;
+  --chart-4: #22c55e;
+  --chart-5: #06b6d4;
+  --radius: 0.75rem;
+  --sidebar: var(--brand-dark-soft);
+  --sidebar-foreground: var(--brand-cream);
+  --sidebar-primary: var(--brand-red);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0ebe4;
+  --sidebar-accent-foreground: var(--brand-cream);
+  --sidebar-border: rgb(42 33 24 / 12%);
+  --sidebar-ring: var(--brand-gold);
+
+  --menu-hero-from: #fff5f3;
+  --menu-hero-via: #faf7f2;
+  --menu-hero-to: #fff8ee;
+  --footer-bg: #2a2118;
+  --footer-text: #d6cfc4;
+}
+
+/* Dark — portfolio clone hiện tại */
+.dark {
+  --brand-red: #d61f26;
+  --brand-red-hover: #ef4444;
+  --brand-gold: #f2b233;
+  --brand-dark: #0b0b0f;
+  --brand-dark-soft: #14141c;
+  --brand-cream: #f7f0e6;
+  --brand-cream-muted: #b8b0a6;
+
+  --ink: #0b0b0f;
+  --ink-soft: #14141c;
+  --on-dark: #ffffff;
+  --on-red: #ffffff;
+  --slogan-mid: #991b1b;
+  --slogan-end: #78350f;
+
+  --background: var(--brand-dark);
+  --foreground: var(--brand-cream);
+  --card: var(--brand-dark-soft);
+  --card-foreground: var(--brand-cream);
+  --popover: var(--brand-dark-soft);
+  --popover-foreground: var(--brand-cream);
+  --primary: var(--brand-red);
+  --primary-foreground: #ffffff;
+  --secondary: #1f1f2a;
+  --secondary-foreground: var(--brand-cream);
+  --muted: #1a1a24;
+  --muted-foreground: var(--brand-cream-muted);
+  --accent: #241818;
+  --accent-foreground: var(--brand-cream);
+  --destructive: #ef4444;
+  --border: rgb(255 255 255 / 10%);
+  --input: rgb(255 255 255 / 12%);
+  --ring: var(--brand-gold);
+  --sidebar: var(--brand-dark-soft);
+  --sidebar-foreground: var(--brand-cream);
+  --sidebar-primary: var(--brand-red);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1f1f2a;
+  --sidebar-accent-foreground: var(--brand-cream);
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-ring: var(--brand-gold);
+
+  --menu-hero-from: #1a0508;
+  --menu-hero-via: #0b0b0f;
+  --menu-hero-to: #2a1508;
+  --footer-bg: #0c0a09;
+  --footer-text: #d6d3d1;
+}
+
+@layer utilities {
+  .bg-slogan-bar {
+    background-image: linear-gradient(
+      to right,
+      var(--brand-red),
+      var(--slogan-mid),
+      var(--slogan-end)
+    );
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans scroll-smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading;
+  }
 }
