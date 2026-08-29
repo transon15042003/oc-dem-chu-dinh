@@ -25,6 +25,8 @@ export const publicEnv = {
     cn4: trim(process.env.NEXT_PUBLIC_MAP_EMBED_CN4),
     cn5: trim(process.env.NEXT_PUBLIC_MAP_EMBED_CN5),
   },
+  supabaseUrl: trim(process.env.NEXT_PUBLIC_SUPABASE_URL),
+  supabaseAnonKey: trim(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
 } as const;
 
 export function formatHotline(hotline: string): string {

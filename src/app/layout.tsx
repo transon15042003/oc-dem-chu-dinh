@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 
-import { SiteLayout } from "@/components/layout/site-layout";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { RestaurantJsonLd } from "@/components/seo/restaurant-json-ld";
 import { rootMetadata } from "@/lib/seo/metadata";
 
 import "./globals.css";
@@ -32,11 +30,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${beVietnamPro.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col bg-background pb-20 font-sans text-foreground antialiased sm:pb-0">
-        <RestaurantJsonLd />
-        <ThemeProvider>
-          <SiteLayout>{children}</SiteLayout>
-        </ThemeProvider>
+      <body className="min-h-full bg-background font-sans text-foreground antialiased">
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
