@@ -39,7 +39,7 @@ export function ArticlesListing({ articles, initialSearch = "" }: ArticlesListin
 
   return (
     <>
-      <section className="sticky top-14 z-30 border-b border-red-900/80 bg-stone-900/95 py-4 text-white shadow-2xl backdrop-blur-md">
+      <section className="sticky top-site-header z-30 bg-stone-900/95 py-4 text-white backdrop-blur-md">
         <div className="mx-auto max-w-7xl space-y-4 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex w-full flex-wrap items-center justify-center gap-2 md:w-auto md:justify-start">

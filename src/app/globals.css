@@ -68,6 +68,8 @@
 
 /* Light — gần site gốc (nền sáng ấm, chữ đậm) */
 :root {
+  --site-header-height: 6.5rem;
+  --site-subnav-height: 3.5rem;
   --brand-red: #d61f26;
   --brand-red-hover: #b91c1c;
   --brand-gold: #c98912;
@@ -184,6 +186,18 @@
       var(--slogan-end)
     );
   }
+
+  .top-site-header {
+    top: var(--site-header-height);
+  }
+
+  .scroll-mt-site-header {
+    scroll-margin-top: var(--site-header-height);
+  }
+
+  .scroll-mt-site-chrome {
+    scroll-margin-top: calc(var(--site-header-height) + var(--site-subnav-height));
+  }
 }
 
 @layer base {
@@ -197,6 +211,7 @@
 
   html {
     @apply font-sans scroll-smooth;
+    scroll-padding-top: var(--site-header-height);
   }
 
   h1,

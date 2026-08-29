@@ -94,7 +94,7 @@ export function EventBookingFormSection() {
   return (
     <section
       id={eventBookingSectionId}
-      className="scroll-mt-28 border-b border-border bg-[radial-gradient(circle_at_top,_rgba(214,31,38,0.08),_transparent_55%)] py-16 sm:py-20"
+      className="scroll-mt-site-header border-b border-border bg-[radial-gradient(circle_at_top,_rgba(214,31,38,0.08),_transparent_55%)] py-16 sm:py-20"
     >
       <div className="mx-auto max-w-3xl space-y-8 px-4">
         <SectionHeading

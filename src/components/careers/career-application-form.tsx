@@ -19,29 +19,36 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { careersApplicationSectionId } from "@/config/site";
 import { branchOptions } from "@/data/branches";
-import {
-  careerPositionOptions,
-  type CareerPositionId,
-} from "@/data/careers";
 import { submitForm } from "@/lib/submit-form";
 import {
   careerApplicationFormSchema,
   type CareerApplicationFormValues,
 } from "@/lib/validations/careers";
 
-const validPositions = new Set(careerPositionOptions.map((item) => item.value));
+export type CareerPositionOption = {
+  value: string;
+  label: string;
+};
 
-function parsePresetPosition(value: string | null): CareerPositionId | "" {
-  if (!value || !validPositions.has(value as CareerPositionId)) {
-    return "";
+type CareerApplicationFormProps = {
+  positionOptions: CareerPositionOption[];
+};
+
+function parsePresetPosition(
+  value: string | null,
+  validSlugs: Set<string>,
+): string | undefined {
+  if (!value || !validSlugs.has(value)) {
+    return undefined;
   }
 
-  return value as CareerPositionId;
+  return value;
 }
 
-export function CareerApplicationForm() {
+export function CareerApplicationForm({ positionOptions }: CareerApplicationFormProps) {
   const searchParams = useSearchParams();
-  const presetPosition = parsePresetPosition(searchParams.get("position"));
+  const validSlugs = new Set(positionOptions.map((item) => item.value));
+  const presetPosition = parsePresetPosition(searchParams.get("position"), validSlugs);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -57,19 +64,19 @@ export function CareerApplicationForm() {
     defaultValues: {
       fullName: "",
       phone: "",
-      position: presetPosition || undefined,
+      positionSlug: presetPosition,
       branchId: "",
       email: "",
       experience: "",
     },
   });
 
-  const position = useWatch({ control, name: "position" });
+  const positionSlug = useWatch({ control, name: "positionSlug" });
   const branchId = useWatch({ control, name: "branchId" });
 
   useEffect(() => {
     if (presetPosition) {
-      setValue("position", presetPosition, { shouldValidate: true });
+      setValue("positionSlug", presetPosition, { shouldValidate: true });
     }
   }, [presetPosition, setValue]);
 
@@ -83,9 +90,17 @@ export function CareerApplicationForm() {
     }
 
     setSubmitted(true);
-    reset({ position: presetPosition || undefined });
+    reset({ positionSlug: presetPosition });
     setTimeout(() => setSubmitted(false), 5000);
   };
+
+  if (positionOptions.length === 0) {
+    return (
+      <div className="rounded-2xl border border-border bg-brand-dark-soft p-6 text-center text-sm text-muted-foreground sm:p-8">
+        Hiện chưa có vị trí tuyển dụng nào đang mở. Vui lòng liên hệ hotline để biết thêm chi tiết.
+      </div>
+    );
+  }
 
   return (
     <form
@@ -96,24 +111,24 @@ export function CareerApplicationForm() {
         <div className="space-y-2 sm:col-span-2">
           <Label>Vị trí ứng tuyển *</Label>
           <Select
-            value={position}
+            value={positionSlug}
             onValueChange={(value) =>
-              setValue("position", value as CareerPositionId, { shouldValidate: true })
+              setValue("positionSlug", value ?? "", { shouldValidate: true })
             }
           >
             <SelectTrigger className="h-11 w-full border-border bg-brand-dark-soft">
               <SelectValue placeholder="Chọn vị trí ứng tuyển" />
             </SelectTrigger>
             <SelectContent>
-              {careerPositionOptions.map((option) => (
+              {positionOptions.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          {errors.position ? (
-            <p className="text-xs text-red-400">{errors.position.message}</p>
+          {errors.positionSlug ? (
+            <p className="text-xs text-red-400">{errors.positionSlug.message}</p>
           ) : null}
         </div>
 
@@ -233,11 +248,15 @@ export function CareerApplicationForm() {
   );
 }
 
-export function CareerApplicationSection() {
+type CareerApplicationSectionProps = {
+  positionOptions: CareerPositionOption[];
+};
+
+export function CareerApplicationSection({ positionOptions }: CareerApplicationSectionProps) {
   return (
     <section
       id={careersApplicationSectionId}
-      className="scroll-mt-28 border-y border-border bg-muted/20 py-12 sm:py-16"
+      className="scroll-mt-site-header border-y border-border bg-muted/20 py-12 sm:py-16"
     >
       <div className="mx-auto max-w-3xl space-y-6 px-4 sm:px-6 lg:px-8">
         <div className="text-center">
@@ -249,7 +268,7 @@ export function CareerApplicationSection() {
           </p>
         </div>
 
-        <CareerApplicationForm />
+        <CareerApplicationForm positionOptions={positionOptions} />
       </div>
     </section>
   );

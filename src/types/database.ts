@@ -79,6 +79,49 @@ export type PromotionSummary = Pick<
   | "updated_at"
 >;
 
+export type CareerPosition = {
+  id: string;
+  title: string;
+  slug: string;
+  badge: string | null;
+  income_label: string | null;
+  description: string | null;
+  schedule: string | null;
+  salary: string | null;
+  perks: string[];
+  status: PublicationStatus;
+  show_on_listing: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type CareerPositionSummary = Pick<
+  CareerPosition,
+  | "id"
+  | "title"
+  | "slug"
+  | "badge"
+  | "income_label"
+  | "status"
+  | "show_on_listing"
+  | "sort_order"
+  | "created_at"
+  | "updated_at"
+>;
+
+export type CareerApplication = {
+  id: string;
+  position_id: string | null;
+  position_title: string;
+  full_name: string;
+  phone: string;
+  email: string | null;
+  branch_id: string;
+  experience: string | null;
+  created_at: string;
+};
+
 export const CONTENT_IMAGE_BUCKET = "content-images" as const;
 export const MAX_CONTENT_IMAGE_BYTES = 2 * 1024 * 1024;
 

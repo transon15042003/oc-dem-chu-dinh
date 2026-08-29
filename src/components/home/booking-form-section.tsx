@@ -69,7 +69,7 @@ export function BookingFormSection() {
   return (
     <section
       id={bookingSectionId}
-      className="scroll-mt-28 bg-[radial-gradient(circle_at_top,_rgba(214,31,38,0.15),_transparent_50%)] py-16 sm:py-20"
+      className="scroll-mt-site-header bg-[radial-gradient(circle_at_top,_rgba(214,31,38,0.15),_transparent_50%)] py-16 sm:py-20"
     >
       <div className="mx-auto max-w-3xl space-y-8 px-4">
         <SectionHeading

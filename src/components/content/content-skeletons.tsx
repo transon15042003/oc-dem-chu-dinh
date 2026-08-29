@@ -7,7 +7,7 @@ function SkeletonPulse({ className }: { className?: string }) {
 
 export function ArticlesFilterBarSkeleton() {
   return (
-    <section className="sticky top-14 z-30 border-b border-red-900/80 bg-stone-900/95 py-4">
+    <section className="sticky top-site-header z-30 bg-stone-900/95 py-4">
       <div className="mx-auto max-w-7xl space-y-4 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap justify-center gap-2 md:justify-start">
