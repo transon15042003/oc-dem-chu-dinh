@@ -36,3 +36,11 @@
 | `*_v2_content_system.sql` | Schema v2.0 |
 | `*_bootstrap_admin_user.sql` | Promote admin đầu tiên |
 | `*_admin_create_user_rpc.sql` | RPC tạo user không cần service role |
+| `*_seed_articles_from_original_site.sql` | Seed 6 bài tin tức từ site gốc (idempotent) |
+
+### Chạy seed articles (local / remote)
+
+```bash
+npx supabase db push
+# hoặc apply file migration trên Supabase Dashboard → SQL Editor
+```
