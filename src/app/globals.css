@@ -207,49 +207,41 @@
   }
 }
 
-/* Rich text — editor + public article body */
-.prose-editor p,
-.prose-content p {
+/* Rich text — shared by editor, preview, and public article body */
+.prose-article p {
   @apply mb-4 leading-relaxed;
 }
 
-.prose-editor h2,
-.prose-content h2 {
+.prose-article h2 {
   @apply mb-3 mt-6 text-xl font-bold;
 }
 
-.prose-editor h3,
-.prose-content h3 {
+.prose-article h3 {
   @apply mb-2 mt-5 text-lg font-semibold;
 }
 
-.prose-editor ul,
-.prose-content ul {
+.prose-article ul {
   @apply mb-4 list-disc space-y-1 pl-6;
 }
 
-.prose-editor ol,
-.prose-content ol {
+.prose-article ol {
   @apply mb-4 list-decimal space-y-1 pl-6;
 }
 
-.prose-editor a,
-.prose-content a {
+.prose-article a {
   @apply text-brand-red underline underline-offset-2 hover:text-brand-red-hover;
 }
 
-.prose-editor img,
-.prose-content img {
+.prose-article img {
   @apply my-4 max-w-full rounded-lg;
 }
 
-.prose-editor blockquote,
-.prose-content blockquote {
+.prose-article blockquote {
   @apply my-4 border-l-4 border-brand-red/40 pl-4 italic text-muted-foreground;
 }
 
-.prose-editor p.is-editor-empty:first-child::before,
-.prose-content .is-empty::before {
+.prose-article p.is-editor-empty:first-child::before,
+.prose-article .is-empty::before {
   @apply text-muted-foreground;
   content: attr(data-placeholder);
   float: left;
