@@ -31,7 +31,7 @@ export function MobileNav({ currentPath }: MobileNavProps) {
           <Button
             variant="outline"
             size="icon"
-            className="border-border bg-foreground/5 text-foreground hover:bg-foreground/10 lg:hidden"
+            className="border-border bg-foreground/5 text-foreground hover:bg-foreground/10 xl:hidden"
             aria-label="Mở menu"
           />
         }
