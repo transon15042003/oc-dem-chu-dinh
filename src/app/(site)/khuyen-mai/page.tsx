@@ -1,7 +1,9 @@
+import { Suspense } from "react";
+
 import { BookingFormSection } from "@/components/home/booking-form-section";
-import { PromotionDealCard } from "@/components/promotions/promotion-deal-card";
+import { PromotionsListSection } from "@/components/promotions/promotions-list-section";
 import { PromotionsPageHeader } from "@/components/promotions/promotions-page-header";
-import { getActivePromotions } from "@/lib/promotions/queries";
+import { PromotionsListSkeleton } from "@/components/content/content-skeletons";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = createPageMetadata({
@@ -11,26 +13,14 @@ export const metadata = createPageMetadata({
   path: "/khuyen-mai",
 });
 
-export default async function PromotionsPage() {
-  const promotions = await getActivePromotions();
-
+export default function PromotionsPage() {
   return (
     <div className="min-h-screen bg-amber-50/30 text-foreground dark:bg-background">
       <PromotionsPageHeader />
 
-      <section className="py-12">
-        <div className="mx-auto max-w-6xl space-y-10 px-4 sm:px-6 lg:px-8">
-          {promotions.length === 0 ? (
-            <p className="text-center text-muted-foreground">
-              Hiện chưa có chương trình khuyến mãi nào.
-            </p>
-          ) : (
-            promotions.map((promotion) => (
-              <PromotionDealCard key={promotion.id} promotion={promotion} variant="list" />
-            ))
-          )}
-        </div>
-      </section>
+      <Suspense fallback={<PromotionsListSkeleton />}>
+        <PromotionsListSection />
+      </Suspense>
 
       <BookingFormSection />
     </div>
