@@ -24,6 +24,10 @@ _Avoid_: Party booking, đặt tiệc (dùng trong UI tiếng Việt)
 Bài viết tin tức hoặc mẹo ẩm thực, không gắn trực tiếp với giá món ăn. Có trạng thái xuất bản (Publication Status).
 _Avoid_: Post, blog post
 
+**Article Body**:
+Nội dung chính của Article (đoạn văn, heading, danh sách, ảnh, liên kết). Soạn qua Content Editor, lưu dạng HTML, hiển thị công khai qua cùng một bộ style typography.
+_Avoid_: Content, post body
+
 **Promotion**:
 Chương trình ưu đãi có thời hạn, có thể kèm mã giảm giá (`promo_code`) hiển thị cho khách. Hết hạn thì tự ẩn khỏi site public.
 _Avoid_: Deal, offer

@@ -1,7 +1,6 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { RichTextContent } from "@/components/editor/rich-text-content";
+import { ArticleBodySection } from "@/components/articles/article-body-section";
 import { PageHero } from "@/components/shared/page-hero";
 import { getPublishedArticleBySlug } from "@/lib/articles/queries";
 import { createPageMetadata } from "@/lib/seo/metadata";
@@ -48,29 +47,13 @@ export default async function ArticleDetailPage({ params }: ArticleDetailPagePro
       />
 
       <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
-        <p className="mb-6 text-sm text-muted-foreground">
-          {formatArticleDate(article.published_at ?? article.created_at)}
-        </p>
-
-        {article.cover_image_url ? (
-          <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-xl border border-border">
-            <Image
-              src={article.cover_image_url}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
-              priority
-            />
-          </div>
-        ) : null}
-
-        <RichTextContent html={article.body} />
+        <ArticleBodySection
+          body={article.body}
+          coverImageUrl={article.cover_image_url}
+          publishedAt={article.published_at ?? article.created_at}
+          coverPriority
+        />
       </article>
     </>
   );
-}
-
-function formatArticleDate(value: string): string {
-  return new Intl.DateTimeFormat("vi-VN", { dateStyle: "long" }).format(new Date(value));
 }

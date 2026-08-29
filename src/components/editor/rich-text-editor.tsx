@@ -29,6 +29,7 @@ type RichTextEditorProps = {
   defaultValue?: string;
   placeholder?: string;
   className?: string;
+  onChange?: (html: string) => void;
 };
 
 export function RichTextEditor({
@@ -36,6 +37,7 @@ export function RichTextEditor({
   defaultValue = "",
   placeholder = "Soạn nội dung bài viết...",
   className,
+  onChange,
 }: RichTextEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -58,11 +60,13 @@ export function RichTextEditor({
     editorProps: {
       attributes: {
         class:
-          "prose-editor min-h-[280px] max-w-none px-4 py-3 focus:outline-none",
+          "prose-article min-h-[280px] max-w-none px-4 py-3 focus:outline-none",
       },
     },
     onUpdate: ({ editor: currentEditor }) => {
-      setHtml(currentEditor.getHTML());
+      const nextHtml = currentEditor.getHTML();
+      setHtml(nextHtml);
+      onChange?.(nextHtml);
     },
   });
 

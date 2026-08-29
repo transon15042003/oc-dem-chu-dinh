@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 
 import {
   createArticle,
@@ -12,10 +12,12 @@ import {
   updateArticle,
   type ArticleActionState,
 } from "@/app/admin/(protected)/articles/actions";
+import { ArticleBodyPreview } from "@/components/admin/articles/article-body-preview";
 import { RichTextEditor } from "@/components/editor/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import { slugifyTitle } from "@/lib/articles/slug";
 import type { Article, PublicationStatus } from "@/types/database";
 
@@ -23,6 +25,8 @@ type ArticleFormProps = {
   mode: "create" | "edit";
   article?: Article;
 };
+
+type ContentMode = "edit" | "preview";
 
 export function ArticleForm({ mode, article }: ArticleFormProps) {
   const boundUpdateAction =
@@ -38,6 +42,21 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
   const [title, setTitle] = useState(article?.title ?? "");
   const [slug, setSlug] = useState(article?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(Boolean(article?.slug));
+  const [excerpt, setExcerpt] = useState(article?.excerpt ?? "");
+  const [bodyHtml, setBodyHtml] = useState(article?.body ?? "");
+  const [contentMode, setContentMode] = useState<ContentMode>("edit");
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(
+    article?.cover_image_url ?? null,
+  );
+  const coverBlobRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (coverBlobRef.current) {
+        URL.revokeObjectURL(coverBlobRef.current);
+      }
+    };
+  }, []);
 
   function handleTitleChange(value: string) {
     setTitle(value);
@@ -82,7 +101,8 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
         <textarea
           id="excerpt"
           name="excerpt"
-          defaultValue={article?.excerpt ?? ""}
+          value={excerpt}
+          onChange={(event) => setExcerpt(event.target.value)}
           disabled={pending}
           rows={3}
           className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm"
@@ -104,16 +124,66 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
           </div>
         ) : null}
         <input type="hidden" name="coverImageUrl" value={article?.cover_image_url ?? ""} />
-        <Input id="coverImage" name="coverImage" type="file" accept="image/*" disabled={pending} />
+        <Input
+          id="coverImage"
+          name="coverImage"
+          type="file"
+          accept="image/*"
+          disabled={pending}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+
+            if (coverBlobRef.current) {
+              URL.revokeObjectURL(coverBlobRef.current);
+              coverBlobRef.current = null;
+            }
+
+            if (file) {
+              const nextUrl = URL.createObjectURL(file);
+              coverBlobRef.current = nextUrl;
+              setCoverPreviewUrl(nextUrl);
+              return;
+            }
+
+            setCoverPreviewUrl(article?.cover_image_url ?? null);
+          }}
+        />
       </div>
 
       <div className="space-y-2">
-        <Label>Nội dung</Label>
-        <RichTextEditor
-          key={article?.id ?? "new"}
-          name="body"
-          defaultValue={article?.body ?? ""}
-        />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Label>Nội dung</Label>
+          <div className="inline-flex rounded-lg border border-border bg-muted/40 p-1">
+            <ContentModeButton
+              active={contentMode === "edit"}
+              onClick={() => setContentMode("edit")}
+              label="Soạn"
+            />
+            <ContentModeButton
+              active={contentMode === "preview"}
+              onClick={() => setContentMode("preview")}
+              label="Xem trước"
+            />
+          </div>
+        </div>
+
+        <div className={contentMode === "edit" ? "block" : "hidden"}>
+          <RichTextEditor
+            key={article?.id ?? "new"}
+            name="body"
+            defaultValue={article?.body ?? ""}
+            onChange={setBodyHtml}
+          />
+        </div>
+
+        {contentMode === "preview" ? (
+          <ArticleBodyPreview
+            title={title}
+            excerpt={excerpt}
+            body={bodyHtml}
+            coverImageUrl={coverPreviewUrl}
+          />
+        ) : null}
       </div>
 
       <div className="space-y-2">
@@ -157,6 +227,31 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
 
 function StatusOption({ value, label }: { value: PublicationStatus; label: string }) {
   return <option value={value}>{label}</option>;
+}
+
+function ContentModeButton({
+  active,
+  onClick,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+        active
+          ? "bg-background text-foreground shadow-sm"
+          : "text-muted-foreground hover:text-foreground",
+      )}
+    >
+      {label}
+    </button>
+  );
 }
 
 function DeleteArticleButton({ articleId, title }: { articleId: string; title: string }) {
