@@ -1,4 +1,7 @@
+import { Suspense } from "react";
+
 import { BookingFormSection } from "@/components/home/booking-form-section";
+import { EventBookingFormSection } from "@/components/home/event-booking-form-section";
 import { EventServicesSection } from "@/components/home/event-services-section";
 import { FeaturedDishesSection } from "@/components/home/featured-dishes-section";
 import { ExperienceSection, GallerySection } from "@/components/home/gallery-section";
@@ -20,6 +23,9 @@ export default function Home() {
       <HeroSection />
       <FeaturedDishesSection />
       <EventServicesSection />
+      <Suspense fallback={null}>
+        <EventBookingFormSection />
+      </Suspense>
       <ExperienceSection />
       <GallerySection />
       <SpaceHighlightSection />

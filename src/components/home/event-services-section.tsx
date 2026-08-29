@@ -7,7 +7,7 @@ import { InteractiveCard } from "@/components/shared/interactive-card";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { Button } from "@/components/ui/button";
 import { eventServices } from "@/data/homepage";
-import { bookingSectionId } from "@/config/site";
+import { eventBookingSectionId } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 export function EventServicesSection() {
@@ -56,7 +56,7 @@ export function EventServicesSection() {
                     ))}
                   </ul>
                   <Button
-                    render={<Link href={`/#${bookingSectionId}`} />}
+                    render={<Link href={`/?event=${service.id}#${eventBookingSectionId}`} />}
                     variant="brand"
                     className="mt-auto w-full font-bold uppercase"
                   >

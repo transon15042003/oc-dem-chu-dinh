@@ -81,3 +81,19 @@ export type PromotionSummary = Pick<
 
 export const CONTENT_IMAGE_BUCKET = "content-images" as const;
 export const MAX_CONTENT_IMAGE_BYTES = 2 * 1024 * 1024;
+
+export type EventBookingType = "sinh-nhat" | "thoi-noi" | "tat-nien" | "lien-hoan";
+
+export type EventBooking = {
+  id: string;
+  full_name: string;
+  phone: string;
+  event_type: EventBookingType;
+  guest_count: string;
+  branch_id: string;
+  event_date: string;
+  event_time: string;
+  company_name: string | null;
+  note: string | null;
+  created_at: string;
+};

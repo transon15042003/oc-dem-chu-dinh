@@ -38,6 +38,7 @@ export const mainNav: NavItem[] = [
 ];
 
 export const bookingSectionId = "dat-ban";
+export const eventBookingSectionId = "dat-tiec";
 
 export const siteRoutes = [
   { path: "/" as const, changeFrequency: "weekly" as const, priority: 1 },
