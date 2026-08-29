@@ -17,6 +17,8 @@ import { RichTextEditor } from "@/components/editor/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CONTENT_CATEGORIES } from "@/lib/content/categories";
+import type { ContentCategory } from "@/lib/content/categories";
 import { cn } from "@/lib/utils";
 import { slugifyTitle } from "@/lib/articles/slug";
 import type { Article, PublicationStatus } from "@/types/database";
@@ -44,6 +46,8 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
   const [slugTouched, setSlugTouched] = useState(Boolean(article?.slug));
   const [excerpt, setExcerpt] = useState(article?.excerpt ?? "");
   const [bodyHtml, setBodyHtml] = useState(article?.body ?? "");
+  const [category, setCategory] = useState<ContentCategory | "">(article?.category ?? "");
+  const [status, setStatus] = useState<PublicationStatus>(article?.status ?? "draft");
   const [contentMode, setContentMode] = useState<ContentMode>("edit");
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(
     article?.cover_image_url ?? null,
@@ -96,6 +100,40 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
         </div>
       </div>
 
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="category">Danh mục</Label>
+          <select
+            id="category"
+            name="category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value as ContentCategory | "")}
+            disabled={pending}
+            className="h-9 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm"
+          >
+            <option value="">Chọn danh mục</option>
+            {CONTENT_CATEGORIES.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex items-end pb-2">
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              name="isFeatured"
+              value="true"
+              defaultChecked={article?.is_featured}
+              disabled={pending}
+              className="size-4 rounded border-input"
+            />
+            Bài viết nổi bật (hiển thị trên đầu /tin-tuc)
+          </label>
+        </div>
+      </div>
+
       <div className="space-y-2">
         <Label htmlFor="excerpt">Mô tả ngắn</Label>
         <textarea
@@ -112,10 +150,10 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="coverImage">Ảnh bìa (tối đa 2MB)</Label>
-        {article?.cover_image_url ? (
+        {coverPreviewUrl ? (
           <div className="relative mb-2 aspect-[16/9] max-w-md overflow-hidden rounded-lg border border-border">
             <Image
-              src={article.cover_image_url}
+              src={coverPreviewUrl}
               alt=""
               fill
               className="object-cover"
@@ -182,6 +220,7 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
             excerpt={excerpt}
             body={bodyHtml}
             coverImageUrl={coverPreviewUrl}
+            category={category || null}
           />
         ) : null}
       </div>
@@ -191,7 +230,8 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
         <select
           id="status"
           name="status"
-          defaultValue={article?.status ?? "draft"}
+          value={status}
+          onChange={(event) => setStatus(event.target.value as PublicationStatus)}
           disabled={pending}
           className="h-9 w-full max-w-xs rounded-lg border border-input bg-transparent px-2.5 text-sm"
         >
@@ -212,8 +252,8 @@ export function ArticleForm({ mode, article }: ArticleFormProps) {
         </Button>
         {mode === "edit" && article ? (
           <>
-            {article.status === "published" ? (
-              <Button type="button" variant="outline" render={<Link href={`/tin-tuc/${article.slug}`} target="_blank" />}>
+            {status === "published" ? (
+              <Button type="button" variant="outline" render={<Link href={`/tin-tuc/${slug}`} target="_blank" />}>
                 Xem trên site
               </Button>
             ) : null}

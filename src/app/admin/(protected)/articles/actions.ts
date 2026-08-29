@@ -26,7 +26,19 @@ function parseArticleForm(formData: FormData) {
     body: formData.get("body"),
     status: formData.get("status"),
     coverImageUrl: formData.get("coverImageUrl") ?? "",
+    category: formData.get("category") ?? "",
+    isFeatured: formData.get("isFeatured") === "true" ? "true" : "false",
   });
+}
+
+function articleMetaFromForm(parsed: {
+  category?: string;
+  isFeatured?: "true" | "false";
+}) {
+  return {
+    category: parsed.category || null,
+    is_featured: parsed.isFeatured === "true",
+  };
 }
 
 async function resolveCoverImageUrl(
@@ -98,8 +110,14 @@ export async function createArticle(
   const slug = await resolveSlug(parsed.data.title, parsed.data.slug);
   const status = parsed.data.status;
   const publishedAt = publishedAtForStatus(status, null);
+  const meta = articleMetaFromForm(parsed.data);
 
   const supabase = await createClient();
+
+  if (meta.is_featured) {
+    await supabase.from("articles").update({ is_featured: false });
+  }
+
   const { data, error } = await supabase
     .from("articles")
     .insert({
@@ -110,6 +128,8 @@ export async function createArticle(
       cover_image_url: cover.url,
       status,
       published_at: publishedAt,
+      category: meta.category,
+      is_featured: meta.is_featured,
       author_id: session.userId,
     })
     .select("id")
@@ -142,7 +162,7 @@ export async function updateArticle(
   const supabase = await createClient();
   const { data: existing, error: fetchError } = await supabase
     .from("articles")
-    .select("published_at, cover_image_url")
+    .select("published_at, cover_image_url, slug")
     .eq("id", articleId)
     .single();
 
@@ -158,6 +178,11 @@ export async function updateArticle(
   const slug = await resolveSlug(parsed.data.title, parsed.data.slug, articleId);
   const status = parsed.data.status;
   const publishedAt = publishedAtForStatus(status, existing.published_at);
+  const meta = articleMetaFromForm(parsed.data);
+
+  if (meta.is_featured) {
+    await supabase.from("articles").update({ is_featured: false }).neq("id", articleId);
+  }
 
   const { error } = await supabase
     .from("articles")
@@ -169,6 +194,8 @@ export async function updateArticle(
       cover_image_url: cover.url,
       status,
       published_at: publishedAt,
+      category: meta.category,
+      is_featured: meta.is_featured,
     })
     .eq("id", articleId);
 
@@ -179,7 +206,10 @@ export async function updateArticle(
   revalidatePath("/admin/articles");
   revalidatePath(`/admin/articles/${articleId}/edit`);
   revalidatePath("/tin-tuc");
-  revalidatePath(`/tin-tuc/${slug}`);
+  revalidatePath(`/tin-tuc/${existing.slug}`);
+  if (slug !== existing.slug) {
+    revalidatePath(`/tin-tuc/${slug}`);
+  }
 
   return { ok: true, message: "Đã lưu bài viết." };
 }

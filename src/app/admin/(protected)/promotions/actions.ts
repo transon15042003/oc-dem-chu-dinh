@@ -151,7 +151,7 @@ export async function updatePromotion(
   const supabase = await createClient();
   const { data: existing, error: fetchError } = await supabase
     .from("promotions")
-    .select("published_at, cover_image_url")
+    .select("published_at, cover_image_url, slug")
     .eq("id", promotionId)
     .single();
 
@@ -192,7 +192,10 @@ export async function updatePromotion(
   revalidatePath("/admin/promotions");
   revalidatePath(`/admin/promotions/${promotionId}/edit`);
   revalidatePath("/khuyen-mai");
-  revalidatePath(`/khuyen-mai/${slug}`);
+  revalidatePath(`/khuyen-mai/${existing.slug}`);
+  if (slug !== existing.slug) {
+    revalidatePath(`/khuyen-mai/${slug}`);
+  }
 
   return { ok: true, message: "Đã lưu khuyến mãi." };
 }

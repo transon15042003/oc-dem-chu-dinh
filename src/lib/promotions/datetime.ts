@@ -18,11 +18,37 @@ export function isPromotionActive(
   promotion: Pick<{ status: string; starts_at: string; ends_at: string }, "status" | "starts_at" | "ends_at">,
   now = new Date(),
 ): boolean {
-  if (promotion.status !== "published") return false;
+  return getPromotionScheduleStatus(promotion, now) === "active";
+}
+
+export type PromotionScheduleStatus = "draft" | "upcoming" | "active" | "expired";
+
+export function getPromotionScheduleStatus(
+  promotion: Pick<{ status: string; starts_at: string; ends_at: string }, "status" | "starts_at" | "ends_at">,
+  now = new Date(),
+): PromotionScheduleStatus {
+  if (promotion.status !== "published") {
+    return "draft";
+  }
 
   const starts = new Date(promotion.starts_at).getTime();
   const ends = new Date(promotion.ends_at).getTime();
   const current = now.getTime();
 
-  return starts <= current && ends > current;
+  if (current < starts) return "upcoming";
+  if (current >= ends) return "expired";
+  return "active";
+}
+
+export function getPromotionScheduleLabel(status: PromotionScheduleStatus): string {
+  switch (status) {
+    case "active":
+      return "Đang chạy";
+    case "upcoming":
+      return "Sắp diễn ra";
+    case "expired":
+      return "Hết hạn";
+    default:
+      return "Nháp";
+  }
 }

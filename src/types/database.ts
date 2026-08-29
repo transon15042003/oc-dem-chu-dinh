@@ -1,3 +1,5 @@
+import type { ContentCategory } from "@/lib/content/categories";
+
 export type UserRole = "admin" | "editor";
 
 export type PublicationStatus = "draft" | "published";
@@ -20,6 +22,8 @@ export type Article = {
   cover_image_url: string | null;
   status: PublicationStatus;
   published_at: string | null;
+  category: ContentCategory | null;
+  is_featured: boolean;
   author_id: string | null;
   created_at: string;
   updated_at: string;
@@ -34,6 +38,8 @@ export type ArticleSummary = Pick<
   | "cover_image_url"
   | "status"
   | "published_at"
+  | "category"
+  | "is_featured"
   | "created_at"
   | "updated_at"
 >;

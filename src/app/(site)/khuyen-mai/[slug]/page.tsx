@@ -1,9 +1,9 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ChevronRight } from "lucide-react";
 
-import { ArticleBodySection } from "@/components/articles/article-body-section";
-import { Badge } from "@/components/ui/badge";
-import { PageHero } from "@/components/shared/page-hero";
-import { formatPromotionDateRange } from "@/lib/promotions/datetime";
+import { BookingFormSection } from "@/components/home/booking-form-section";
+import { PromotionDealCard } from "@/components/promotions/promotion-deal-card";
 import { getActivePromotionBySlug } from "@/lib/promotions/queries";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/config/site";
@@ -37,37 +37,30 @@ export default async function PromotionDetailPage({ params }: PromotionDetailPag
   }
 
   return (
-    <>
-      <PageHero
-        breadcrumbs={[
-          { label: "Trang chủ", href: "/" },
-          { label: "Khuyến mãi", href: "/khuyen-mai" },
-          { label: promotion.title },
-        ]}
-        title={promotion.title}
-        description={promotion.excerpt ?? undefined}
-      />
-
-      <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-6 flex flex-wrap items-center gap-3">
-          <p className="text-sm text-muted-foreground">
-            {formatPromotionDateRange(promotion.starts_at, promotion.ends_at)}
-          </p>
-          {promotion.discount_label ? <Badge variant="hot">{promotion.discount_label}</Badge> : null}
-          {promotion.promo_code ? (
-            <p className="rounded-lg border border-brand-red/30 bg-brand-red/5 px-3 py-1 text-sm font-semibold text-brand-red">
-              Mã: {promotion.promo_code}
-            </p>
-          ) : null}
+    <div className="min-h-screen bg-amber-50/30 text-foreground dark:bg-background">
+      <section className="relative overflow-hidden border-b border-amber-100 bg-background py-10 sm:py-12">
+        <div className="relative z-10 mx-auto max-w-6xl space-y-4 px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-muted-foreground">
+            <Link href="/" className="transition-colors hover:text-brand-red">
+              Trang chủ
+            </Link>
+            <ChevronRight className="size-3 text-muted-foreground/70" aria-hidden />
+            <Link href="/khuyen-mai" className="transition-colors hover:text-brand-red">
+              Chương trình khuyến mãi
+            </Link>
+            <ChevronRight className="size-3 text-muted-foreground/70" aria-hidden />
+            <span className="line-clamp-1 font-black text-brand-red">{promotion.title}</span>
+          </div>
         </div>
+      </section>
 
-        <ArticleBodySection
-          body={promotion.body}
-          coverImageUrl={promotion.cover_image_url}
-          showDate={false}
-          coverPriority
-        />
-      </article>
-    </>
+      <section className="py-12">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <PromotionDealCard promotion={promotion} variant="detail" />
+        </div>
+      </section>
+
+      <BookingFormSection />
+    </div>
   );
 }

@@ -12,7 +12,7 @@ import {
   updatePromotion,
   type PromotionActionState,
 } from "@/app/admin/(protected)/promotions/actions";
-import { ArticleBodyPreview } from "@/components/admin/articles/article-body-preview";
+import { PromotionBodyPreview } from "@/components/admin/promotions/promotion-body-preview";
 import { RichTextEditor } from "@/components/editor/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +57,10 @@ export function PromotionForm({ mode, promotion }: PromotionFormProps) {
   const [slug, setSlug] = useState(promotion?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(Boolean(promotion?.slug));
   const [excerpt, setExcerpt] = useState(promotion?.excerpt ?? "");
+  const [discountLabel, setDiscountLabel] = useState(promotion?.discount_label ?? "");
+  const [promoCode, setPromoCode] = useState(promotion?.promo_code ?? "");
   const [bodyHtml, setBodyHtml] = useState(promotion?.body ?? "");
+  const [status, setStatus] = useState<PublicationStatus>(promotion?.status ?? "draft");
   const [startsAt, setStartsAt] = useState(
     promotion ? toDatetimeLocalValue(promotion.starts_at) : defaultStartsAt(),
   );
@@ -85,7 +88,11 @@ export function PromotionForm({ mode, promotion }: PromotionFormProps) {
     }
   }
 
-  const canViewOnSite = promotion ? isPromotionActive(promotion) : false;
+  const canViewOnSite = isPromotionActive({
+    status,
+    starts_at: new Date(startsAt).toISOString(),
+    ends_at: new Date(endsAt).toISOString(),
+  });
 
   return (
     <form action={formAction} className="space-y-6">
@@ -124,7 +131,8 @@ export function PromotionForm({ mode, promotion }: PromotionFormProps) {
           <Input
             id="discountLabel"
             name="discountLabel"
-            defaultValue={promotion?.discount_label ?? ""}
+            value={discountLabel}
+            onChange={(event) => setDiscountLabel(event.target.value)}
             disabled={pending}
             placeholder="Giảm 20%"
           />
@@ -134,7 +142,8 @@ export function PromotionForm({ mode, promotion }: PromotionFormProps) {
           <Input
             id="promoCode"
             name="promoCode"
-            defaultValue={promotion?.promo_code ?? ""}
+            value={promoCode}
+            onChange={(event) => setPromoCode(event.target.value)}
             disabled={pending}
             placeholder="OC20"
           />
@@ -184,10 +193,10 @@ export function PromotionForm({ mode, promotion }: PromotionFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="coverImage">Ảnh bìa (tối đa 2MB)</Label>
-        {promotion?.cover_image_url ? (
+        {coverPreviewUrl ? (
           <div className="relative mb-2 aspect-video max-w-md overflow-hidden rounded-lg border border-border">
             <Image
-              src={promotion.cover_image_url}
+              src={coverPreviewUrl}
               alt=""
               fill
               className="object-cover"
@@ -249,11 +258,17 @@ export function PromotionForm({ mode, promotion }: PromotionFormProps) {
         </div>
 
         {contentMode === "preview" ? (
-          <ArticleBodyPreview
+          <PromotionBodyPreview
             title={title}
             excerpt={excerpt}
             body={bodyHtml}
             coverImageUrl={coverPreviewUrl}
+            startsAt={startsAt}
+            endsAt={endsAt}
+            discountLabel={discountLabel}
+            promoCode={promoCode}
+            slug={slug}
+            variant="detail"
           />
         ) : null}
       </div>
@@ -263,7 +278,8 @@ export function PromotionForm({ mode, promotion }: PromotionFormProps) {
         <select
           id="status"
           name="status"
-          defaultValue={promotion?.status ?? "draft"}
+          value={status}
+          onChange={(event) => setStatus(event.target.value as PublicationStatus)}
           disabled={pending}
           className="h-9 w-full max-w-xs rounded-lg border border-input bg-transparent px-2.5 text-sm"
         >
@@ -288,7 +304,7 @@ export function PromotionForm({ mode, promotion }: PromotionFormProps) {
               <Button
                 type="button"
                 variant="outline"
-                render={<Link href={`/khuyen-mai/${promotion.slug}`} target="_blank" />}
+                render={<Link href={`/khuyen-mai/${slug}`} target="_blank" />}
               >
                 Xem trên site
               </Button>

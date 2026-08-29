@@ -9,12 +9,12 @@ const promotionColumns =
 const promotionListColumns =
   "id, title, slug, excerpt, cover_image_url, status, published_at, starts_at, ends_at, discount_label, promo_code, created_at, updated_at" as const;
 
-export const getActivePromotions = cache(async (): Promise<PromotionSummary[]> => {
+export const getActivePromotions = cache(async (): Promise<Promotion[]> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("promotions")
-    .select(promotionListColumns)
+    .select(promotionColumns)
     .eq("status", "published")
     .order("starts_at", { ascending: false });
 
@@ -23,7 +23,7 @@ export const getActivePromotions = cache(async (): Promise<PromotionSummary[]> =
     return [];
   }
 
-  return (data ?? []) as PromotionSummary[];
+  return (data ?? []) as Promotion[];
 });
 
 export const getActivePromotionBySlug = cache(async (slug: string): Promise<Promotion | null> => {

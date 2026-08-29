@@ -28,6 +28,10 @@ _Avoid_: Post, blog post
 Nội dung chính của Article (đoạn văn, heading, danh sách, ảnh, liên kết). Soạn qua Content Editor, lưu dạng HTML, hiển thị công khai qua cùng một bộ style typography.
 _Avoid_: Content, post body
 
+**Content Category**:
+Danh mục phân loại Article trên trang tin tức (Khuyến Mãi & Ưu Đãi, Tin Tức Nhà Hàng, Bí Quyết Ẩm Thực). Dùng cho filter và badge hiển thị.
+_Avoid_: Tag, topic
+
 **Promotion**:
 Chương trình ưu đãi có thời hạn, có thể kèm mã giảm giá (`promo_code`) hiển thị cho khách. Hết hạn thì tự ẩn khỏi site public.
 _Avoid_: Deal, offer

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getContentCategoryLabel } from "@/lib/content/categories";
 import type { ArticleSummary } from "@/types/database";
 
 type ArticlesTableProps = {
@@ -26,6 +27,7 @@ export function ArticlesTable({ articles }: ArticlesTableProps) {
         <thead className="bg-muted/50 text-left">
           <tr>
             <th className="px-4 py-3 font-semibold">Tiêu đề</th>
+            <th className="px-4 py-3 font-semibold">Danh mục</th>
             <th className="px-4 py-3 font-semibold">Trạng thái</th>
             <th className="px-4 py-3 font-semibold">Cập nhật</th>
             <th className="px-4 py-3 font-semibold">Thao tác</th>
@@ -37,6 +39,14 @@ export function ArticlesTable({ articles }: ArticlesTableProps) {
               <td className="px-4 py-3">
                 <p className="font-medium">{article.title}</p>
                 <p className="text-xs text-muted-foreground">/tin-tuc/{article.slug}</p>
+              </td>
+              <td className="px-4 py-3">
+                <p className="text-sm">{getContentCategoryLabel(article.category)}</p>
+                {article.is_featured ? (
+                  <Badge variant="hot" className="mt-1">
+                    Nổi bật
+                  </Badge>
+                ) : null}
               </td>
               <td className="px-4 py-3">
                 <Badge variant={article.status === "published" ? "default" : "outline"}>

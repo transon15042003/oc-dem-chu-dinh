@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { formatPromotionDateRange, isPromotionActive } from "@/lib/promotions/datetime";
+import { formatPromotionDateRange, getPromotionScheduleLabel, getPromotionScheduleStatus } from "@/lib/promotions/datetime";
 import type { PromotionSummary } from "@/types/database";
 
 type PromotionsTableProps = {
@@ -35,7 +35,9 @@ export function PromotionsTable({ promotions }: PromotionsTableProps) {
         </thead>
         <tbody>
           {promotions.map((promotion) => {
-            const active = isPromotionActive(promotion);
+            const scheduleStatus = getPromotionScheduleStatus(promotion);
+            const scheduleLabel = getPromotionScheduleLabel(scheduleStatus);
+            const canViewOnSite = scheduleStatus === "active";
 
             return (
               <tr key={promotion.id} className="border-t border-border">
@@ -55,8 +57,16 @@ export function PromotionsTable({ promotions }: PromotionsTableProps) {
                       {promotion.status === "published" ? "Xuất bản" : "Nháp"}
                     </Badge>
                     {promotion.status === "published" ? (
-                      <Badge variant={active ? "hot" : "outline"}>
-                        {active ? "Đang chạy" : "Hết hạn"}
+                      <Badge
+                        variant={
+                          scheduleStatus === "active"
+                            ? "hot"
+                            : scheduleStatus === "upcoming"
+                              ? "outline"
+                              : "outline"
+                        }
+                      >
+                        {scheduleLabel}
                       </Badge>
                     ) : null}
                   </div>
@@ -73,7 +83,7 @@ export function PromotionsTable({ promotions }: PromotionsTableProps) {
                     >
                       Sửa
                     </Button>
-                    {active ? (
+                    {canViewOnSite ? (
                       <Button
                         size="sm"
                         variant="ghost"
