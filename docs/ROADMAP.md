@@ -122,10 +122,11 @@ M4 — Promotion System ✅
 ├── Sitemap động (promotions)
 └── Nav + admin dashboard link
 
-M5 — v2.0 Polish & Deploy ⏳
+M5 — v2.0 Polish & Deploy ✅
 ├── Merge feature branches → develop → QA staging
+├── Perf: streaming + skeleton + cache tin-tuc/khuyen-mai
 ├── QA: auth, CRUD, public pages, RLS
-└── Merge develop → main (production)
+└── Merge develop → main (production) — PR #15/#16
 ```
 
 **Ước tính v2.0:** ~5–7 ngày full-time (còn M4–M5)
@@ -133,12 +134,12 @@ M5 — v2.0 Polish & Deploy ⏳
 ### Milestones v2.1 — Event Booking
 
 ```
-M1 — Form & API
+M1 — Form & API ✅
 ├── Form riêng (khác Table Reservation)
 ├── POST /api/event-booking → Supabase + Resend
 └── Nút "Đặt tiệc ngay" trỏ đúng luồng
 
-M2 — Admin
+M2 — Admin ✅
 └── /admin/event-bookings — xem danh sách
 ```
 
@@ -175,7 +176,8 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 | Admin auth + users | ✅ |
 | Article CRUD + public /tin-tuc | ✅ |
 | Promotion CRUD + public /khuyen-mai | ✅ M4 |
-| v2.0 deploy | ⏳ M5 |
+| Perf streaming tin-tuc/khuyen-mai | ✅ M5 |
+| v2.0 deploy (main) | ✅ M5 |
 
 ### Env bổ sung (v2)
 
