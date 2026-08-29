@@ -87,6 +87,7 @@
 | 1 | Hướng A — Portfolio trước, nâng cấp sau | 2026-08-28 |
 | 2 | Phạm vi v1: 5 trang + homepage features (xem bảng trên) | 2026-08-28 |
 | 3 | Stack v1: Next.js 15 + TS + Tailwind + shadcn + Framer Motion | 2026-08-28 |
+| 4 | Repo public + branch protection `main`/`develop` (xem ADR-0001) | 2026-08-29 |
 ---
 
 ## Env variables (do bạn config)
