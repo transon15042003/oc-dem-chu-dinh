@@ -46,6 +46,7 @@ export function AdminNav({ role, email }: AdminNavProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={false}
                 className={cn(
                   "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   pathname === item.href

@@ -1,9 +1,11 @@
 import Link from "next/link";
 
-import { requireAdminSession } from "@/lib/auth/session";
+import { getSessionProfile } from "@/lib/auth/session";
 
 export default async function AdminDashboardPage() {
-  const session = await requireAdminSession();
+  // Layout đã requireAdminSession; getSessionProfile dùng React cache() — không gọi Supabase lại.
+  const session = await getSessionProfile();
+  if (!session) return null;
 
   return (
     <div className="space-y-6">
@@ -31,7 +33,11 @@ export default async function AdminDashboardPage() {
       {session.profile.role === "admin" ? (
         <p className="text-sm">
           Quản lý tài khoản:{" "}
-          <Link href="/admin/users" className="font-medium text-brand-red hover:underline">
+          <Link
+            href="/admin/users"
+            prefetch={false}
+            className="font-medium text-brand-red hover:underline"
+          >
             /admin/users
           </Link>
         </p>

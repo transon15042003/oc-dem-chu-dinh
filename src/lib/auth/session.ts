@@ -1,13 +1,20 @@
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 import { createClient } from "@/lib/supabase/server";
 import type { Profile, UserRole } from "@/types/database";
 
-export async function getSessionProfile(): Promise<{
+const profileColumns =
+  "id, email, full_name, role, created_at, updated_at" as const;
+
+/**
+ * Một lần gọi auth + profile / request (dedupe layout + page + actions trong cùng render).
+ */
+export const getSessionProfile = cache(async (): Promise<{
   userId: string;
   email: string;
   profile: Profile;
-} | null> {
+} | null> => {
   const supabase = await createClient();
   const {
     data: { user },
@@ -19,7 +26,7 @@ export async function getSessionProfile(): Promise<{
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("*")
+    .select(profileColumns)
     .eq("id", user.id)
     .single();
 
@@ -32,7 +39,7 @@ export async function getSessionProfile(): Promise<{
     email: user.email,
     profile: profile as Profile,
   };
-}
+});
 
 export async function requireAdminSession() {
   const session = await getSessionProfile();
