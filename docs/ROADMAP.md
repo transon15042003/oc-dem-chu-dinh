@@ -146,10 +146,10 @@ M2 — Admin ✅
 ### Milestones v2.2 — Careers
 
 ```
-M1 — Public page
+M1 — Public page ✅
 └── /tuyen-dung + form ứng tuyển
 
-M2 — Email
+M2 — Email ✅
 └── POST /api/careers → Resend only (không DB)
 ```
 
@@ -178,6 +178,13 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 | Promotion CRUD + public /khuyen-mai | ✅ M4 |
 | Perf streaming tin-tuc/khuyen-mai | ✅ M5 |
 | v2.0 deploy (main) | ✅ M5 |
+
+### Tiến độ v2.1+ (tóm tắt)
+
+| Hạng mục | Trạng thái |
+|----------|------------|
+| Event Booking form + admin | ✅ v2.1 |
+| Careers `/tuyen-dung` + email | ✅ v2.2 |
 
 ### Env bổ sung (v2)
 

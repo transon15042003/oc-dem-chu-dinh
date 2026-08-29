@@ -34,11 +34,13 @@ export const mainNav: NavItem[] = [
   { label: "Tin tức", href: "/tin-tuc" },
   { label: "Khuyến mãi", href: "/khuyen-mai" },
   { label: "Chi nhánh", href: "/chi-nhanh" },
+  { label: "Tuyển dụng", href: "/tuyen-dung" },
   { label: "Liên hệ", href: "/lien-he" },
 ];
 
 export const bookingSectionId = "dat-ban";
 export const eventBookingSectionId = "dat-tiec";
+export const careersApplicationSectionId = "ung-tuyen";
 
 export const siteRoutes = [
   { path: "/" as const, changeFrequency: "weekly" as const, priority: 1 },
@@ -47,5 +49,6 @@ export const siteRoutes = [
   { path: "/tin-tuc" as const, changeFrequency: "weekly" as const, priority: 0.85 },
   { path: "/khuyen-mai" as const, changeFrequency: "weekly" as const, priority: 0.85 },
   { path: "/chi-nhanh" as const, changeFrequency: "monthly" as const, priority: 0.85 },
+  { path: "/tuyen-dung" as const, changeFrequency: "monthly" as const, priority: 0.75 },
   { path: "/lien-he" as const, changeFrequency: "monthly" as const, priority: 0.8 },
 ];
