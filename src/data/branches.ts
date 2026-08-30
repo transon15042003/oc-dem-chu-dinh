@@ -23,12 +23,11 @@ export type Branch = {
 };
 
 function galleryItem(jpgPath: string): BranchImage {
-  const encoded = jpgPath.replace(/ /g, "%20");
-  const webp = encoded.replace(/\.jpg$/, "_400-400.webp");
+  const full = cdnImage(jpgPath);
 
   return {
-    thumb: cdnImage(webp),
-    full: cdnImage(encoded),
+    thumb: full,
+    full,
   };
 }
 

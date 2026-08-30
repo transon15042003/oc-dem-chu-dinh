@@ -12,9 +12,19 @@ storage/anh-video/CN1 - gò vấp13.jpg
 storage/anh-video/CN1 - gò vấp14.jpg
 storage/anh-video/CN1 - gò vấp15.jpg
 storage/anh-video/CN1 - gò vấp16.jpg
+storage/anh-video/CN1 - gò vấp17.jpg
+storage/anh-video/CN1 - gò vấp18.jpg
+storage/anh-video/CN1 - gò vấp19.jpg
 storage/anh-video/CN1 - gò vấp2_600-600.webp
 storage/anh-video/CN1 - gò vấp20.mp4
 storage/anh-video/CN2 - Tân Bình1.jpg
+storage/anh-video/CN2 - Tân Bình2.jpg
+storage/anh-video/CN2 - Tân Bình3.jpg
+storage/anh-video/CN2 - Tân Bình4.jpg
+storage/anh-video/CN2 - Tân Bình5.jpg
+storage/anh-video/CN2 - Tân Bình6.jpg
+storage/anh-video/CN2 - Tân Bình7.jpg
+storage/anh-video/CN2 - Tân Bình8.jpg
 storage/anh-video/CN3 - Thủ Đức - Món ăn1.jpg
 storage/anh-video/CN3 - Thủ Đức - Món ăn1_400-400.webp
 storage/anh-video/CN3 - Thủ Đức - Món ăn10.jpg

@@ -306,18 +306,18 @@ export const experienceVideos: ExperienceVideo[] = [
 ];
 
 const galleryFiles = [
-  "CN1%20-%20gò%20vấp1_600-600.webp",
-  "CN1%20-%20gò%20vấp2_600-600.webp",
-  "CN1%20-%20gò%20vấp10_600-600.webp",
-  "CN1%20-%20gò%20vấp11_600-600.webp",
-  "CN1%20-%20gò%20vấp12_600-600.webp",
-  "CN1%20-%20gò%20vấp13_600-600.webp",
-  "CN1%20-%20gò%20vấp14_600-600.webp",
-  "CN1%20-%20gò%20vấp15_600-600.webp",
-  "CN1%20-%20gò%20vấp16_600-600.webp",
-  "CN1%20-%20gò%20vấp17_600-600.webp",
-  "CN1%20-%20gò%20vấp18_600-600.webp",
-  "CN1%20-%20gò%20vấp19_600-600.webp",
+  "CN1 - gò vấp1_600-600.webp",
+  "CN1 - gò vấp2_600-600.webp",
+  "CN1 - gò vấp10_600-600.webp",
+  "CN1 - gò vấp11_600-600.webp",
+  "CN1 - gò vấp12.jpg",
+  "CN1 - gò vấp13.jpg",
+  "CN1 - gò vấp14.jpg",
+  "CN1 - gò vấp15.jpg",
+  "CN1 - gò vấp16.jpg",
+  "CN1 - gò vấp17.jpg",
+  "CN1 - gò vấp18.jpg",
+  "CN1 - gò vấp19.jpg",
 ];
 
 export const galleryImages: GalleryImage[] = galleryFiles.map((file, index) => ({

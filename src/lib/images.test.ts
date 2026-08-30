@@ -36,4 +36,12 @@ describe("cdnImage", () => {
       `${SUPABASE_URL}/storage/v1/object/public/site-assets/storage/mon-an/a%20(19).jpg`,
     );
   });
+
+  it("resolves gallery jpg paths that only exist as originals on storage", async () => {
+    const { cdnImage } = await import("@/lib/images");
+
+    expect(cdnImage("storage/anh-video/CN1 - gò vấp17.jpg")).toBe(
+      `${SUPABASE_URL}/storage/v1/object/public/site-assets/storage/anh-video/cn1-go-vap17.jpg`,
+    );
+  });
 });
