@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireRole } from "@/lib/auth/session";
+import { getSupabaseServiceConfig, getSupabaseServiceConfigError } from "@/lib/env-server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { UserRole } from "@/types/database";
 
@@ -24,6 +26,20 @@ export type UserActionState = {
   message: string;
 };
 
+function mapCreateUserError(message: string): string {
+  const lower = message.toLowerCase();
+
+  if (lower.includes("already") && lower.includes("registered")) {
+    return "Email đã được sử dụng.";
+  }
+
+  if (lower.includes("duplicate") || lower.includes("unique")) {
+    return "Email đã được sử dụng.";
+  }
+
+  return message;
+}
+
 export async function createAdminUser(
   _prev: UserActionState,
   formData: FormData,
@@ -41,20 +57,45 @@ export async function createAdminUser(
     return { ok: false, message: parsed.error.issues[0]?.message ?? "Dữ liệu không hợp lệ" };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.rpc("admin_create_user", {
-    p_email: parsed.data.email,
-    p_password: parsed.data.password,
-    p_full_name: parsed.data.fullName,
-    p_role: parsed.data.role,
+  if (!getSupabaseServiceConfig()) {
+    return { ok: false, message: getSupabaseServiceConfigError() };
+  }
+
+  const normalizedEmail = parsed.data.email.trim().toLowerCase();
+  const admin = createAdminClient();
+
+  const { data, error } = await admin.auth.admin.createUser({
+    email: normalizedEmail,
+    password: parsed.data.password,
+    email_confirm: true,
+    user_metadata: {
+      full_name: parsed.data.fullName,
+    },
   });
 
   if (error) {
-    return { ok: false, message: error.message };
+    return { ok: false, message: mapCreateUserError(error.message) };
+  }
+
+  const userId = data.user?.id;
+  if (!userId) {
+    return { ok: false, message: "Không tạo được người dùng." };
+  }
+
+  const { error: profileError } = await admin
+    .from("profiles")
+    .update({
+      full_name: parsed.data.fullName,
+      role: parsed.data.role,
+    })
+    .eq("id", userId);
+
+  if (profileError) {
+    return { ok: false, message: profileError.message };
   }
 
   revalidatePath("/admin/users");
-  return { ok: true, message: `Đã tạo tài khoản ${parsed.data.email}` };
+  return { ok: true, message: `Đã tạo tài khoản ${normalizedEmail}` };
 }
 
 export async function updateUserRole(

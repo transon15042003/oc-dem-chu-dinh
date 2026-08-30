@@ -29,7 +29,10 @@
 ## Tạo user mới (marketing)
 
 1. Đăng nhập admin → `/admin/users`
-2. Điền form → gọi RPC `admin_create_user` (chỉ role `admin`)
+2. Điền form → server action gọi **Supabase Admin API** (`auth.admin.createUser`) với `SUPABASE_SERVICE_ROLE_KEY`
+3. Sau khi tạo, cập nhật `profiles.role` và `full_name`
+
+> **Lưu ý:** Thiếu `SUPABASE_SERVICE_ROLE_KEY` trên Vercel → không tạo được tài khoản mới (form báo lỗi cấu hình).
 
 ## Migrations
 
@@ -37,7 +40,7 @@
 |------|--------|
 | `*_v2_content_system.sql` | Schema v2.0 |
 | `*_bootstrap_admin_user.sql` | Promote admin đầu tiên |
-| `*_admin_create_user_rpc.sql` | RPC tạo user không cần service role |
+| `*_admin_create_user_rpc.sql` | RPC legacy (đã vá token columns); app dùng Admin API |
 | `*_seed_articles_from_original_site.sql` | Seed 6 bài tin tức từ site gốc (idempotent) |
 
 ### Chạy seed articles (local / remote)
