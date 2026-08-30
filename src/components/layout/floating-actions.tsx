@@ -6,6 +6,7 @@ import { CalendarDays, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { bookingSectionId } from "@/config/site";
 import { formatHotline, hotlineHref, publicEnv } from "@/lib/env";
+import { resolveMapDirectionsUrl } from "@/lib/maps";
 import { cn } from "@/lib/utils";
 
 type FloatingAction = {
@@ -20,6 +21,8 @@ type FloatingAction = {
 export function FloatingActions() {
   const hotline = publicEnv.hotline;
 
+  const mapDirectionsUrl = resolveMapDirectionsUrl("cn1");
+
   const actions: FloatingAction[] = [
     ...(hotline
       ? [
@@ -31,12 +34,12 @@ export function FloatingActions() {
           },
         ]
       : []),
-    ...(publicEnv.mapUrls.cn1
+    ...(mapDirectionsUrl
       ? [
           {
             label: "Tìm đường",
             shortLabel: "Đường",
-            href: publicEnv.mapUrls.cn1,
+            href: mapDirectionsUrl,
             icon: <MapPin className="size-5" aria-hidden />,
             external: true,
           },

@@ -27,6 +27,7 @@ import {
 import { branches } from "@/data/branches";
 import { bookingSectionId } from "@/config/site";
 import { formatHotline, hotlineHref, publicEnv } from "@/lib/env";
+import { resolveMapDirectionsUrl } from "@/lib/maps";
 import { hoverImageClass } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -62,10 +63,8 @@ export function BranchesPageContent() {
       <section className="py-10 sm:py-14">
         <div className="mx-auto max-w-7xl space-y-10 px-4 sm:px-6 lg:px-8">
           {branches.map((branch, branchIndex) => {
-            const mapUrl = publicEnv.mapUrls[branch.mapKey];
-            const directionsUrl =
-              mapUrl ||
-              `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(branch.address)}`;
+            const mapUrl = resolveMapDirectionsUrl(branch.mapKey, branch.address);
+            const directionsUrl = mapUrl;
 
             return (
               <ScrollReveal

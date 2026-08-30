@@ -17,6 +17,7 @@ import { branches } from "@/data/branches";
 import { footerSlogans } from "@/data/footer";
 import { siteConfig } from "@/config/site";
 import { formatHotline, hotlineHref, publicEnv } from "@/lib/env";
+import { resolveMapDirectionsUrl, resolveMapEmbedUrl } from "@/lib/maps";
 import { cn } from "@/lib/utils";
 
 export function Footer() {
@@ -24,9 +25,10 @@ export function Footer() {
   const hotline = publicEnv.hotline;
   const email = publicEnv.email;
   const activeBranch = branches[activeBranchIndex];
-  const mapEmbed = activeBranch
-    ? publicEnv.mapEmbeds[activeBranch.mapKey]
-    : "";
+  const mapEmbed =
+    activeBranch && !activeBranch.comingSoon
+      ? resolveMapEmbedUrl(activeBranch.mapKey, activeBranch.address)
+      : "";
 
   return (
     <footer
@@ -164,7 +166,7 @@ export function Footer() {
             </h3>
             <div className="space-y-3 text-xs">
               {branches.map((branch, index) => {
-                const mapUrl = publicEnv.mapUrls[branch.mapKey];
+                const mapUrl = resolveMapDirectionsUrl(branch.mapKey, branch.address);
                 const isActive = activeBranchIndex === index;
 
                 return (
@@ -184,7 +186,7 @@ export function Footer() {
                         <Store className="size-3 shrink-0" />
                         {branch.name}
                       </span>
-                      {mapUrl ? (
+                      {mapUrl && !branch.comingSoon ? (
                         <a
                           href={mapUrl}
                           target="_blank"
