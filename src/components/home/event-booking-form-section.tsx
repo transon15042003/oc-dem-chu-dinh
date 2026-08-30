@@ -87,7 +87,17 @@ export function EventBookingFormSection() {
     }
 
     setSubmitted(true);
-    reset({ eventType: presetEventType || undefined });
+    reset({
+      fullName: "",
+      phone: "",
+      eventType: presetEventType || undefined,
+      guestCount: "",
+      branchId: "",
+      date: "",
+      time: "",
+      companyName: "",
+      note: "",
+    });
     setTimeout(() => setSubmitted(false), 5000);
   };
 

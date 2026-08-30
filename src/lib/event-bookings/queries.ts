@@ -4,7 +4,7 @@ import { createPrivilegedClient } from "@/lib/supabase/privileged";
 import type { EventBooking } from "@/types/database";
 
 const eventBookingColumns =
-  "id, full_name, phone, event_type, guest_count, branch_id, event_date, event_time, company_name, note, created_at" as const;
+  "id, full_name, phone, event_type, guest_count, branch_id, event_date, event_time, company_name, note, status, created_at" as const;
 
 export const getEventBookings = cache(async (): Promise<EventBooking[]> => {
   const supabase = await createPrivilegedClient();

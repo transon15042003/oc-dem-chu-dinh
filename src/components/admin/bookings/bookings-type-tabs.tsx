@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-import type { BookingFilterType } from "@/lib/bookings/types";
+import {
+  buildBookingsHref,
+  parseBookingStatusFilter,
+  type BookingFilterType,
+} from "@/lib/bookings/types";
 import { cn } from "@/lib/utils";
 
 const tabs: Array<{ value: BookingFilterType; label: string }> = [
@@ -16,12 +21,22 @@ type BookingsTypeTabsProps = {
 };
 
 export function BookingsTypeTabs({ active }: BookingsTypeTabsProps) {
+  const searchParams = useSearchParams();
+  const status = parseBookingStatusFilter(searchParams.get("status") ?? undefined);
+  const branch = searchParams.get("branch") ?? "";
+  const query = searchParams.get("q") ?? "";
+
   return (
     <div className="flex flex-wrap gap-2">
       {tabs.map((tab) => (
         <Link
           key={tab.value}
-          href={tab.value === "all" ? "/admin/bookings" : `/admin/bookings?type=${tab.value}`}
+          href={buildBookingsHref({
+            type: tab.value,
+            status,
+            branch,
+            query,
+          })}
           prefetch={false}
           className={cn(
             "rounded-lg px-4 py-2 text-sm font-semibold transition-colors",
