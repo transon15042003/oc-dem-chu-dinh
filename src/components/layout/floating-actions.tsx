@@ -29,6 +29,19 @@ type FloatingAction = {
 
 const brandIconTones: FloatingActionTone[] = ["maps", "zalo", "messenger"];
 
+function ActionIcon({ action }: { action: FloatingAction }) {
+  return (
+    <span
+      className={cn(
+        "flex size-10 items-center justify-center rounded-full shadow-md ring-1 ring-black/5",
+        action.tone === "booking" ? "bg-brand-gold" : "bg-white",
+      )}
+    >
+      {action.icon}
+    </span>
+  );
+}
+
 function IconButton({
   action,
   className,
@@ -36,15 +49,7 @@ function IconButton({
   action: FloatingAction;
   className?: string;
 }) {
-  const usesBrandIcon = brandIconTones.includes(action.tone);
-
-  const content = usesBrandIcon ? (
-    <span className="flex size-10 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-black/5">
-      {action.icon}
-    </span>
-  ) : (
-    action.icon
-  );
+  const content = <ActionIcon action={action} />;
 
   const sharedClass = cn(
     "flex items-center justify-center transition-transform hover:scale-105",
@@ -201,10 +206,8 @@ export function FloatingActions() {
             </span>
             <span
               className={cn(
-                "rounded-full border p-1 shadow-lg",
-                action.tone === "booking"
-                  ? "border-brand-gold bg-brand-gold"
-                  : "border-brand-gold/30 bg-brand-dark-soft",
+                "rounded-full border border-brand-gold/30 bg-brand-dark-soft p-1 shadow-lg",
+                action.tone === "booking" && "border-brand-gold ring-1 ring-brand-gold/30",
               )}
             >
               <IconButton action={action} />
