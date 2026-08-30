@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 
 import { InteractiveCard } from "@/components/shared/interactive-card";
 import {
-  carouselNavButtonClass,
+  carouselNavButtonMobileClass,
   ScrollCarouselShell,
 } from "@/components/shared/scroll-carousel-shell";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -95,11 +95,11 @@ export function EventServicesSection() {
             </CarouselContent>
             <CarouselPrevious
               hideWhenDisabled={false}
-              className={cn(carouselNavButtonClass, "left-0")}
+              className={cn(carouselNavButtonMobileClass, "-left-2 sm:-left-4")}
             />
             <CarouselNext
               hideWhenDisabled={false}
-              className={cn(carouselNavButtonClass, "right-0")}
+              className={cn(carouselNavButtonMobileClass, "-right-2 sm:-right-4")}
             />
           </Carousel>
         </ScrollCarouselShell>

@@ -16,7 +16,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { reviews } from "@/data/homepage";
-import { cn } from "@/lib/utils";
 
 export function ReviewsSection() {
   return (
@@ -64,14 +63,8 @@ export function ReviewsSection() {
               </CarouselItem>
             ))}
           </CarouselContent>
-            <CarouselPrevious
-              hideWhenDisabled={false}
-              className={cn(carouselNavButtonClass, "left-0")}
-            />
-            <CarouselNext
-              hideWhenDisabled={false}
-              className={cn(carouselNavButtonClass, "right-0")}
-            />
+            <CarouselPrevious hideWhenDisabled={false} className={carouselNavButtonClass} />
+            <CarouselNext hideWhenDisabled={false} className={carouselNavButtonClass} />
           </Carousel>
         </ScrollCarouselShell>
       </div>

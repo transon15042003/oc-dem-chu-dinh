@@ -104,14 +104,8 @@ export function FeaturedDishesSection() {
               </CarouselItem>
             ))}
           </CarouselContent>
-            <CarouselPrevious
-              hideWhenDisabled={false}
-              className={cn(carouselNavButtonClass, "left-0")}
-            />
-            <CarouselNext
-              hideWhenDisabled={false}
-              className={cn(carouselNavButtonClass, "right-0")}
-            />
+            <CarouselPrevious hideWhenDisabled={false} className={carouselNavButtonClass} />
+            <CarouselNext hideWhenDisabled={false} className={carouselNavButtonClass} />
           </Carousel>
         </ScrollCarouselShell>
 

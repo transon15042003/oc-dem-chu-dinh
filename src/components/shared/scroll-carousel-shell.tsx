@@ -21,15 +21,15 @@ export function ScrollCarouselShell({
   return (
     <div className={cn("relative", className)}>
       <div
-        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r from-background via-background/80 to-transparent sm:w-10"
+        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-brand-dark-soft via-brand-dark-soft/80 to-transparent sm:hidden"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-r from-transparent via-background/80 to-background sm:w-10"
+        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-brand-dark-soft via-brand-dark-soft/80 to-transparent sm:hidden"
         aria-hidden
       />
 
-      <div className="px-1 sm:px-8">{children}</div>
+      <div className="px-0 sm:px-12">{children}</div>
 
       {showHint ? (
         <p className="mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground sm:hidden">
@@ -43,4 +43,7 @@ export function ScrollCarouselShell({
 }
 
 export const carouselNavButtonClass =
-  "top-1/2 z-20 flex size-9 -translate-y-1/2 border-border bg-card/95 text-brand-gold shadow-md backdrop-blur-sm hover:bg-brand-red hover:text-on-red sm:size-10";
+  "z-20 hidden size-9 border-border bg-card/95 text-brand-gold shadow-md backdrop-blur-sm hover:bg-brand-red hover:text-on-red sm:flex sm:size-10";
+
+export const carouselNavButtonMobileClass =
+  "z-20 flex size-8 border-border bg-card/95 text-brand-gold shadow-md backdrop-blur-sm hover:bg-brand-red hover:text-on-red sm:size-9 xl:hidden";
