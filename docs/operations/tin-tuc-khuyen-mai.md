@@ -54,5 +54,5 @@ Quy trình tương tự tin tức, thêm các trường:
 
 ## Trang public
 
-- Danh sách tin: `https://oc-dem-chu-dinh.vercel.app/tin-tuc`
-- Danh sách KM: `https://oc-dem-chu-dinh.vercel.app/khuyen-mai`
+- Danh sách tin: `https://ocdemchudinh.vercel.app/tin-tuc`
+- Danh sách KM: `https://ocdemchudinh.vercel.app/khuyen-mai`

@@ -63,4 +63,4 @@ Số danh mục/món **nháp** hiển thị dưới tiêu đề trang.
 
 ## Trang public
 
-`https://oc-dem-chu-dinh.vercel.app/thuc-don`
+`https://ocdemchudinh.vercel.app/thuc-don`

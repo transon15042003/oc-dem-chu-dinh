@@ -5,7 +5,7 @@ Tài liệu dành cho **chủ quán** và **marketing** — không cần biết 
 ## Đăng nhập
 
 1. Mở trình duyệt (Chrome, Safari, Cốc Cốc…)
-2. Vào địa chỉ admin: **`https://oc-dem-chu-dinh.vercel.app/admin/login`**
+2. Vào địa chỉ admin: **`https://ocdemchudinh.vercel.app/admin/login`**
 3. Nhập email và mật khẩu do quản trị viên cấp
 4. Sau khi đăng nhập, menu trên cùng hiển thị các mục quản lý
 

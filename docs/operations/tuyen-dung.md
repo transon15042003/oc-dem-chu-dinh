@@ -55,4 +55,4 @@ Có thể bật chế độ **chỉ hiện form** (không hiện thẻ vị trí
 
 ## Trang public
 
-`https://oc-dem-chu-dinh.vercel.app/tuyen-dung`
+`https://ocdemchudinh.vercel.app/tuyen-dung`

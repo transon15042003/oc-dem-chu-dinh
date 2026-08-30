@@ -2,7 +2,8 @@
 
 Chúng tôi dùng **một** Vercel project, production branch `main`, staging cố định qua **branch domain** của nhánh `develop` — không tạo project Vercel thứ hai.
 
-**Staging URL (Vercel):** `https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app`  
+**Staging URL (chính):** `https://ocdemchudinh-preview.vercel.app` (domain Vercel gắn Git branch `develop`)  
+**Branch alias (dự phòng):** `https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app`  
 **Custom domain (khi có):** `staging.<domain-chủ-quán>` gắn Git branch `develop`.
 
 **Quyết định phiên grill 2026-08-29:**

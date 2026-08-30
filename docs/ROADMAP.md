@@ -610,7 +610,7 @@ M5 — Polish & deploy
 ├── Theme system light/dark + toggle ✅ (chuẩn hóa — xem § Theme System)
 ├── Responsive QA + FAB hotline ✅
 ├── SEO metadata + Open Graph + JSON-LD + sitemap/robots ✅
-└── Deploy Vercel ✅ → https://oc-dem-chu-dinh.vercel.app (cấu hình env production — xem § Deploy Vercel)
+└── Deploy Vercel ✅ → https://ocdemchudinh.vercel.app (cấu hình env production — xem § Deploy Vercel)
 ```
 
 **Ước tính:** ~7–9 ngày full-time · 2–3 tuần part-time
@@ -619,8 +619,8 @@ M5 — Polish & deploy
 
 ## Deploy Vercel (M5) ✅
 
-**Production URL:** https://oc-dem-chu-dinh.vercel.app  
-**Staging URL (`develop`):** https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app  
+**Production URL:** https://ocdemchudinh.vercel.app  
+**Staging URL (`develop`):** https://ocdemchudinh-preview.vercel.app  
 **Dashboard:** https://vercel.com/tran-sons-projects-703bf65b/oc-dem-chu-dinh/settings
 
 > Chi tiết đầy đủ: [`docs/DEPLOY.md`](./DEPLOY.md) · Git Flow: [`docs/GITFLOW.md`](./GITFLOW.md)

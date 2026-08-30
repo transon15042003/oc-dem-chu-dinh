@@ -65,11 +65,11 @@ _Avoid_: Category tab, food group
 _Avoid_: Content image, upload ảnh admin
 
 **Production Deployment**:
-Bản build live cho khách — deploy từ nhánh `main` lên Vercel Production (`https://oc-dem-chu-dinh.vercel.app`).
+Bản build live cho khách — deploy từ nhánh `main` lên Vercel Production (`https://ocdemchudinh.vercel.app`).
 _Avoid_: Prod, live site
 
 **Staging Deployment**:
-Bản QA nội bộ cho dev — deploy từ nhánh `develop` qua Vercel branch domain (URL cố định). Không gửi chủ quán.
+Bản QA nội bộ cho dev — deploy từ nhánh `develop` (`https://ocdemchudinh-preview.vercel.app`). Không gửi chủ quán.
 _Avoid_: UAT, pre-prod
 
 **Preview Deployment**:

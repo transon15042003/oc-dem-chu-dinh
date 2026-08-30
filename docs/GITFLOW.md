@@ -82,8 +82,10 @@ Một Vercel project, production branch `main`, staging = branch domain của `d
 | Merge PR vào `main` | **Production** tự deploy |
 | Push lên `feature/*` (chưa merge) | Chỉ Preview URL trên PR — không ảnh hưởng staging/production |
 
-**Staging URL:** https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app  
-**Production URL:** https://oc-dem-chu-dinh.vercel.app
+**Staging URL:** https://ocdemchudinh-preview.vercel.app  
+**Production URL:** https://ocdemchudinh.vercel.app
+
+Branch alias dự phòng: `oc-dem-chu-dinh-git-develop-...vercel.app` / `oc-dem-chu-dinh-git-main-...vercel.app` — xem [`DEPLOY.md`](./DEPLOY.md).
 
 ### Quy tắc khi push
 
