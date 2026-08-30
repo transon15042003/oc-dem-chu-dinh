@@ -44,9 +44,25 @@ _Avoid_: Visibility, state
 Người dùng nội bộ đăng nhập admin để tạo và sửa Article, Promotion. Role `editor` hoặc `admin`.
 _Avoid_: Author, CMS user
 
+**Booking Status**:
+Trạng thái xử lý yêu cầu đặt bàn hoặc đặt tiệc trong admin: `pending` (chưa xử lý) hoặc `processed` (đã xử lý).
+_Avoid_: Trạng thái đơn, order status
+
+**Career**:
+Vị trí tuyển dụng do Content Editor quản lý qua admin; hiển thị trên trang Tuyển dụng khi ở trạng thái xuất bản.
+_Avoid_: Job posting, job opening
+
 **Job Application**:
-Đơn ứng tuyển gửi qua form trang Tuyển dụng; chỉ gửi email thông báo, không lưu database (v2.2).
+Đơn ứng tuyển gửi qua form trang Tuyển dụng; lưu database (`career_applications`) và gửi email thông báo.
 _Avoid_: CV upload, applicant
+
+**Menu Category**:
+Nhóm món trong thực đơn (Ốc, Sò, Lẩu…), có thứ tự sắp xếp và trạng thái xuất bản riêng.
+_Avoid_: Category tab, food group
+
+**Site Asset**:
+Ảnh tĩnh migrate từ site gốc (logo, gallery, ảnh món, thumbnail chi nhánh), lưu trên Supabase bucket `site-assets`.
+_Avoid_: Content image, upload ảnh admin
 
 **Production Deployment**:
 Bản build live cho khách — deploy từ nhánh `main` lên Vercel Production (`https://oc-dem-chu-dinh.vercel.app`).

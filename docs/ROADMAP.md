@@ -2,6 +2,17 @@
 
 > Ghi chú từ phiên `/grill-with-docs`. Cập nhật khi quyết định thay đổi.
 
+## Cấu trúc tài liệu
+
+| Tài liệu | Vai trò |
+|----------|---------|
+| [`README.md`](../README.md) | Onboarding dev — clone, env, link demo |
+| [`CONTEXT.md`](../CONTEXT.md) | Glossary domain (không env, không milestone) |
+| [`docs/README.md`](./README.md) | **Mục lục trung tâm** |
+| [`docs/operations/`](./operations/) | Hướng dẫn chủ quán / marketing |
+| [`docs/adr/`](./adr/) | Quyết định kiến trúc |
+| `ROADMAP.md` (file này) | Lịch sử quyết định + milestones + ghi chú AI |
+
 ## Ghi chú cho AI (phiên sau)
 
 > **Đọc mục này trước** khi tiếp tục phát triển — ghi lại ý chủ dự án qua các phiên chat.
@@ -14,7 +25,7 @@
 | **Không tự merge** | Chỉ merge PR / push `main` khi chủ dự án yêu cầu rõ ràng. |
 | **Git Flow** | `feature/*` → PR → `develop` (staging) → PR → `main` (production). Chi tiết: [`docs/GITFLOW.md`](./GITFLOW.md). |
 | **Branch v2.3** | `feature/v2-bookings-hub` → PR [#21](https://github.com/transon15042003/oc-dem-chu-dinh/pull/21) → `develop` (đã merge). |
-| **Branch v2.4** | `feature/v2-menu-admin` → PR → `develop`. |
+| **Branch v2.4** | `feature/v2-menu-admin` → đã merge `develop` + `main`. |
 
 ### Env Vercel (quan trọng)
 
@@ -220,7 +231,7 @@ M3 — Form & API fixes ✅
 
 **Defer v2.3+:** export CSV, calendar view, workflow đã xác nhận/hủy (ngoài pending/processed).
 
-### Milestones v2.4 — Menu Admin
+### Milestones v2.4 — Menu Admin ✅
 
 ```
 M1 — Supabase schema ✅
@@ -260,7 +271,8 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 | Event Booking form + admin | ✅ v2.1 |
 | Careers `/tuyen-dung` + admin CMS | ✅ v2.2 |
 | Bookings hub (đặt bàn DB + `/admin/bookings`) | ✅ v2.3 |
-| Menu admin CRUD + `/thuc-don` từ Supabase | 🚧 v2.4 |
+| Menu admin CRUD + `/thuc-don` từ Supabase | ✅ v2.4 |
+| Ảnh tĩnh `site-assets` + fix URL production | ✅ post-v2.4 |
 
 ### Env bổ sung (v2)
 
@@ -295,6 +307,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 | 25 | Sau mỗi task: **commit + push** — chủ dự án test trên Vercel Preview/Staging | 2026-08-30 |
 | 26 | `SUPABASE_SERVICE_ROLE_KEY` bắt buộc Vercel; form success ≠ đã lưu DB nếu thiếu key | 2026-08-30 |
 | 27 | Admin bookings: filter + `booking_status` pending/processed; form select hiện label VI | 2026-08-30 |
+| 28 | Bộ tài liệu: `docs/README.md`, `docs/operations/`, `docs/IMAGES.md`, ADR-0006 | 2026-08-31 |
 ---
 
 ## Env variables (do bạn config)

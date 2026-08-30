@@ -6,6 +6,8 @@
 **URL:** https://ianpabkxuzjnksrgsvtr.supabase.co  
 **Dashboard:** https://supabase.com/dashboard/project/ianpabkxuzjnksrgsvtr
 
+> Ảnh tĩnh site gốc (bucket `site-assets`): xem [`IMAGES.md`](./IMAGES.md) · ADR: [`adr/0006-site-assets-supabase-storage.md`](./adr/0006-site-assets-supabase-storage.md)
+
 ## Admin đầu tiên ✅
 
 | Field | Giá trị |
