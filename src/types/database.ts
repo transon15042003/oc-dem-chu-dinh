@@ -140,3 +140,15 @@ export type EventBooking = {
   note: string | null;
   created_at: string;
 };
+
+export type TableBooking = {
+  id: string;
+  full_name: string;
+  phone: string;
+  guest_count: string;
+  branch_id: string;
+  booking_date: string;
+  booking_time: string;
+  note: string | null;
+  created_at: string;
+};

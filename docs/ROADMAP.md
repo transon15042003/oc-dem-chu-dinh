@@ -162,13 +162,13 @@ M2 — Admin CMS ✅
 > **Quyết định:** Một hub admin duy nhất; **2 bảng DB riêng** (`table_bookings`, `event_bookings`). Form public vẫn tách (đặt bàn ≠ đặt tiệc).
 
 ```
-M1 — Table booking → Supabase
+M1 — Table booking → Supabase ✅
 ├── Migration `table_bookings` (full_name, phone, guest_count, branch_id, booking_date, booking_time, note)
 ├── RLS: editor SELECT
 ├── POST /api/booking → insert DB + Resend (giữ email)
 └── Pattern giống event_bookings / career_applications
 
-M2 — Admin hub `/admin/bookings`
+M2 — Admin hub `/admin/bookings` ✅
 ├── Tab: Tất cả | Đặt bàn | Đặt tiệc (query param `?type=table|event|all`)
 ├── Bảng riêng theo loại (cột phù hợp từng form)
 ├── Gộp nav: thay `/admin/event-bookings` → **Đặt chỗ** (`/admin/bookings`)
@@ -203,7 +203,7 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 |----------|------------|
 | Event Booking form + admin | ✅ v2.1 |
 | Careers `/tuyen-dung` + admin CMS | ✅ v2.2 |
-| Bookings hub (đặt bàn DB + `/admin/bookings`) | 🔲 v2.3 |
+| Bookings hub (đặt bàn DB + `/admin/bookings`) | ✅ v2.3 |
 
 ### Env bổ sung (v2)
 

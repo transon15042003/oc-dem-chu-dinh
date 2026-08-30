@@ -39,13 +39,13 @@ export default async function AdminDashboardPage() {
           </p>
         </Link>
         <Link
-          href="/admin/event-bookings"
+          href="/admin/bookings"
           prefetch={false}
           className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
         >
-          <h2 className="font-semibold">Đặt tiệc</h2>
+          <h2 className="font-semibold">Đặt chỗ</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Xem yêu cầu đặt tiệc từ form trang chủ
+            Xem yêu cầu đặt bàn và đặt tiệc từ form trang chủ
           </p>
         </Link>
         <Link
