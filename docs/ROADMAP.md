@@ -54,7 +54,8 @@
 
 - Chuyển từ portfolio clone sang **sản phẩm vận hành thật**
 - Marketing cập nhật **Article** và **Promotion** qua admin `/admin`
-- Form đặt tiệc (**Event Booking**) tách khỏi đặt bàn; lưu DB + email (v2.1)
+- Form đặt tiệc (**Event Booking**) tách khỏi đặt bàn ở **form public**; lưu DB + email (v2.1)
+- **Đặt bàn + đặt tiệc**: hub admin chung `/admin/bookings` (tab/filter) — v2.3
 - **Tuyển dụng**: CRUD vị trí + hồ sơ ứng tuyển qua admin; lưu DB + email (v2.2)
 - **Menu CRUD**: defer v2.4 (menu vẫn static `src/data/`)
 
@@ -79,6 +80,7 @@
 | `/khuyen-mai` | Danh sách Promotion (chưa hết hạn) |
 | `/khuyen-mai/[slug]` | Chi tiết Promotion |
 | `/tuyen-dung` | Trang tuyển dụng + form (v2.2) |
+| `/admin/bookings` | Hub đặt bàn + đặt tiệc (tab/filter, v2.3) |
 | `/admin/*` | Panel nội bộ (auth required) |
 
 ### Content model (tóm tắt)
@@ -155,12 +157,26 @@ M2 — Admin CMS ✅
 └── /admin/career-applications — xem hồ sơ ứng viên
 ```
 
-### Milestones v2.3 — Table Reservation → DB (tùy chọn)
+### Milestones v2.3 — Bookings Hub (đặt bàn + đặt tiệc)
+
+> **Quyết định:** Một hub admin duy nhất; **2 bảng DB riêng** (`table_bookings`, `event_bookings`). Form public vẫn tách (đặt bàn ≠ đặt tiệc).
 
 ```
-M1 — Migrate booking từ email-only sang Supabase
-M2 — Admin xem danh sách đặt bàn
+M1 — Table booking → Supabase
+├── Migration `table_bookings` (full_name, phone, guest_count, branch_id, booking_date, booking_time, note)
+├── RLS: editor SELECT
+├── POST /api/booking → insert DB + Resend (giữ email)
+└── Pattern giống event_bookings / career_applications
+
+M2 — Admin hub `/admin/bookings`
+├── Tab: Tất cả | Đặt bàn | Đặt tiệc (query param `?type=table|event|all`)
+├── Bảng riêng theo loại (cột phù hợp từng form)
+├── Gộp nav: thay `/admin/event-bookings` → **Đặt chỗ** (`/admin/bookings`)
+├── Redirect `/admin/event-bookings` → `/admin/bookings?type=event`
+└── Dashboard card cập nhật
 ```
+
+**Không làm trong v2.3:** workflow trạng thái (đã xác nhận/hủy), export CSV, calendar view.
 
 ### Milestones v2.4 — Menu Admin
 
@@ -187,6 +203,7 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 |----------|------------|
 | Event Booking form + admin | ✅ v2.1 |
 | Careers `/tuyen-dung` + admin CMS | ✅ v2.2 |
+| Bookings hub (đặt bàn DB + `/admin/bookings`) | 🔲 v2.3 |
 
 ### Env bổ sung (v2)
 
@@ -217,6 +234,7 @@ SUPABASE_SERVICE_ROLE_KEY=
 | 21 | Article: `draft` / `published`; Promotion: `promo_code` + auto-hide expired | 2026-08-29 |
 | 22 | Tiptap WYSIWYG; ảnh content max 2MB (Supabase Storage) | 2026-08-29 |
 | 23 | Event Booking v2.1: email + DB; Careers v2.2: admin CMS + DB; Menu admin v2.4 | 2026-08-29 |
+| 24 | v2.3 Bookings: hub admin `/admin/bookings` (tab Tất cả / Đặt bàn / Đặt tiệc); 2 bảng DB riêng | 2026-08-30 |
 ---
 
 ## Env variables (do bạn config)
