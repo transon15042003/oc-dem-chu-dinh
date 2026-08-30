@@ -58,6 +58,16 @@ export default async function AdminDashboardPage() {
             Quản lý vị trí tuyển dụng và hồ sơ ứng viên
           </p>
         </Link>
+        <Link
+          href="/admin/menu"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
+          <h2 className="font-semibold">Thực đơn</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Quản lý danh mục và món ăn tại /thuc-don
+          </p>
+        </Link>
       </div>
 
       {session.profile.role === "admin" ? (

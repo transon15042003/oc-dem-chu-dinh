@@ -156,3 +156,33 @@ export type TableBooking = {
   status: BookingStatus;
   created_at: string;
 };
+
+export type MenuCategoryRecord = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  sort_order: number;
+  status: PublicationStatus;
+  show_in_filter: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type MenuItemRecord = {
+  id: string;
+  slug: string;
+  name: string;
+  category_id: string;
+  image_path: string;
+  is_hot: boolean;
+  search_terms: string | null;
+  sort_order: number;
+  status: PublicationStatus;
+  created_at: string;
+  updated_at: string;
+};
+
+export type MenuItemWithCategory = MenuItemRecord & {
+  category: Pick<MenuCategoryRecord, "slug" | "name">;
+};

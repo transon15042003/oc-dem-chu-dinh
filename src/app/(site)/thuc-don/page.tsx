@@ -1,4 +1,5 @@
 import { MenuPageContent } from "@/components/menu/menu-page-content";
+import { getPublishedMenuData } from "@/lib/menu/queries";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = createPageMetadata({
@@ -8,6 +9,10 @@ export const metadata = createPageMetadata({
   path: "/thuc-don",
 });
 
-export default function MenuPage() {
-  return <MenuPageContent />;
+export default async function MenuPage() {
+  const { categories, items, filterTabs } = await getPublishedMenuData();
+
+  return (
+    <MenuPageContent categories={categories} items={items} filterTabs={filterTabs} />
+  );
 }
