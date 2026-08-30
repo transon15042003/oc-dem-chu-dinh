@@ -1,5 +1,8 @@
+import assetKeyMapJson from "../../../scripts/asset-key-map.json";
 import { cdnImage } from "@/lib/images";
 import type { MenuCategoryRecord, MenuItemRecord } from "@/types/database";
+
+const assetKeyMap = assetKeyMapJson as Record<string, string>;
 
 export type MenuCategory = {
   id: string;
@@ -22,13 +25,13 @@ export type MenuItem = {
 export type MenuTabId = "all" | string;
 
 export function buildMenuImageUrls(imagePath: string): { image: string; fullImage: string } {
-  const encoded = imagePath.replace(/ /g, "%20");
-  const webp = encoded.replace(/\.jpg$/, "_400-400.webp");
+  const fullImage = cdnImage(imagePath);
+  const webpPath = imagePath.replace(/\.jpg$/i, "_400-400.webp");
 
-  return {
-    image: cdnImage(webp.includes("_400-400") ? webp : `${encoded}_400-400.webp`),
-    fullImage: cdnImage(encoded.endsWith(".jpg") ? encoded : `${encoded}.jpg`),
-  };
+  const image =
+    webpPath !== imagePath && assetKeyMap[webpPath] ? cdnImage(webpPath) : fullImage;
+
+  return { image, fullImage };
 }
 
 export function toMenuCategory(row: MenuCategoryRecord): MenuCategory {
