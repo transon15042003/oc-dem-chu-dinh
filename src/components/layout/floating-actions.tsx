@@ -27,8 +27,6 @@ type FloatingAction = {
   disabled?: boolean;
 };
 
-const brandIconTones: FloatingActionTone[] = ["maps", "zalo", "messenger"];
-
 function ActionIcon({ action }: { action: FloatingAction }) {
   return (
     <span
