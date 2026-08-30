@@ -1,6 +1,8 @@
-import { ArticlesListing } from "@/components/articles/articles-listing";
+import { Suspense } from "react";
+
+import { ArticlesListingSection } from "@/components/articles/articles-listing-section";
 import { ArticlesPageHeader } from "@/components/articles/articles-page-header";
-import { getPublishedArticles } from "@/lib/articles/queries";
+import { ArticlesListingSkeleton } from "@/components/content/content-skeletons";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = createPageMetadata({
@@ -10,18 +12,17 @@ export const metadata = createPageMetadata({
   path: "/tin-tuc",
 });
 
-export default async function NewsPage({
+export default function NewsPage({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>;
 }) {
-  const { q } = await searchParams;
-  const articles = await getPublishedArticles();
-
   return (
     <div className="min-h-screen bg-amber-50/30 text-foreground dark:bg-background">
       <ArticlesPageHeader />
-      <ArticlesListing articles={articles} initialSearch={q ?? ""} />
+      <Suspense fallback={<ArticlesListingSkeleton />}>
+        <ArticlesListingSection searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Star, ZoomIn } from "lucide-react";
 
-import type { MenuItem } from "@/data/menu";
+import type { MenuItem } from "@/lib/menu/types";
 import { hoverImageClass } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 

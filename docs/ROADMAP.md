@@ -2,6 +2,41 @@
 
 > Ghi chú từ phiên `/grill-with-docs`. Cập nhật khi quyết định thay đổi.
 
+## Ghi chú cho AI (phiên sau)
+
+> **Đọc mục này trước** khi tiếp tục phát triển — ghi lại ý chủ dự án qua các phiên chat.
+
+### Quy trình làm việc
+
+| Quy tắc | Chi tiết |
+|---------|----------|
+| **Commit + push** | Sau khi hoàn thành task → **luôn commit và push** lên branch feature đang làm. Chủ dự án kiểm tra trực tiếp trên **Vercel Preview / Staging**, không chỉ localhost. |
+| **Không tự merge** | Chỉ merge PR / push `main` khi chủ dự án yêu cầu rõ ràng. |
+| **Git Flow** | `feature/*` → PR → `develop` (staging) → PR → `main` (production). Chi tiết: [`docs/GITFLOW.md`](./GITFLOW.md). |
+| **Branch v2.3** | `feature/v2-bookings-hub` → PR [#21](https://github.com/transon15042003/oc-dem-chu-dinh/pull/21) → `develop` (đã merge). |
+| **Branch v2.4** | `feature/v2-menu-admin` → PR → `develop`. |
+
+### Env Vercel (quan trọng)
+
+- `SUPABASE_SERVICE_ROLE_KEY` **bắt buộc** trên Vercel (Production + Preview + Development).
+- **Thiếu key** → form đặt bàn/đặt tiệc vẫn báo thành công (email gửi được) nhưng **không lưu DB** → admin `/admin/bookings` trống, không có lỗi hiển thị.
+- Chi tiết: [`docs/DEPLOY.md`](./DEPLOY.md), [`docs/SUPABASE.md`](./SUPABASE.md).
+
+### UX / hành vi đã chốt
+
+| Khu vực | Quy tắc |
+|---------|---------|
+| Select (form public) | Hiển thị **label tiếng Việt** khi đã chọn (vd. `Thôi nôi / Báo hỷ`), không hiện slug (`thoi-noi`). Dùng `FormSelectValue`. |
+| Form đặt tiệc | **Reset toàn bộ** sau submit thành công; giữ preset loại tiệc nếu vào trang qua `?event=`. |
+| Admin `/admin/bookings` | Tab loại + filter trạng thái / chi nhánh / tìm kiếm; thao tác **Đã xử lý** / **Mở lại** (`booking_status`: `pending` \| `processed`). |
+
+### Supabase project
+
+- Project ref: `ianpabkxuzjnksrgsvtr` (region `ap-southeast-1`).
+- Migrations trong `supabase/migrations/` — áp dụng remote khi thêm bảng/cột mới.
+
+---
+
 ## Mục tiêu dự án
 
 **Hướng A — Portfolio / học tập**, thiết kế để nâng cấp dần mà không viết lại từ đầu.
@@ -54,9 +89,10 @@
 
 - Chuyển từ portfolio clone sang **sản phẩm vận hành thật**
 - Marketing cập nhật **Article** và **Promotion** qua admin `/admin`
-- Form đặt tiệc (**Event Booking**) tách khỏi đặt bàn; lưu DB + email (v2.1)
-- **Tuyển dụng**: form email only — không DB (v2.2)
-- **Menu CRUD**: defer v2.4 (menu vẫn static `src/data/`)
+- Form đặt tiệc (**Event Booking**) tách khỏi đặt bàn ở **form public**; lưu DB + email (v2.1)
+- **Đặt bàn + đặt tiệc**: hub admin chung `/admin/bookings` (tab/filter) — v2.3
+- **Tuyển dụng**: CRUD vị trí + hồ sơ ứng tuyển qua admin; lưu DB + email (v2.2)
+- **Menu CRUD**: v2.4 — `/admin/menu`, DB `menu_categories` + `menu_items`
 
 ### Stack v2 (đã chốt)
 
@@ -79,6 +115,7 @@
 | `/khuyen-mai` | Danh sách Promotion (chưa hết hạn) |
 | `/khuyen-mai/[slug]` | Chi tiết Promotion |
 | `/tuyen-dung` | Trang tuyển dụng + form (v2.2) |
+| `/admin/bookings` | Hub đặt bàn + đặt tiệc (tab/filter, v2.3) |
 | `/admin/*` | Panel nội bộ (auth required) |
 
 ### Content model (tóm tắt)
@@ -122,10 +159,11 @@ M4 — Promotion System ✅
 ├── Sitemap động (promotions)
 └── Nav + admin dashboard link
 
-M5 — v2.0 Polish & Deploy ⏳
+M5 — v2.0 Polish & Deploy ✅
 ├── Merge feature branches → develop → QA staging
+├── Perf: streaming + skeleton + cache tin-tuc/khuyen-mai
 ├── QA: auth, CRUD, public pages, RLS
-└── Merge develop → main (production)
+└── Merge develop → main (production) — PR #15/#16
 ```
 
 **Ước tính v2.0:** ~5–7 ngày full-time (còn M4–M5)
@@ -133,37 +171,74 @@ M5 — v2.0 Polish & Deploy ⏳
 ### Milestones v2.1 — Event Booking
 
 ```
-M1 — Form & API
+M1 — Form & API ✅
 ├── Form riêng (khác Table Reservation)
 ├── POST /api/event-booking → Supabase + Resend
 └── Nút "Đặt tiệc ngay" trỏ đúng luồng
 
-M2 — Admin
+M2 — Admin ✅
 └── /admin/event-bookings — xem danh sách
 ```
 
 ### Milestones v2.2 — Careers
 
 ```
-M1 — Public page
-└── /tuyen-dung + form ứng tuyển
+M1 — Public page ✅
+├── /tuyen-dung — thẻ vị trí + form ứng tuyển (dữ liệu từ Supabase)
+└── POST /api/careers → lưu career_applications + Resend
 
-M2 — Email
-└── POST /api/careers → Resend only (không DB)
+M2 — Admin CMS ✅
+├── /admin/careers — CRUD vị trí tuyển dụng (draft/publish, thẻ trang / chỉ form)
+└── /admin/career-applications — xem hồ sơ ứng viên
 ```
 
-### Milestones v2.3 — Table Reservation → DB (tùy chọn)
+### Milestones v2.3 — Bookings Hub (đặt bàn + đặt tiệc)
+
+> **Quyết định:** Một hub admin duy nhất; **2 bảng DB riêng** (`table_bookings`, `event_bookings`). Form public vẫn tách (đặt bàn ≠ đặt tiệc).
 
 ```
-M1 — Migrate booking từ email-only sang Supabase
-M2 — Admin xem danh sách đặt bàn
+M1 — Table booking → Supabase ✅
+├── Migration `table_bookings` (full_name, phone, guest_count, branch_id, booking_date, booking_time, note)
+├── RLS: editor SELECT
+├── POST /api/booking → insert DB + Resend (giữ email)
+└── Pattern giống event_bookings / career_applications
+
+M2 — Admin hub `/admin/bookings` ✅
+├── Tab: Tất cả | Đặt bàn | Đặt tiệc (query param `?type=table|event|all`)
+├── Filter: trạng thái (`?status=pending|processed`), chi nhánh (`?branch=`), tìm kiếm (`?q=`)
+├── Thao tác: đánh dấu **Đã xử lý** / **Mở lại** (migration `booking_status`)
+├── Gộp nav: thay `/admin/event-bookings` → **Đặt chỗ** (`/admin/bookings`)
+├── Redirect `/admin/event-bookings` → `/admin/bookings?type=event`
+└── Dashboard card cập nhật
+
+M3 — Form & API fixes ✅
+├── `SUPABASE_SERVICE_ROLE_KEY` bắt buộc trên Vercel (insert DB + admin đọc)
+├── API fallback email-only khi thiếu service role (vẫn success, không lưu DB)
+├── `FormSelectValue` — label tiếng Việt trong select
+└── Form đặt tiệc reset toàn bộ sau submit thành công
 ```
+
+**Defer v2.3+:** export CSV, calendar view, workflow đã xác nhận/hủy (ngoài pending/processed).
 
 ### Milestones v2.4 — Menu Admin
 
 ```
-M1 — CRUD Menu Item qua admin (thay static menu.ts)
+M1 — Supabase schema ✅
+├── `menu_categories` + `menu_items` (draft/published, sort_order, is_hot)
+├── RLS: public SELECT published; editor CRUD
+└── Seed từ static `menu.ts` (7 danh mục, 26 món)
+
+M2 — Admin `/admin/menu` ✅
+├── CRUD danh mục + món ăn (slug, ảnh CDN path, từ khóa tìm kiếm)
+├── Nav + dashboard card
+└── Xóa danh mục (RESTRICT nếu còn món)
+
+M3 — Public `/thuc-don` ✅
+├── Đọc menu từ Supabase (cache tag `menu`)
+└── Giữ poster + wifi password static trong `src/data/menu.ts`
 ```
+
+**Defer v2.4+:** upload ảnh món qua Storage (hiện dùng path CDN), giá món, lightbox nâng cao.
 
 Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 
@@ -175,7 +250,17 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 | Admin auth + users | ✅ |
 | Article CRUD + public /tin-tuc | ✅ |
 | Promotion CRUD + public /khuyen-mai | ✅ M4 |
-| v2.0 deploy | ⏳ M5 |
+| Perf streaming tin-tuc/khuyen-mai | ✅ M5 |
+| v2.0 deploy (main) | ✅ M5 |
+
+### Tiến độ v2.1+ (tóm tắt)
+
+| Hạng mục | Trạng thái |
+|----------|------------|
+| Event Booking form + admin | ✅ v2.1 |
+| Careers `/tuyen-dung` + admin CMS | ✅ v2.2 |
+| Bookings hub (đặt bàn DB + `/admin/bookings`) | ✅ v2.3 |
+| Menu admin CRUD + `/thuc-don` từ Supabase | 🚧 v2.4 |
 
 ### Env bổ sung (v2)
 
@@ -205,7 +290,11 @@ SUPABASE_SERVICE_ROLE_KEY=
 | 20 | Admin `/admin` cùng app; Auth email+password; roles `admin` / `editor` | 2026-08-29 |
 | 21 | Article: `draft` / `published`; Promotion: `promo_code` + auto-hide expired | 2026-08-29 |
 | 22 | Tiptap WYSIWYG; ảnh content max 2MB (Supabase Storage) | 2026-08-29 |
-| 23 | Event Booking v2.1: email + DB; Careers v2.2: email only; Menu admin v2.4 | 2026-08-29 |
+| 23 | Event Booking v2.1: email + DB; Careers v2.2: admin CMS + DB; Menu admin v2.4 | 2026-08-29 |
+| 24 | v2.3 Bookings: hub admin `/admin/bookings` (tab Tất cả / Đặt bàn / Đặt tiệc); 2 bảng DB riêng | 2026-08-30 |
+| 25 | Sau mỗi task: **commit + push** — chủ dự án test trên Vercel Preview/Staging | 2026-08-30 |
+| 26 | `SUPABASE_SERVICE_ROLE_KEY` bắt buộc Vercel; form success ≠ đã lưu DB nếu thiếu key | 2026-08-30 |
+| 27 | Admin bookings: filter + `booking_status` pending/processed; form select hiện label VI | 2026-08-30 |
 ---
 
 ## Env variables (do bạn config)
@@ -555,6 +644,7 @@ Custom domain staging (`staging.<domain>`) → gắn branch `develop` khi mua do
 | `RESEND_API_KEY` | ✅ | Form đặt bàn + liên hệ |
 | `BOOKING_FROM_EMAIL` | ✅ | Domain đã verify Resend |
 | `BOOKING_NOTIFICATION_EMAIL` | ✅ | Email nhận thông báo |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | **Bắt buộc** — insert form booking + admin đọc DB. Thiếu → form success nhưng admin trống. |
 
 4. QA trên **staging** (`develop`) trước khi merge lên `main`.
 

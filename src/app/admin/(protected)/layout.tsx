@@ -13,7 +13,11 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
 
   return (
     <div className="min-h-screen bg-background">
-      <AdminNav role={session.profile.role} email={session.email} />
+      <AdminNav
+        role={session.profile.role}
+        displayName={session.profile.full_name ?? session.email}
+        email={session.email}
+      />
       <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
     </div>
   );

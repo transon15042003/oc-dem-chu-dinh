@@ -79,5 +79,110 @@ export type PromotionSummary = Pick<
   | "updated_at"
 >;
 
+export type CareerPosition = {
+  id: string;
+  title: string;
+  slug: string;
+  badge: string | null;
+  income_label: string | null;
+  description: string | null;
+  schedule: string | null;
+  salary: string | null;
+  perks: string[];
+  status: PublicationStatus;
+  show_on_listing: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type CareerPositionSummary = Pick<
+  CareerPosition,
+  | "id"
+  | "title"
+  | "slug"
+  | "badge"
+  | "income_label"
+  | "status"
+  | "show_on_listing"
+  | "sort_order"
+  | "created_at"
+  | "updated_at"
+>;
+
+export type CareerApplication = {
+  id: string;
+  position_id: string | null;
+  position_title: string;
+  full_name: string;
+  phone: string;
+  email: string | null;
+  branch_id: string;
+  experience: string | null;
+  created_at: string;
+};
+
 export const CONTENT_IMAGE_BUCKET = "content-images" as const;
 export const MAX_CONTENT_IMAGE_BYTES = 2 * 1024 * 1024;
+
+export type EventBookingType = "sinh-nhat" | "thoi-noi" | "tat-nien" | "lien-hoan";
+
+export type BookingStatus = "pending" | "processed";
+
+export type EventBooking = {
+  id: string;
+  full_name: string;
+  phone: string;
+  event_type: EventBookingType;
+  guest_count: string;
+  branch_id: string;
+  event_date: string;
+  event_time: string;
+  company_name: string | null;
+  note: string | null;
+  status: BookingStatus;
+  created_at: string;
+};
+
+export type TableBooking = {
+  id: string;
+  full_name: string;
+  phone: string;
+  guest_count: string;
+  branch_id: string;
+  booking_date: string;
+  booking_time: string;
+  note: string | null;
+  status: BookingStatus;
+  created_at: string;
+};
+
+export type MenuCategoryRecord = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  sort_order: number;
+  status: PublicationStatus;
+  show_in_filter: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type MenuItemRecord = {
+  id: string;
+  slug: string;
+  name: string;
+  category_id: string;
+  image_path: string;
+  is_hot: boolean;
+  search_terms: string | null;
+  sort_order: number;
+  status: PublicationStatus;
+  created_at: string;
+  updated_at: string;
+};
+
+export type MenuItemWithCategory = MenuItemRecord & {
+  category: Pick<MenuCategoryRecord, "slug" | "name">;
+};

@@ -47,6 +47,18 @@ export function getEmailConfigError(): string {
   return "Hệ thống email chưa được cấu hình. Vui lòng gọi hotline hoặc thử lại sau.";
 }
 
+export function getSupabaseServiceConfigError(): string {
+  const missing: string[] = [];
+  if (!readEnv("NEXT_PUBLIC_SUPABASE_URL")) missing.push("NEXT_PUBLIC_SUPABASE_URL");
+  if (!readEnv("SUPABASE_SERVICE_ROLE_KEY")) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+
+  if (missing.length > 0) {
+    return `Thiếu cấu hình Supabase: ${missing.join(", ")}.`;
+  }
+
+  return "Supabase service role chưa được cấu hình.";
+}
+
 export type SupabaseServiceConfig = {
   url: string;
   serviceRoleKey: string;

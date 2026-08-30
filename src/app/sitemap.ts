@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
 
-import { getPublishedArticles } from "@/lib/articles/queries";
+import { getPublishedArticleSummaries } from "@/lib/articles/queries";
 import { getActivePromotions } from "@/lib/promotions/queries";
 import { siteConfig, siteRoutes } from "@/config/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url.replace(/\/$/, "");
   const [articles, promotions] = await Promise.all([
-    getPublishedArticles(),
+    getPublishedArticleSummaries(),
     getActivePromotions(),
   ]);
 

@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { Article } from "@/types/database";
+import type { ArticleSummary } from "@/types/database";
 
 type ArticleDetailSidebarProps = {
-  articles: Article[];
+  articles: ArticleSummary[];
   currentSlug: string;
 };
 

@@ -20,3 +20,11 @@ export function estimateReadingMinutes(html: string): number {
 export function formatReadingTime(html: string): string {
   return `${estimateReadingMinutes(html)} phút đọc`;
 }
+
+export function formatReadingTimeForSummary(excerpt: string | null): string {
+  if (!excerpt?.trim()) {
+    return "3 phút đọc";
+  }
+
+  return formatReadingTime(excerpt);
+}

@@ -25,17 +25,14 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { branches } from "@/data/branches";
+import { menuPoster, menuWifiPassword } from "@/data/menu";
 import {
   filterMenuItems,
   getMenuItemsByCategory,
-  menuCategories,
-  menuFilterTabs,
-  menuPoster,
-  menuWifiPassword,
   type MenuCategory,
   type MenuItem,
   type MenuTabId,
-} from "@/data/menu";
+} from "@/lib/menu/types";
 import { formatHotline, hotlineHref, publicEnv } from "@/lib/env";
 import { cn } from "@/lib/utils";
 
@@ -57,7 +54,7 @@ function MenuCategorySection({
     <ScrollReveal as="section" className="space-y-5">
       <div
         id={`menu-${category.id}`}
-        className="scroll-mt-44 flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between"
+        className="scroll-mt-site-chrome flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex items-center gap-3">
           <span className="h-7 w-1.5 shrink-0 rounded-full bg-brand-red shadow" />
@@ -70,13 +67,13 @@ function MenuCategorySection({
 
       <Carousel
         opts={{ align: "start", loop: false }}
-        className="relative w-full px-10 sm:px-12"
+        className="relative w-full px-2 sm:px-12"
       >
         <CarouselContent className="-ml-3">
           {filteredItems.map((item) => (
             <CarouselItem
               key={item.id}
-              className="basis-1/2 pl-3 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
+              className="basis-[82%] pl-3 min-[400px]:basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
             >
               <MenuDishCard item={item} onSelect={onSelectItem} />
             </CarouselItem>
@@ -89,7 +86,15 @@ function MenuCategorySection({
   );
 }
 
-export function MenuPageContent() {
+export function MenuPageContent({
+  categories,
+  items,
+  filterTabs,
+}: {
+  categories: MenuCategory[];
+  items: MenuItem[];
+  filterTabs: Array<{ id: MenuTabId; label: string }>;
+}) {
   const [activeTab, setActiveTab] = useState<MenuTabId>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
@@ -99,19 +104,18 @@ export function MenuPageContent() {
   const hotline = publicEnv.hotline;
 
   const visibleCategories = useMemo(() => {
-    if (searchQuery.trim()) return menuCategories;
-    if (activeTab === "all") return menuCategories;
-    return menuCategories.filter((category) => category.id === activeTab);
-  }, [activeTab, searchQuery]);
+    if (searchQuery.trim()) return categories;
+    if (activeTab === "all") return categories;
+    return categories.filter((category) => category.id === activeTab);
+  }, [activeTab, categories, searchQuery]);
 
   const hasVisibleItems = useMemo(
     () =>
       visibleCategories.some(
         (category) =>
-          filterMenuItems(getMenuItemsByCategory(category.id), searchQuery).length >
-          0,
+          filterMenuItems(getMenuItemsByCategory(items, category.id), searchQuery).length > 0,
       ),
-    [searchQuery, visibleCategories],
+    [items, searchQuery, visibleCategories],
   );
 
   const showPoster = activeTab === "all" && !searchQuery;
@@ -178,13 +182,14 @@ export function MenuPageContent() {
             </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3 border-t border-brand-red/30 pt-4 text-xs font-bold text-brand-cream-muted md:justify-start">
+            <div className="flex flex-wrap items-center justify-center gap-2 border-t border-brand-red/30 pt-4 text-xs font-bold text-brand-cream-muted md:justify-start">
             {branches.map((branch) => (
               <span
                 key={branch.id}
-                className="rounded-xl border border-border bg-foreground/10 px-3.5 py-1.5"
+                className="max-w-full rounded-xl border border-border bg-foreground/10 px-3 py-1.5 text-center sm:px-3.5"
               >
-                📍 {branch.name}: {branch.address}
+                <span className="sm:hidden">📍 {branch.badge}: {branch.shortName}</span>
+                <span className="hidden sm:inline">📍 {branch.name}: {branch.address}</span>
               </span>
             ))}
             </div>
@@ -192,7 +197,7 @@ export function MenuPageContent() {
         </div>
       </section>
 
-      <section className="sticky top-14 z-30 bg-brand-dark/95 py-3.5 backdrop-blur-md">
+      <section className="sticky top-site-header z-30 bg-brand-dark/95 py-3.5 backdrop-blur-md">
         <div className="mx-auto max-w-7xl space-y-3 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
             <div className="relative w-full sm:w-96">
@@ -234,7 +239,7 @@ export function MenuPageContent() {
               ref={categoryScrollRef}
               className="flex flex-1 items-center gap-2 overflow-x-auto py-1 pl-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
-              {menuFilterTabs.map((tab) => (
+              {filterTabs.map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
@@ -264,7 +269,7 @@ export function MenuPageContent() {
 
       <div
         id="menu-dishes"
-        className="mx-auto max-w-7xl scroll-mt-44 space-y-12 px-4 pb-10 sm:space-y-16 sm:px-6 sm:pb-16 lg:px-8"
+        className="mx-auto max-w-7xl scroll-mt-site-chrome space-y-12 px-4 pb-10 sm:space-y-16 sm:px-6 sm:pb-16 lg:px-8"
       >
         {showPoster ? (
           <ScrollReveal as="section" className="space-y-4">
@@ -310,7 +315,7 @@ export function MenuPageContent() {
           <MenuCategorySection
             key={category.id}
             category={category}
-            items={getMenuItemsByCategory(category.id)}
+            items={getMenuItemsByCategory(items, category.id)}
             searchQuery={searchQuery}
             onSelectItem={setSelectedItem}
           />

@@ -17,7 +17,7 @@ export default async function AdminDashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Link
           href="/admin/articles"
           prefetch={false}
@@ -36,6 +36,36 @@ export default async function AdminDashboardPage() {
           <h2 className="font-semibold">Khuyến mãi</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Quản lý chương trình ưu đãi tại /khuyen-mai
+          </p>
+        </Link>
+        <Link
+          href="/admin/bookings"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
+          <h2 className="font-semibold">Đặt chỗ</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Xem yêu cầu đặt bàn và đặt tiệc từ form trang chủ
+          </p>
+        </Link>
+        <Link
+          href="/admin/careers"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
+          <h2 className="font-semibold">Tuyển dụng</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Quản lý vị trí tuyển dụng và hồ sơ ứng viên
+          </p>
+        </Link>
+        <Link
+          href="/admin/menu"
+          prefetch={false}
+          className="rounded-xl border border-border p-6 transition-colors hover:border-brand-red/40 hover:bg-muted/30"
+        >
+          <h2 className="font-semibold">Thực đơn</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Quản lý danh mục và món ăn tại /thuc-don
           </p>
         </Link>
       </div>

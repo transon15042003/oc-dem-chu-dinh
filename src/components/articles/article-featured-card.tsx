@@ -3,10 +3,10 @@ import Link from "next/link";
 import { ArrowRight, CalendarDays } from "lucide-react";
 
 import { formatArticleDateShort } from "@/lib/articles/display";
-import type { Article } from "@/types/database";
+import type { ArticleSummary } from "@/types/database";
 
 type ArticleFeaturedCardProps = {
-  article: Article;
+  article: ArticleSummary;
 };
 
 export function ArticleFeaturedCard({ article }: ArticleFeaturedCardProps) {

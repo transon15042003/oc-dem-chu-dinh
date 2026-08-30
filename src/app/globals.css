@@ -68,6 +68,8 @@
 
 /* Light — gần site gốc (nền sáng ấm, chữ đậm) */
 :root {
+  --site-header-height: 6.5rem;
+  --site-subnav-height: 3.5rem;
   --brand-red: #d61f26;
   --brand-red-hover: #b91c1c;
   --brand-gold: #c98912;
@@ -122,6 +124,12 @@
   --menu-hero-to: #fff8ee;
   --footer-bg: #2a2118;
   --footer-text: #d6cfc4;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --site-subnav-height: 8.75rem;
+  }
 }
 
 /* Dark — portfolio clone hiện tại */
@@ -184,6 +192,18 @@
       var(--slogan-end)
     );
   }
+
+  .top-site-header {
+    top: var(--site-header-height);
+  }
+
+  .scroll-mt-site-header {
+    scroll-margin-top: var(--site-header-height);
+  }
+
+  .scroll-mt-site-chrome {
+    scroll-margin-top: calc(var(--site-header-height) + var(--site-subnav-height));
+  }
 }
 
 @layer base {
@@ -197,6 +217,8 @@
 
   html {
     @apply font-sans scroll-smooth;
+    scroll-padding-top: var(--site-header-height);
+    overflow-x: clip;
   }
 
   h1,
@@ -288,6 +310,11 @@
 
 .prose-article-public a {
   @apply text-brand-red underline underline-offset-2 hover:text-brand-red-hover;
+}
+
+.prose-article-public table,
+.prose-article-public pre {
+  @apply my-4 block max-w-full overflow-x-auto;
 }
 .prose-promotion p {
   @apply mb-3 leading-relaxed text-stone-300;

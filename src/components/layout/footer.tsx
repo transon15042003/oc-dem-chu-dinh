@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SiteLogo } from "@/components/layout/site-logo";
 import { useState } from "react";
 import {
   Mail,
@@ -17,6 +17,7 @@ import { branches } from "@/data/branches";
 import { footerSlogans } from "@/data/footer";
 import { siteConfig } from "@/config/site";
 import { formatHotline, hotlineHref, publicEnv } from "@/lib/env";
+import { resolveMapDirectionsUrl, resolveMapEmbedUrl } from "@/lib/maps";
 import { cn } from "@/lib/utils";
 
 export function Footer() {
@@ -24,9 +25,10 @@ export function Footer() {
   const hotline = publicEnv.hotline;
   const email = publicEnv.email;
   const activeBranch = branches[activeBranchIndex];
-  const mapEmbed = activeBranch
-    ? publicEnv.mapEmbeds[activeBranch.mapKey]
-    : "";
+  const mapEmbed =
+    activeBranch && !activeBranch.comingSoon
+      ? resolveMapEmbedUrl(activeBranch.mapKey, activeBranch.address)
+      : "";
 
   return (
     <footer
@@ -80,17 +82,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-12">
           {/* Cột 1: Thương hiệu */}
           <div className="space-y-4 lg:col-span-4">
-            <Link href="/" className="inline-flex items-center gap-3" aria-label={siteConfig.name}>
-              <span className="flex size-16 items-center justify-center rounded-2xl border border-brand-gold/30 bg-amber-950/40 text-xl font-extrabold text-brand-gold">
-                Đỉnh
-              </span>
-              <div>
-                <p className="font-heading text-sm font-black uppercase tracking-wide text-footer-foreground">
-                  {siteConfig.name}
-                </p>
-                <p className="text-[10px] text-brand-gold">{siteConfig.tagline}</p>
-              </div>
-            </Link>
+            <SiteLogo showWordmark variant="footer" imageClassName="h-14 sm:h-16" />
 
             <p className="text-xs leading-relaxed font-medium text-footer-foreground/80">
               {siteConfig.description}
@@ -164,7 +156,7 @@ export function Footer() {
             </h3>
             <div className="space-y-3 text-xs">
               {branches.map((branch, index) => {
-                const mapUrl = publicEnv.mapUrls[branch.mapKey];
+                const mapUrl = resolveMapDirectionsUrl(branch.mapKey, branch.address);
                 const isActive = activeBranchIndex === index;
 
                 return (
@@ -175,7 +167,7 @@ export function Footer() {
                     className={cn(
                       "w-full rounded-2xl border p-3 text-left transition",
                       isActive
-                        ? "scale-[1.02] border-brand-gold bg-footer-foreground/8 shadow-lg ring-1 ring-brand-gold/50"
+                        ? "border-brand-gold bg-footer-foreground/8 shadow-lg ring-1 ring-brand-gold/50"
                         : "border-footer-foreground/15 bg-footer-foreground/5 hover:border-brand-gold/40",
                     )}
                   >
@@ -184,7 +176,7 @@ export function Footer() {
                         <Store className="size-3 shrink-0" />
                         {branch.name}
                       </span>
-                      {mapUrl ? (
+                      {mapUrl && !branch.comingSoon ? (
                         <a
                           href={mapUrl}
                           target="_blank"
