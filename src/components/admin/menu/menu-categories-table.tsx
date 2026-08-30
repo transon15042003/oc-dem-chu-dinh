@@ -7,13 +7,18 @@ import type { MenuCategoryRecord } from "@/types/database";
 type MenuCategoriesTableProps = {
   categories: MenuCategoryRecord[];
   itemCountByCategory: Record<string, number>;
+  emptyMessage?: string;
 };
 
-export function MenuCategoriesTable({ categories, itemCountByCategory }: MenuCategoriesTableProps) {
+export function MenuCategoriesTable({
+  categories,
+  itemCountByCategory,
+  emptyMessage = "Chưa có danh mục nào.",
+}: MenuCategoriesTableProps) {
   if (categories.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground">
-        Chưa có danh mục nào.
+        {emptyMessage}
       </div>
     );
   }

@@ -8,13 +8,17 @@ import type { MenuItemWithCategory } from "@/types/database";
 
 type MenuItemsTableProps = {
   items: MenuItemWithCategory[];
+  emptyMessage?: string;
 };
 
-export function MenuItemsTable({ items }: MenuItemsTableProps) {
+export function MenuItemsTable({
+  items,
+  emptyMessage = "Chưa có món ăn nào.",
+}: MenuItemsTableProps) {
   if (items.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground">
-        Chưa có món ăn nào.
+        {emptyMessage}
       </div>
     );
   }

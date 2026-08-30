@@ -1,30 +1,54 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
-import { MenuCategoriesTable } from "@/components/admin/menu/menu-categories-table";
-import { MenuItemsTable } from "@/components/admin/menu/menu-items-table";
+import { MenuAdminHub } from "@/components/admin/menu/menu-admin-hub";
 import { Button } from "@/components/ui/button";
+import {
+  countDraftMenuCategories,
+  countDraftMenuItems,
+  parseMenuAdminFilters,
+} from "@/lib/menu/admin-filters";
 import { getAdminMenuCategories, getAdminMenuItems } from "@/lib/menu/queries";
 import { requireRole } from "@/lib/auth/session";
 
-export default async function AdminMenuPage() {
+type AdminMenuPageProps = {
+  searchParams: Promise<{
+    view?: string;
+    status?: string;
+    category?: string;
+    q?: string;
+    hot?: string;
+  }>;
+};
+
+export default async function AdminMenuPage({ searchParams }: AdminMenuPageProps) {
   await requireRole(["admin", "editor"]);
+  const params = await searchParams;
+  const filters = parseMenuAdminFilters(params);
 
   const [categories, items] = await Promise.all([
     getAdminMenuCategories(),
     getAdminMenuItems(),
   ]);
 
-  const itemCountByCategory = items.reduce<Record<string, number>>((counts, item) => {
-    counts[item.category_id] = (counts[item.category_id] ?? 0) + 1;
-    return counts;
-  }, {});
+  const draftCategoryCount = countDraftMenuCategories(categories);
+  const draftItemCount = countDraftMenuItems(items);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">Thực đơn</h1>
-          <p className="text-muted-foreground">Quản lý danh mục và món ăn hiển thị tại /thuc-don</p>
+          <p className="text-muted-foreground">
+            Quản lý danh mục và món ăn hiển thị tại /thuc-don.
+            {draftItemCount > 0 || draftCategoryCount > 0 ? (
+              <span className="ml-1 font-medium text-foreground">
+                ({draftCategoryCount > 0 ? `${draftCategoryCount} danh mục nháp` : ""}
+                {draftCategoryCount > 0 && draftItemCount > 0 ? ", " : ""}
+                {draftItemCount > 0 ? `${draftItemCount} món nháp` : ""})
+              </span>
+            ) : null}
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" render={<Link href="/admin/menu/categories/new" prefetch={false} />}>
@@ -36,15 +60,15 @@ export default async function AdminMenuPage() {
         </div>
       </div>
 
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Danh mục</h2>
-        <MenuCategoriesTable categories={categories} itemCountByCategory={itemCountByCategory} />
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Món ăn</h2>
-        <MenuItemsTable items={items} />
-      </section>
+      <Suspense fallback={null}>
+        <MenuAdminHub
+          categories={categories}
+          items={items}
+          filters={filters}
+          draftCategoryCount={draftCategoryCount}
+          draftItemCount={draftItemCount}
+        />
+      </Suspense>
     </div>
   );
 }
