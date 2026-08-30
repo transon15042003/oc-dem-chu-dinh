@@ -50,6 +50,8 @@
   --color-card: var(--card);
   --color-footer: var(--footer-bg);
   --color-footer-foreground: var(--footer-text);
+  --color-footer-muted: var(--footer-text-muted);
+  --color-footer-accent: var(--footer-accent);
   --color-menu-hero-from: var(--menu-hero-from);
   --color-menu-hero-via: var(--menu-hero-via);
   --color-menu-hero-to: var(--menu-hero-to);
@@ -132,7 +134,9 @@
   --menu-hero-via: #faf7f2;
   --menu-hero-to: #fff8ee;
   --footer-bg: #2a2118;
-  --footer-text: #d6cfc4;
+  --footer-text: #f7f2ec;
+  --footer-text-muted: #e5ddd3;
+  --footer-accent: #f5c842;
 }
 
 @media (max-width: 639px) {
@@ -192,7 +196,9 @@
   --menu-hero-via: #0b0b0f;
   --menu-hero-to: #2a1508;
   --footer-bg: #0c0a09;
-  --footer-text: #d6d3d1;
+  --footer-text: #f5f5f4;
+  --footer-text-muted: #d6d3d1;
+  --footer-accent: #f2b233;
 }
 
 @layer utilities {

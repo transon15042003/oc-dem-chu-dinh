@@ -17,11 +17,11 @@ export function FooterSloganBar() {
               key={item.id}
               className="flex items-center gap-3.5 rounded-2xl border border-brand-gold/20 bg-black/20 p-3.5 backdrop-blur-sm"
             >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-gold text-brand-dark shadow">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-footer-accent text-footer-bg shadow">
                 <Icon className="size-5" aria-hidden />
               </div>
               <div>
-                <h4 className="text-xs font-extrabold uppercase tracking-wide text-amber-200">
+                <h4 className="text-xs font-extrabold uppercase tracking-wide text-white">
                   {item.title}
                 </h4>
                 {isHotline && hotline ? (
@@ -32,7 +32,7 @@ export function FooterSloganBar() {
                     {formattedHotline}
                   </a>
                 ) : (
-                  <p className="text-[11px] font-medium text-amber-100/80">
+                  <p className="text-[11px] font-medium text-white/90">
                     {isHotline ? formattedHotline : item.description}
                   </p>
                 )}
