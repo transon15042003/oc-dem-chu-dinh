@@ -72,7 +72,7 @@ export function FloatingActions() {
     cn(
       "flex items-center justify-center rounded-full border shadow-lg transition-transform hover:scale-105",
       mobile
-        ? "size-11 flex-1 flex-col gap-0.5 rounded-xl py-2 text-[10px] font-semibold"
+        ? "min-h-12 flex-1 flex-col gap-0.5 rounded-xl py-2 text-[11px] font-semibold sm:text-xs"
         : "size-12",
       emphasis
         ? "border-brand-gold bg-brand-gold text-brand-dark"
@@ -82,7 +82,7 @@ export function FloatingActions() {
   return (
     <>
       {/* Mobile — thanh ngang dưới đáy (giống site gốc) */}
-      <div className="fixed right-0 bottom-0 left-0 z-50 flex gap-1.5 border-t border-border bg-brand-dark/95 p-2 backdrop-blur-md sm:hidden">
+      <div className="fixed right-0 bottom-0 left-0 z-50 flex gap-1 border-t border-border bg-brand-dark/95 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md sm:hidden">
         {actions.map((action) => {
           const content = (
             <>

@@ -34,7 +34,7 @@ export function AdminUserMenu({ displayName, email, role }: AdminUserMenuProps) 
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="max-w-[12rem]">
+      <DropdownMenuTrigger className="max-w-[6.5rem] sm:max-w-[11rem]">
         <span className="truncate">{displayName}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

@@ -155,7 +155,7 @@ export function BranchesPageContent() {
                             </button>
                           ) : null}
                         </div>
-                        <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 sm:gap-3">
+                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6 sm:gap-3">
                           {branch.images.map((image, index) => (
                             <button
                               key={`${branch.id}-gallery-${index}`}

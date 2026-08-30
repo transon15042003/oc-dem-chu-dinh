@@ -177,7 +177,7 @@ export function Footer() {
                     className={cn(
                       "w-full rounded-2xl border p-3 text-left transition",
                       isActive
-                        ? "scale-[1.02] border-brand-gold bg-footer-foreground/8 shadow-lg ring-1 ring-brand-gold/50"
+                        ? "border-brand-gold bg-footer-foreground/8 shadow-lg ring-1 ring-brand-gold/50"
                         : "border-footer-foreground/15 bg-footer-foreground/5 hover:border-brand-gold/40",
                     )}
                   >

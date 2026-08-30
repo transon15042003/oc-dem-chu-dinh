@@ -20,12 +20,12 @@ export function TopBar() {
 
         <a
           href={hotline ? hotlineHref(hotline) : "#"}
-          className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap font-semibold text-brand-gold transition-opacity hover:opacity-80"
+          className="inline-flex shrink-0 items-center gap-1.5 font-semibold text-brand-gold transition-opacity hover:opacity-80 sm:gap-2"
           aria-label={`Hotline ${formattedHotline}`}
         >
           <Phone className="size-4" aria-hidden />
-          <span>HOTLINE</span>
-          <span>{formattedHotline}</span>
+          <span className="hidden sm:inline">HOTLINE</span>
+          <span className="whitespace-nowrap">{formattedHotline}</span>
         </a>
       </div>
     </div>

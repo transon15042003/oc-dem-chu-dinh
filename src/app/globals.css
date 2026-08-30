@@ -126,6 +126,12 @@
   --footer-text: #d6cfc4;
 }
 
+@media (max-width: 639px) {
+  :root {
+    --site-subnav-height: 8.75rem;
+  }
+}
+
 /* Dark — portfolio clone hiện tại */
 .dark {
   --brand-red: #d61f26;
@@ -212,6 +218,7 @@
   html {
     @apply font-sans scroll-smooth;
     scroll-padding-top: var(--site-header-height);
+    overflow-x: clip;
   }
 
   h1,
@@ -303,6 +310,11 @@
 
 .prose-article-public a {
   @apply text-brand-red underline underline-offset-2 hover:text-brand-red-hover;
+}
+
+.prose-article-public table,
+.prose-article-public pre {
+  @apply my-4 block max-w-full overflow-x-auto;
 }
 .prose-promotion p {
   @apply mb-3 leading-relaxed text-stone-300;
