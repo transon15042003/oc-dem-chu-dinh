@@ -144,7 +144,9 @@ export function BookingsHub({ tableBookings, eventBookings, filters }: BookingsH
           {filters.branch ? (
             <Badge variant="outline">{resolveBranchLabel(filters.branch)}</Badge>
           ) : null}
-          {filters.query ? <Badge variant="outline">"{filters.query}"</Badge> : null}
+          {filters.query ? (
+            <Badge variant="outline">{`"${filters.query}"`}</Badge>
+          ) : null}
           <Button
             type="button"
             variant="ghost"
