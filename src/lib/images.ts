@@ -23,9 +23,21 @@ function toEncodedPath(relativePath: string): string {
     .join("/");
 }
 
-function resolveStoragePath(path: string): string {
+function decodeAssetPath(path: string): string {
   const normalized = path.replace(/^\//, "");
-  return assetKeyMap[normalized] ?? normalized;
+
+  try {
+    // Data files may pass percent-encoded paths (e.g. CN1%20-%20gò%20vấp).
+    // Decode once so asset-key-map lookups match and we avoid double-encoding.
+    return decodeURIComponent(normalized);
+  } catch {
+    return normalized;
+  }
+}
+
+function resolveStoragePath(path: string): string {
+  const decoded = decodeAssetPath(path);
+  return assetKeyMap[decoded] ?? decoded;
 }
 
 function supabasePublicAssetUrl(path: string): string | null {
