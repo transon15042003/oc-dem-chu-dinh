@@ -2,6 +2,40 @@
 
 > Ghi chú từ phiên `/grill-with-docs`. Cập nhật khi quyết định thay đổi.
 
+## Ghi chú cho AI (phiên sau)
+
+> **Đọc mục này trước** khi tiếp tục phát triển — ghi lại ý chủ dự án qua các phiên chat.
+
+### Quy trình làm việc
+
+| Quy tắc | Chi tiết |
+|---------|----------|
+| **Commit + push** | Sau khi hoàn thành task → **luôn commit và push** lên branch feature đang làm. Chủ dự án kiểm tra trực tiếp trên **Vercel Preview / Staging**, không chỉ localhost. |
+| **Không tự merge** | Chỉ merge PR / push `main` khi chủ dự án yêu cầu rõ ràng. |
+| **Git Flow** | `feature/*` → PR → `develop` (staging) → PR → `main` (production). Chi tiết: [`docs/GITFLOW.md`](./GITFLOW.md). |
+| **Branch v2.3** | `feature/v2-bookings-hub` → PR [#21](https://github.com/transon15042003/oc-dem-chu-dinh/pull/21) → `develop`. |
+
+### Env Vercel (quan trọng)
+
+- `SUPABASE_SERVICE_ROLE_KEY` **bắt buộc** trên Vercel (Production + Preview + Development).
+- **Thiếu key** → form đặt bàn/đặt tiệc vẫn báo thành công (email gửi được) nhưng **không lưu DB** → admin `/admin/bookings` trống, không có lỗi hiển thị.
+- Chi tiết: [`docs/DEPLOY.md`](./DEPLOY.md), [`docs/SUPABASE.md`](./SUPABASE.md).
+
+### UX / hành vi đã chốt
+
+| Khu vực | Quy tắc |
+|---------|---------|
+| Select (form public) | Hiển thị **label tiếng Việt** khi đã chọn (vd. `Thôi nôi / Báo hỷ`), không hiện slug (`thoi-noi`). Dùng `FormSelectValue`. |
+| Form đặt tiệc | **Reset toàn bộ** sau submit thành công; giữ preset loại tiệc nếu vào trang qua `?event=`. |
+| Admin `/admin/bookings` | Tab loại + filter trạng thái / chi nhánh / tìm kiếm; thao tác **Đã xử lý** / **Mở lại** (`booking_status`: `pending` \| `processed`). |
+
+### Supabase project
+
+- Project ref: `ianpabkxuzjnksrgsvtr` (region `ap-southeast-1`).
+- Migrations trong `supabase/migrations/` — áp dụng remote khi thêm bảng/cột mới.
+
+---
+
 ## Mục tiêu dự án
 
 **Hướng A — Portfolio / học tập**, thiết kế để nâng cấp dần mà không viết lại từ đầu.
@@ -162,21 +196,28 @@ M2 — Admin CMS ✅
 > **Quyết định:** Một hub admin duy nhất; **2 bảng DB riêng** (`table_bookings`, `event_bookings`). Form public vẫn tách (đặt bàn ≠ đặt tiệc).
 
 ```
-M1 — Table booking → Supabase
+M1 — Table booking → Supabase ✅
 ├── Migration `table_bookings` (full_name, phone, guest_count, branch_id, booking_date, booking_time, note)
 ├── RLS: editor SELECT
 ├── POST /api/booking → insert DB + Resend (giữ email)
 └── Pattern giống event_bookings / career_applications
 
-M2 — Admin hub `/admin/bookings`
+M2 — Admin hub `/admin/bookings` ✅
 ├── Tab: Tất cả | Đặt bàn | Đặt tiệc (query param `?type=table|event|all`)
-├── Bảng riêng theo loại (cột phù hợp từng form)
+├── Filter: trạng thái (`?status=pending|processed`), chi nhánh (`?branch=`), tìm kiếm (`?q=`)
+├── Thao tác: đánh dấu **Đã xử lý** / **Mở lại** (migration `booking_status`)
 ├── Gộp nav: thay `/admin/event-bookings` → **Đặt chỗ** (`/admin/bookings`)
 ├── Redirect `/admin/event-bookings` → `/admin/bookings?type=event`
 └── Dashboard card cập nhật
+
+M3 — Form & API fixes ✅
+├── `SUPABASE_SERVICE_ROLE_KEY` bắt buộc trên Vercel (insert DB + admin đọc)
+├── API fallback email-only khi thiếu service role (vẫn success, không lưu DB)
+├── `FormSelectValue` — label tiếng Việt trong select
+└── Form đặt tiệc reset toàn bộ sau submit thành công
 ```
 
-**Không làm trong v2.3:** workflow trạng thái (đã xác nhận/hủy), export CSV, calendar view.
+**Defer v2.3+:** export CSV, calendar view, workflow đã xác nhận/hủy (ngoài pending/processed).
 
 ### Milestones v2.4 — Menu Admin
 
@@ -203,7 +244,7 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 |----------|------------|
 | Event Booking form + admin | ✅ v2.1 |
 | Careers `/tuyen-dung` + admin CMS | ✅ v2.2 |
-| Bookings hub (đặt bàn DB + `/admin/bookings`) | 🔲 v2.3 |
+| Bookings hub (đặt bàn DB + `/admin/bookings`) | ✅ v2.3 |
 
 ### Env bổ sung (v2)
 
@@ -235,6 +276,9 @@ SUPABASE_SERVICE_ROLE_KEY=
 | 22 | Tiptap WYSIWYG; ảnh content max 2MB (Supabase Storage) | 2026-08-29 |
 | 23 | Event Booking v2.1: email + DB; Careers v2.2: admin CMS + DB; Menu admin v2.4 | 2026-08-29 |
 | 24 | v2.3 Bookings: hub admin `/admin/bookings` (tab Tất cả / Đặt bàn / Đặt tiệc); 2 bảng DB riêng | 2026-08-30 |
+| 25 | Sau mỗi task: **commit + push** — chủ dự án test trên Vercel Preview/Staging | 2026-08-30 |
+| 26 | `SUPABASE_SERVICE_ROLE_KEY` bắt buộc Vercel; form success ≠ đã lưu DB nếu thiếu key | 2026-08-30 |
+| 27 | Admin bookings: filter + `booking_status` pending/processed; form select hiện label VI | 2026-08-30 |
 ---
 
 ## Env variables (do bạn config)
@@ -584,6 +628,7 @@ Custom domain staging (`staging.<domain>`) → gắn branch `develop` khi mua do
 | `RESEND_API_KEY` | ✅ | Form đặt bàn + liên hệ |
 | `BOOKING_FROM_EMAIL` | ✅ | Domain đã verify Resend |
 | `BOOKING_NOTIFICATION_EMAIL` | ✅ | Email nhận thông báo |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | **Bắt buộc** — insert form booking + admin đọc DB. Thiếu → form success nhưng admin trống. |
 
 4. QA trên **staging** (`develop`) trước khi merge lên `main`.
 

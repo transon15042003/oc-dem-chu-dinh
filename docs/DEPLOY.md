@@ -40,7 +40,7 @@ QA trên staging OK → PR develop → main   →  Production deploy
 | `NEXT_PUBLIC_SITE_URL` | `https://oc-dem-chu-dinh.vercel.app` | URL staging ở trên | `http://localhost:3000` |
 | `NEXT_PUBLIC_SUPABASE_*` | ✅ | ✅ (cùng project) | local `.env.local` |
 | `RESEND_*`, `BOOKING_*` | ✅ | ✅ (gửi email thật) | local `.env.local` |
-| `SUPABASE_SERVICE_ROLE_KEY` | Optional | Optional | local (optional) |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | ✅ | local `.env.local` |
 
 Dashboard: https://vercel.com/tran-sons-projects-703bf65b/oc-dem-chu-dinh/settings/environment-variables
 

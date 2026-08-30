@@ -17,7 +17,7 @@ const navItems = [
   { href: "/admin", label: "Tổng quan", roles: ["admin", "editor"] as UserRole[] },
   { href: "/admin/articles", label: "Tin tức", roles: ["admin", "editor"] as UserRole[] },
   { href: "/admin/promotions", label: "Khuyến mãi", roles: ["admin", "editor"] as UserRole[] },
-  { href: "/admin/event-bookings", label: "Đặt tiệc", roles: ["admin", "editor"] as UserRole[] },
+  { href: "/admin/bookings", label: "Đặt chỗ", roles: ["admin", "editor"] as UserRole[] },
   { href: "/admin/careers", label: "Tuyển dụng", roles: ["admin", "editor"] as UserRole[] },
   { href: "/admin/users", label: "Người dùng", roles: ["admin"] as UserRole[] },
 ];
@@ -54,6 +54,9 @@ export function AdminNav({ role, email }: AdminNavProps) {
                 className={cn(
                   "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   pathname === item.href ||
+                    (item.href === "/admin/bookings" &&
+                      (pathname.startsWith("/admin/bookings") ||
+                        pathname.startsWith("/admin/event-bookings"))) ||
                     (item.href !== "/admin" && pathname.startsWith(`${item.href}/`)) ||
                     (item.href !== "/admin" && pathname.startsWith(item.href))
                     ? "bg-brand-red text-on-red"

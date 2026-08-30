@@ -22,7 +22,7 @@
 |------|----------|---------|
 | `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Dashboard → Settings → API |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | anon / legacy JWT key |
-| `SUPABASE_SERVICE_ROLE_KEY` | ❌ | Không cần cho `/admin/users` (dùng RPC `admin_create_user`) |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ server | Form đặt bàn / đặt tiệc / tuyển dụng (insert DB). **Không** commit; lấy: `npx supabase projects api-keys --project-ref ianpabkxuzjnksrgsvtr` |
 
 ## Tạo user mới (marketing)
 

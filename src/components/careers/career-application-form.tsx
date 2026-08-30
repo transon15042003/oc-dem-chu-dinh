@@ -9,12 +9,12 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FormSelectValue } from "@/components/ui/form-select-value";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { careersApplicationSectionId } from "@/config/site";
@@ -117,7 +117,11 @@ export function CareerApplicationForm({ positionOptions }: CareerApplicationForm
             }
           >
             <SelectTrigger className="h-11 w-full border-border bg-brand-dark-soft">
-              <SelectValue placeholder="Chọn vị trí ứng tuyển" />
+              <FormSelectValue
+                value={positionSlug}
+                options={positionOptions}
+                placeholder="Chọn vị trí ứng tuyển"
+              />
             </SelectTrigger>
             <SelectContent>
               {positionOptions.map((option) => (
@@ -169,7 +173,11 @@ export function CareerApplicationForm({ positionOptions }: CareerApplicationForm
             }
           >
             <SelectTrigger className="h-11 w-full border-border bg-brand-dark-soft">
-              <SelectValue placeholder="Chọn chi nhánh" />
+              <FormSelectValue
+                value={branchId}
+                options={branchOptions}
+                placeholder="Chọn chi nhánh"
+              />
             </SelectTrigger>
             <SelectContent>
               {branchOptions.map((branch) => (

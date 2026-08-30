@@ -6,6 +6,8 @@ import {
   validationError,
 } from "@/lib/api/errors";
 import { sendBookingEmail } from "@/lib/email/send-booking";
+import { insertTableBooking } from "@/lib/table-bookings/insert";
+import { getEmailConfig, getSupabaseServiceConfig } from "@/lib/env-server";
 import { bookingFormSchema } from "@/lib/validations/booking";
 
 export async function POST(request: Request) {
@@ -22,8 +24,25 @@ export async function POST(request: Request) {
     return validationError();
   }
 
+  const supabaseConfig = getSupabaseServiceConfig();
+  const emailConfig = getEmailConfig();
+
+  if (!supabaseConfig && !emailConfig) {
+    console.error("[api/booking] Neither Supabase service role nor email is configured");
+    return emailNotConfiguredError();
+  }
+
   try {
-    await sendBookingEmail(parsed.data);
+    if (supabaseConfig) {
+      await insertTableBooking(parsed.data);
+    } else {
+      console.warn("[api/booking] SUPABASE_SERVICE_ROLE_KEY not set — skipping DB insert");
+    }
+
+    if (emailConfig) {
+      await sendBookingEmail(parsed.data);
+    }
+
     return NextResponse.json({ success: true });
   } catch (error) {
     if (error instanceof Error && error.message === "EMAIL_NOT_CONFIGURED") {

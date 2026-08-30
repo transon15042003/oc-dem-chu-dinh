@@ -11,12 +11,12 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FormSelectValue } from "@/components/ui/form-select-value";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { eventBookingSectionId } from "@/config/site";
@@ -87,7 +87,17 @@ export function EventBookingFormSection() {
     }
 
     setSubmitted(true);
-    reset({ eventType: presetEventType || undefined });
+    reset({
+      fullName: "",
+      phone: "",
+      eventType: presetEventType || undefined,
+      guestCount: "",
+      branchId: "",
+      date: "",
+      time: "",
+      companyName: "",
+      note: "",
+    });
     setTimeout(() => setSubmitted(false), 5000);
   };
 
@@ -121,7 +131,11 @@ export function EventBookingFormSection() {
                 }
               >
                 <SelectTrigger className="h-11 w-full border-border bg-brand-dark-soft">
-                  <SelectValue placeholder="Chọn loại tiệc" />
+                  <FormSelectValue
+                    value={eventType}
+                    options={eventTypeOptions}
+                    placeholder="Chọn loại tiệc"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {eventTypeOptions.map((option) => (
@@ -173,7 +187,11 @@ export function EventBookingFormSection() {
                 }
               >
                 <SelectTrigger className="h-11 w-full border-border bg-brand-dark-soft">
-                  <SelectValue placeholder="Chọn số lượng khách" />
+                  <FormSelectValue
+                    value={guestCount}
+                    options={guestCountOptions}
+                    placeholder="Chọn số lượng khách"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {guestCountOptions.map((option) => (
@@ -197,7 +215,11 @@ export function EventBookingFormSection() {
                 }
               >
                 <SelectTrigger className="h-11 w-full border-border bg-brand-dark-soft">
-                  <SelectValue placeholder="Chọn chi nhánh" />
+                  <FormSelectValue
+                    value={branchId}
+                    options={branchOptions}
+                    placeholder="Chọn chi nhánh"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {branchOptions.map((branch) => (

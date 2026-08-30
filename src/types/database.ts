@@ -127,6 +127,8 @@ export const MAX_CONTENT_IMAGE_BYTES = 2 * 1024 * 1024;
 
 export type EventBookingType = "sinh-nhat" | "thoi-noi" | "tat-nien" | "lien-hoan";
 
+export type BookingStatus = "pending" | "processed";
+
 export type EventBooking = {
   id: string;
   full_name: string;
@@ -138,5 +140,19 @@ export type EventBooking = {
   event_time: string;
   company_name: string | null;
   note: string | null;
+  status: BookingStatus;
+  created_at: string;
+};
+
+export type TableBooking = {
+  id: string;
+  full_name: string;
+  phone: string;
+  guest_count: string;
+  branch_id: string;
+  booking_date: string;
+  booking_time: string;
+  note: string | null;
+  status: BookingStatus;
   created_at: string;
 };
