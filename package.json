@@ -13,7 +13,12 @@
     "flow:release:finish": "bash scripts/gitflow/release-finish.sh",
     "flow:hotfix": "bash scripts/gitflow/hotfix-start.sh",
     "flow:hotfix:finish": "bash scripts/gitflow/hotfix-finish.sh",
-    "flow:sync": "bash scripts/gitflow/sync-develop.sh"
+    "flow:sync": "bash scripts/gitflow/sync-develop.sh",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "assets:migrate": "node scripts/migrate-site-images.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -43,13 +48,18 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/react": "^8.6.14",
+    "@storybook/react-vite": "^8.6.14",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
+    "storybook": "^8.6.14",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }

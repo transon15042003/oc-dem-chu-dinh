@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SiteLogo } from "@/components/layout/site-logo";
 import { useState } from "react";
 import {
   Mail,
@@ -82,17 +82,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-12">
           {/* Cột 1: Thương hiệu */}
           <div className="space-y-4 lg:col-span-4">
-            <Link href="/" className="inline-flex items-center gap-3" aria-label={siteConfig.name}>
-              <span className="flex size-16 items-center justify-center rounded-2xl border border-brand-gold/30 bg-amber-950/40 text-xl font-extrabold text-brand-gold">
-                Đỉnh
-              </span>
-              <div>
-                <p className="font-heading text-sm font-black uppercase tracking-wide text-footer-foreground">
-                  {siteConfig.name}
-                </p>
-                <p className="text-[10px] text-brand-gold">{siteConfig.tagline}</p>
-              </div>
-            </Link>
+            <SiteLogo showWordmark variant="footer" imageClassName="h-14 sm:h-16" />
 
             <p className="text-xs leading-relaxed font-medium text-footer-foreground/80">
               {siteConfig.description}
