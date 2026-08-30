@@ -4,13 +4,20 @@
 
 ## URL theo nhánh
 
-| Môi trường | Git branch | Vercel target | URL |
-|------------|------------|---------------|-----|
-| **Production** | `main` | Production | https://oc-dem-chu-dinh.vercel.app |
-| **Staging** | `develop` | Preview (branch domain) | https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app |
+| Môi trường | Git branch | Vercel target | URL chính |
+|------------|------------|---------------|-----------|
+| **Production** | `main` | Production | https://ocdemchudinh.vercel.app |
+| **Staging** | `develop` | Preview (domain gắn branch) | https://ocdemchudinh-preview.vercel.app |
 | **Preview PR** | `feature/*` | Preview (tạm) | URL riêng mỗi PR — xem Vercel bot trên GitHub |
 
-### Custom domain staging (khi mua domain)
+**Branch alias (dự phòng):**
+
+| Nhánh | URL |
+|-------|-----|
+| `main` | https://oc-dem-chu-dinh-git-main-tran-sons-projects-703bf65b.vercel.app |
+| `develop` | https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app |
+
+### Custom domain (khi mua domain riêng)
 
 1. Vercel → Project **oc-dem-chu-dinh** → **Settings → Domains**
 2. Add domain: `staging.<your-domain.com>` (vd `staging.ocdemchudinh.vn`)
@@ -37,7 +44,7 @@ QA trên staging OK → PR develop → main   →  Production deploy
 
 | Biến | Production | Preview (staging + PR) | Development |
 |------|------------|------------------------|-------------|
-| `NEXT_PUBLIC_SITE_URL` | `https://oc-dem-chu-dinh.vercel.app` | URL staging ở trên | `http://localhost:3000` |
+| `NEXT_PUBLIC_SITE_URL` | `https://ocdemchudinh.vercel.app` | `https://ocdemchudinh-preview.vercel.app` | `http://localhost:3000` |
 | `NEXT_PUBLIC_SUPABASE_*` | ✅ | ✅ (cùng project) | local `.env.local` |
 | `RESEND_*`, `BOOKING_*` | ✅ | ✅ (gửi email thật) | local `.env.local` |
 | `SUPABASE_SERVICE_ROLE_KEY` | ✅ | ✅ | local `.env.local` |

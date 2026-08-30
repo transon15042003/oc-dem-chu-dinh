@@ -6,15 +6,22 @@ Dự án bắt đầu là **clone portfolio**; **v2** chuyển sang **sản ph�
 
 ## Môi trường
 
-| Môi trường     | Nhánh Git | URL                                                                        |
-| -------------- | --------- | -------------------------------------------------------------------------- |
-| **Production** | `main`    | https://oc-dem-chu-dinh.vercel.app                                         |
-| **Staging**    | `develop` | https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app |
-| **Local**      | —         | http://localhost:3000                                                      |
+| Môi trường     | Nhánh Git | URL chính (Vercel)                    | Ghi chú |
+| -------------- | --------- | ------------------------------------- | ------- |
+| **Production** | `main`    | https://ocdemchudinh.vercel.app       | Domain production trên Vercel |
+| **Staging**    | `develop` | https://ocdemchudinh-preview.vercel.app | Domain gắn nhánh `develop` |
+| **Local**      | —         | http://localhost:3000                 | — |
+
+**URL dự phòng (branch alias Vercel):**
+
+- Production: `https://oc-dem-chu-dinh-git-main-tran-sons-projects-703bf65b.vercel.app`
+- Staging: `https://oc-dem-chu-dinh-git-develop-tran-sons-projects-703bf65b.vercel.app`
 
 Admin: `/admin/login` (trên mỗi môi trường tương ứng).
 
-Chi tiết deploy: [`docs/DEPLOY.md`](./docs/DEPLOY.md)
+> Domain `ocdemchudinh-preview.vercel.app` được cấu hình trên Vercel → **Settings → Domains**, gắn Git branch `develop`. Preview mỗi PR (`feature/*`) vẫn có URL riêng — xem Vercel bot trên GitHub.
+
+Chi tiết deploy và env `NEXT_PUBLIC_SITE_URL`: [`docs/DEPLOY.md`](./docs/DEPLOY.md)
 
 ## Stack
 
