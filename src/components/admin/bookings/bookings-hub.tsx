@@ -1,9 +1,10 @@
 "use client";
 
-import { CheckCircle2, RotateCcw, Search } from "lucide-react";
+import { CheckCircle2, Download, RotateCcw, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 
+import { AdminDataView } from "@/components/admin/admin-data-view";
 import {
   updateEventBookingStatus,
   updateTableBookingStatus,
@@ -22,6 +23,7 @@ import {
   type CombinedBookingListItem,
 } from "@/lib/bookings/types";
 import type { EventBooking, TableBooking } from "@/types/database";
+import { downloadBookingsCsv } from "@/lib/bookings/export-csv";
 
 type BookingsHubProps = {
   tableBookings: TableBooking[];
@@ -133,6 +135,23 @@ export function BookingsHub({ tableBookings, eventBookings, filters }: BookingsH
         </div>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground">
+          {items.length} kết quả
+          {items.length !== allItems.length ? ` / ${allItems.length} tổng` : ""}
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={items.length === 0}
+          onClick={() => downloadBookingsCsv(items)}
+        >
+          <Download className="size-4" />
+          Xuất CSV
+        </Button>
+      </div>
+
       {(filters.query || filters.status !== "all" || filters.branch) && (
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
           <span>Đang lọc:</span>
@@ -175,32 +194,44 @@ export function BookingsHub({ tableBookings, eventBookings, filters }: BookingsH
             : "Không có kết quả phù hợp với bộ lọc hiện tại."}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-border">
-          <table className="min-w-full text-sm">
-            <thead className="bg-muted/50 text-left">
-              <tr>
-                <th className="px-4 py-3 font-semibold">Loại</th>
-                <th className="px-4 py-3 font-semibold">Khách hàng</th>
-                <th className="px-4 py-3 font-semibold">Chi tiết</th>
-                <th className="px-4 py-3 font-semibold">Thời gian</th>
-                <th className="px-4 py-3 font-semibold">Chi nhánh</th>
-                <th className="px-4 py-3 font-semibold">Nhận lúc</th>
-                <th className="px-4 py-3 font-semibold">Trạng thái</th>
-                <th className="px-4 py-3 font-semibold">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => (
-                <BookingRow
-                  key={`${item.kind}-${item.booking.id}`}
-                  item={item}
-                  isPending={isPending}
-                  onToggleStatus={() => handleStatusToggle(item)}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <AdminDataView
+          table={
+            <div className="overflow-x-auto rounded-xl border border-border">
+              <table className="min-w-full text-sm">
+                <thead className="bg-muted/50 text-left">
+                  <tr>
+                    <th className="px-4 py-3 font-semibold">Loại</th>
+                    <th className="px-4 py-3 font-semibold">Khách hàng</th>
+                    <th className="px-4 py-3 font-semibold">Chi tiết</th>
+                    <th className="px-4 py-3 font-semibold">Thời gian</th>
+                    <th className="px-4 py-3 font-semibold">Chi nhánh</th>
+                    <th className="px-4 py-3 font-semibold">Nhận lúc</th>
+                    <th className="px-4 py-3 font-semibold">Trạng thái</th>
+                    <th className="px-4 py-3 font-semibold">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map((item) => (
+                    <BookingRow
+                      key={`${item.kind}-${item.booking.id}`}
+                      item={item}
+                      isPending={isPending}
+                      onToggleStatus={() => handleStatusToggle(item)}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          }
+          cards={items.map((item) => (
+            <BookingCard
+              key={`${item.kind}-${item.booking.id}-card`}
+              item={item}
+              isPending={isPending}
+              onToggleStatus={() => handleStatusToggle(item)}
+            />
+          ))}
+        />
       )}
     </div>
   );
@@ -275,6 +306,82 @@ function BookingRow({ item, isPending, onToggleStatus }: BookingRowProps) {
         </Button>
       </td>
     </tr>
+  );
+}
+
+type BookingCardProps = BookingRowProps;
+
+function BookingCard({ item, isPending, onToggleStatus }: BookingCardProps) {
+  const isProcessed = item.booking.status === "processed";
+
+  return (
+    <article
+      className={`space-y-3 rounded-xl border border-border p-4 ${isProcessed ? "bg-muted/20" : "bg-card"}`}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="space-y-1">
+          <Badge variant={item.kind === "event" ? "hot" : "outline"}>
+            {item.kind === "event" ? "Đặt tiệc" : "Đặt bàn"}
+          </Badge>
+          <p className="font-semibold">{item.booking.full_name}</p>
+          <p className="text-sm text-muted-foreground">{item.booking.phone}</p>
+        </div>
+        <Badge variant={isProcessed ? "default" : "outline"}>
+          {isProcessed ? "Đã xử lý" : "Chưa xử lý"}
+        </Badge>
+      </div>
+
+      <dl className="grid gap-2 text-sm">
+        <div>
+          <dt className="text-xs text-muted-foreground">Chi tiết</dt>
+          <dd>
+            {item.kind === "event" ? (
+              <>
+                {getEventTypeLabel(item.booking.event_type)} ·{" "}
+                {resolveGuestCountLabel(item.booking.guest_count)}
+              </>
+            ) : (
+              resolveGuestCountLabel(item.booking.guest_count)
+            )}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-xs text-muted-foreground">Thời gian</dt>
+          <dd>
+            {formatBookingDate(
+              item.kind === "table" ? item.booking.booking_date : item.booking.event_date,
+            )}{" "}
+            · {item.kind === "table" ? item.booking.booking_time : item.booking.event_time}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-xs text-muted-foreground">Chi nhánh</dt>
+          <dd>{resolveBranchLabel(item.booking.branch_id)}</dd>
+        </div>
+        <div>
+          <dt className="text-xs text-muted-foreground">Nhận lúc</dt>
+          <dd>{formatDateTime(item.booking.created_at)}</dd>
+        </div>
+        {item.booking.note?.trim() ? (
+          <div>
+            <dt className="text-xs text-muted-foreground">Ghi chú</dt>
+            <dd>{item.booking.note}</dd>
+          </div>
+        ) : null}
+      </dl>
+
+      <Button
+        type="button"
+        variant={isProcessed ? "outline" : "brand"}
+        size="sm"
+        className="w-full"
+        disabled={isPending}
+        onClick={onToggleStatus}
+      >
+        <CheckCircle2 className="size-3.5" />
+        {isProcessed ? "Mở lại" : "Đã xử lý"}
+      </Button>
+    </article>
   );
 }
 

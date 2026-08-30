@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MapPin, Navigation } from "lucide-react";
 
 import { branches } from "@/data/branches";
-import { publicEnv } from "@/lib/env";
+import { resolveMapDirectionsUrl, resolveMapEmbedUrl } from "@/lib/maps";
 import { cn } from "@/lib/utils";
 
 type BranchMapSectionProps = {
@@ -20,10 +20,13 @@ export function BranchMapSection({
 }: BranchMapSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeBranch = branches[activeIndex];
-  const mapEmbed = activeBranch
-    ? publicEnv.mapEmbeds[activeBranch.mapKey]
+  const mapEmbed =
+    activeBranch && !activeBranch.comingSoon
+      ? resolveMapEmbedUrl(activeBranch.mapKey, activeBranch.address)
+      : "";
+  const mapUrl = activeBranch
+    ? resolveMapDirectionsUrl(activeBranch.mapKey, activeBranch.address)
     : "";
-  const mapUrl = activeBranch ? publicEnv.mapUrls[activeBranch.mapKey] : "";
 
   return (
     <section className={cn("space-y-6", className)}>
@@ -60,6 +63,14 @@ export function BranchMapSection({
             referrerPolicy="no-referrer-when-downgrade"
             allowFullScreen
           />
+        ) : activeBranch?.comingSoon ? (
+          <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 bg-gradient-to-br from-ink to-ink-soft p-6 text-center">
+            <MapPin className="size-10 text-brand-gold/60" />
+            <p className="text-sm font-bold text-on-dark">{activeBranch?.name}</p>
+            <p className="max-w-md text-xs text-brand-cream-muted/80">
+              {activeBranch?.address}
+            </p>
+          </div>
         ) : (
           <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 bg-gradient-to-br from-ink to-ink-soft p-6 text-center">
             <MapPin className="size-10 text-brand-gold/60" />

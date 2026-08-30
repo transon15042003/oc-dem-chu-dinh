@@ -13,7 +13,8 @@
 | **Commit + push** | Sau khi hoàn thành task → **luôn commit và push** lên branch feature đang làm. Chủ dự án kiểm tra trực tiếp trên **Vercel Preview / Staging**, không chỉ localhost. |
 | **Không tự merge** | Chỉ merge PR / push `main` khi chủ dự án yêu cầu rõ ràng. |
 | **Git Flow** | `feature/*` → PR → `develop` (staging) → PR → `main` (production). Chi tiết: [`docs/GITFLOW.md`](./GITFLOW.md). |
-| **Branch v2.3** | `feature/v2-bookings-hub` → PR [#21](https://github.com/transon15042003/oc-dem-chu-dinh/pull/21) → `develop`. |
+| **Branch v2.3** | `feature/v2-bookings-hub` → PR [#21](https://github.com/transon15042003/oc-dem-chu-dinh/pull/21) → `develop` (đã merge). |
+| **Branch v2.4** | `feature/v2-menu-admin` → PR → `develop`. |
 
 ### Env Vercel (quan trọng)
 
@@ -91,7 +92,7 @@
 - Form đặt tiệc (**Event Booking**) tách khỏi đặt bàn ở **form public**; lưu DB + email (v2.1)
 - **Đặt bàn + đặt tiệc**: hub admin chung `/admin/bookings` (tab/filter) — v2.3
 - **Tuyển dụng**: CRUD vị trí + hồ sơ ứng tuyển qua admin; lưu DB + email (v2.2)
-- **Menu CRUD**: defer v2.4 (menu vẫn static `src/data/`)
+- **Menu CRUD**: v2.4 — `/admin/menu`, DB `menu_categories` + `menu_items`
 
 ### Stack v2 (đã chốt)
 
@@ -222,8 +223,22 @@ M3 — Form & API fixes ✅
 ### Milestones v2.4 — Menu Admin
 
 ```
-M1 — CRUD Menu Item qua admin (thay static menu.ts)
+M1 — Supabase schema ✅
+├── `menu_categories` + `menu_items` (draft/published, sort_order, is_hot)
+├── RLS: public SELECT published; editor CRUD
+└── Seed từ static `menu.ts` (7 danh mục, 26 món)
+
+M2 — Admin `/admin/menu` ✅
+├── CRUD danh mục + món ăn (slug, ảnh CDN path, từ khóa tìm kiếm)
+├── Nav + dashboard card
+└── Xóa danh mục (RESTRICT nếu còn món)
+
+M3 — Public `/thuc-don` ✅
+├── Đọc menu từ Supabase (cache tag `menu`)
+└── Giữ poster + wifi password static trong `src/data/menu.ts`
 ```
+
+**Defer v2.4+:** upload ảnh món qua Storage (hiện dùng path CDN), giá món, lightbox nâng cao.
 
 Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 
@@ -245,6 +260,7 @@ Defer: lightbox gallery nâng cao, i18n, Storybook, Jest
 | Event Booking form + admin | ✅ v2.1 |
 | Careers `/tuyen-dung` + admin CMS | ✅ v2.2 |
 | Bookings hub (đặt bàn DB + `/admin/bookings`) | ✅ v2.3 |
+| Menu admin CRUD + `/thuc-don` từ Supabase | 🚧 v2.4 |
 
 ### Env bổ sung (v2)
 
