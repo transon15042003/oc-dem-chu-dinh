@@ -1,13 +1,13 @@
 import { cache } from "react";
 
-import { createClient } from "@/lib/supabase/server";
+import { createPrivilegedClient } from "@/lib/supabase/privileged";
 import type { TableBooking } from "@/types/database";
 
 const tableBookingColumns =
   "id, full_name, phone, guest_count, branch_id, booking_date, booking_time, note, created_at" as const;
 
 export const getTableBookings = cache(async (): Promise<TableBooking[]> => {
-  const supabase = await createClient();
+  const supabase = await createPrivilegedClient();
 
   const { data, error } = await supabase
     .from("table_bookings")
