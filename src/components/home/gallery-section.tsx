@@ -41,7 +41,7 @@ export function ExperienceSection() {
             {activeVideo ? (
               <div className="border-t border-border bg-ink/80 px-4 py-3">
                 <p className="font-bold text-on-dark">{activeVideo.title}</p>
-                <p className="text-xs text-brand-gold">{activeVideo.branch}</p>
+                <p className="text-xs text-brand-gold-on-ink">{activeVideo.branch}</p>
               </div>
             ) : null}
           </div>
@@ -68,12 +68,12 @@ export function ExperienceSection() {
                     sizes="80px"
                   />
                   <span className="absolute inset-0 flex items-center justify-center bg-ink/40">
-                    <Play className="size-6 text-brand-gold" />
+                    <Play className="size-6 text-icon-on-ink" />
                   </span>
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-bold text-foreground">{video.title}</p>
-                  <p className="text-xs text-brand-gold">{video.branch}</p>
+                  <p className="text-xs text-brand-gold-on-ink">{video.branch}</p>
                   <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
                     Video {index + 1}/{experienceVideos.length}
                   </p>

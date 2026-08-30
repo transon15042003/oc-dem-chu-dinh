@@ -34,7 +34,7 @@ export function EventServicesSection() {
                 >
                   <div className="absolute top-0 right-0 size-24 rounded-full bg-foreground/5 blur-2xl" />
                   <div className="relative flex items-center gap-4">
-                    <span className="flex size-14 items-center justify-center rounded-2xl bg-ink/60 text-brand-gold shadow-inner">
+                    <span className="flex size-14 items-center justify-center rounded-2xl bg-ink/60 text-icon-on-ink shadow-inner">
                       <Icon className="size-7" aria-hidden />
                     </span>
                     <h3 className="text-lg font-extrabold uppercase text-foreground">

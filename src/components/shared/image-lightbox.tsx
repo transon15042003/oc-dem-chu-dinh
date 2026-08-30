@@ -42,7 +42,7 @@ export function ImageLightbox({ image, alt, onClose }: ImageLightboxProps) {
           </div>
         ) : null}
         <p className="flex items-center justify-center gap-2 py-1 text-center text-xs text-brand-cream-muted">
-          <ZoomIn className="size-3.5 text-brand-gold" />
+          <ZoomIn className="size-3.5 text-brand-gold-on-ink" />
           Cuộn hoặc chụm để xem chi tiết
         </p>
       </DialogContent>

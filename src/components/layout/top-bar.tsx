@@ -11,7 +11,7 @@ export function TopBar() {
     <div className="border-b border-brand-gold/20 bg-brand-red text-on-red">
       <div className="mx-auto flex max-w-7xl flex-nowrap items-center justify-between gap-3 px-4 py-2 text-xs sm:gap-4 sm:text-sm">
         <p className="flex min-w-0 items-center gap-2 font-medium uppercase tracking-wide">
-          <Flame className="size-4 shrink-0 text-brand-gold" aria-hidden />
+          <Flame className="size-4 shrink-0 text-brand-gold-on-red" aria-hidden />
           <span className="hidden truncate sm:inline">
             {siteConfig.name} | Phục vụ xuyên đêm {siteConfig.hours}
           </span>
@@ -20,7 +20,7 @@ export function TopBar() {
 
         <a
           href={hotline ? hotlineHref(hotline) : "#"}
-          className="inline-flex shrink-0 items-center gap-1.5 font-semibold text-brand-gold transition-opacity hover:opacity-80 sm:gap-2"
+          className="inline-flex shrink-0 items-center gap-1.5 font-semibold text-brand-gold-on-red transition-opacity hover:opacity-80 sm:gap-2"
           aria-label={`Hotline ${formattedHotline}`}
         >
           <Phone className="size-4" aria-hidden />

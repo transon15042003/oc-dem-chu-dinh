@@ -85,7 +85,7 @@ export function BranchesPageContent() {
                           className="object-cover"
                           sizes="(max-width: 640px) 100vw, 192px"
                         />
-                        <span className="absolute top-2 left-2 rounded-full bg-brand-red px-2.5 py-0.5 text-[10px] font-black uppercase text-brand-gold shadow">
+                        <span className="absolute top-2 left-2 rounded-full bg-brand-red px-2.5 py-0.5 text-[10px] font-black uppercase text-brand-gold-on-red shadow">
                           {branch.badge}
                         </span>
                       </div>
@@ -249,7 +249,7 @@ export function BranchesPageContent() {
               <source src={videoUrl} type="video/mp4" />
             </video>
           ) : null}
-          <p className="py-2 text-center text-sm font-bold text-brand-gold">
+          <p className="py-2 text-center text-sm font-bold text-brand-gold-on-ink">
             {videoTitle}
           </p>
         </DialogContent>

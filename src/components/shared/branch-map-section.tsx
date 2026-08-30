@@ -44,7 +44,7 @@ export function BranchMapSection({
             className={cn(
               "rounded-xl border px-3 py-2 text-xs font-bold uppercase transition-colors",
               activeIndex === index
-                ? "border-brand-gold bg-brand-red text-brand-gold"
+                ? "border-brand-gold bg-brand-red text-brand-gold-on-red"
                 : "border-border bg-brand-dark-soft text-brand-cream-muted hover:border-brand-gold/40 hover:bg-foreground/5",
             )}
           >
@@ -65,7 +65,7 @@ export function BranchMapSection({
           />
         ) : activeBranch?.comingSoon ? (
           <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 bg-gradient-to-br from-ink to-ink-soft p-6 text-center">
-            <MapPin className="size-10 text-brand-gold/60" />
+            <MapPin className="size-10 text-brand-gold-on-ink/70" />
             <p className="text-sm font-bold text-on-dark">{activeBranch?.name}</p>
             <p className="max-w-md text-xs text-brand-cream-muted/80">
               {activeBranch?.address}
@@ -73,7 +73,7 @@ export function BranchMapSection({
           </div>
         ) : (
           <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 bg-gradient-to-br from-ink to-ink-soft p-6 text-center">
-            <MapPin className="size-10 text-brand-gold/60" />
+            <MapPin className="size-10 text-brand-gold-on-ink/70" />
             <p className="text-sm font-bold text-on-dark">{activeBranch?.name}</p>
             <p className="max-w-md text-xs text-brand-cream-muted/80">
               {activeBranch?.address}

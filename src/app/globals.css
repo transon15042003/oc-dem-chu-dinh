@@ -14,6 +14,9 @@
   --color-brand-dark-soft: var(--brand-dark-soft);
   --color-brand-red: var(--brand-red);
   --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-on-red: var(--brand-gold-on-red);
+  --color-brand-gold-on-ink: var(--brand-gold-on-ink);
+  --color-icon-on-ink: var(--icon-on-ink);
   --color-brand-cream: var(--brand-cream);
   --color-brand-cream-muted: var(--brand-cream-muted);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -72,7 +75,13 @@
   --site-subnav-height: 3.5rem;
   --brand-red: #d61f26;
   --brand-red-hover: #b91c1c;
-  --brand-gold: #c98912;
+  /* Vàng đậm — đọc tốt trên nền sáng (section heading, stats, tagline) */
+  --brand-gold: #a16207;
+  /* Chữ/icon trên nền đỏ (top bar, badge HOT, tab active) */
+  --brand-gold-on-red: #ffffff;
+  /* Chữ/icon trên overlay tối (ink/60, ink/80) */
+  --brand-gold-on-ink: #fef3c7;
+  --icon-on-ink: #ffffff;
   --brand-dark: #faf7f2;
   --brand-dark-soft: #ffffff;
   --brand-cream: #2a2118;
@@ -137,6 +146,9 @@
   --brand-red: #d61f26;
   --brand-red-hover: #ef4444;
   --brand-gold: #f2b233;
+  --brand-gold-on-red: #fde68a;
+  --brand-gold-on-ink: #f2b233;
+  --icon-on-ink: #f2b233;
   --brand-dark: #0b0b0f;
   --brand-dark-soft: #14141c;
   --brand-cream: #f7f0e6;

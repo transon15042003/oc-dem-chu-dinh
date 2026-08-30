@@ -63,7 +63,7 @@ export function FeaturedDishesSection() {
                         HOT
                       </Badge>
                     ) : null}
-                    <p className="absolute top-3 right-3 rounded-full bg-ink/80 px-3 py-1 text-sm font-bold text-brand-gold backdrop-blur-sm">
+                    <p className="absolute top-3 right-3 rounded-full bg-ink/80 px-3 py-1 text-sm font-bold text-brand-gold-on-ink backdrop-blur-sm">
                       {formatPrice(dish.price)}
                     </p>
                     <button

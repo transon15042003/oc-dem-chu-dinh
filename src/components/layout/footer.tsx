@@ -61,7 +61,7 @@ export function Footer() {
                   {isHotline && hotline ? (
                     <a
                       href={hotlineHref(hotline)}
-                      className="text-[11px] font-bold text-brand-gold hover:underline"
+                      className="text-[11px] font-bold text-amber-100 hover:underline"
                     >
                       {description}
                     </a>
@@ -247,7 +247,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. Khai mở vị giác khám phá ẩm thực.
             {" | "}
-            <span className="text-brand-gold">Tuyển Dụng Nhân Sự</span>
+            <span className="text-amber-100">Tuyển Dụng Nhân Sự</span>
           </p>
         </div>
       </div>

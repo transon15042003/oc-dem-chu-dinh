@@ -26,13 +26,13 @@ export function BranchMapPanel({ branch }: BranchMapPanelProps) {
           />
         ) : branch.comingSoon ? (
           <div className="flex size-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-ink-soft to-ink p-6 text-center">
-            <MapPin className="size-10 text-brand-gold/50" />
+            <MapPin className="size-10 text-brand-gold-on-ink/70" />
             <p className="text-sm font-bold text-on-dark">{branch.name}</p>
             <p className="max-w-xs text-xs text-brand-cream-muted/80">{branch.address}</p>
           </div>
         ) : (
           <div className="flex size-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-ink-soft to-ink p-6 text-center">
-            <MapPin className="size-10 text-brand-gold/50" />
+            <MapPin className="size-10 text-brand-gold-on-ink/70" />
             <p className="text-sm font-bold text-on-dark">{branch.name}</p>
             <p className="max-w-xs text-xs text-brand-cream-muted/80">{branch.address}</p>
             <p className="text-[11px] text-muted-foreground">

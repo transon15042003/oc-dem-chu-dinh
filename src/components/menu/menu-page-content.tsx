@@ -175,7 +175,7 @@ export function MenuPageContent({
                   href={hotlineHref(hotline)}
                   className="inline-flex items-center gap-2 rounded-2xl bg-brand-red px-4 py-2 font-black text-on-red shadow-lg transition hover:bg-brand-red-hover"
                 >
-                  <Phone className="size-4 text-brand-gold" />
+                  <Phone className="size-4 text-brand-gold-on-red" />
                   {formatHotline(hotline)}
                 </a>
               ) : null}
@@ -247,7 +247,7 @@ export function MenuPageContent({
                   className={cn(
                     "shrink-0 rounded-xl border px-4 py-2 text-xs font-bold uppercase tracking-wider transition",
                     activeTab === tab.id
-                      ? "scale-105 border-brand-gold/40 bg-brand-red text-brand-gold shadow-lg ring-2 ring-brand-gold/30"
+                      ? "scale-105 border-brand-gold/40 bg-brand-red text-brand-gold-on-red shadow-lg ring-2 ring-brand-gold/30"
                       : "border-border bg-brand-dark-soft text-brand-cream-muted hover:bg-brand-red/20 hover:text-brand-gold",
                   )}
                 >
@@ -303,7 +303,7 @@ export function MenuPageContent({
                 className="h-auto w-full object-contain transition duration-500 group-hover:scale-[1.01]"
                 priority
               />
-              <div className="absolute right-3 bottom-3 inline-flex items-center gap-2 rounded-2xl border border-brand-gold/60 bg-ink/90 px-3 py-1.5 text-[10px] font-black uppercase text-brand-gold shadow-2xl transition group-hover:bg-brand-gold group-hover:text-brand-dark sm:right-4 sm:bottom-4 sm:px-4 sm:py-2 sm:text-xs">
+              <div className="absolute right-3 bottom-3 inline-flex items-center gap-2 rounded-2xl border border-brand-gold/60 bg-ink/90 px-3 py-1.5 text-[10px] font-black uppercase text-brand-gold-on-ink shadow-2xl transition group-hover:bg-brand-gold group-hover:text-brand-dark sm:right-4 sm:bottom-4 sm:px-4 sm:py-2 sm:text-xs">
                 <ZoomIn className="size-3.5 text-brand-red group-hover:text-brand-dark" />
                 Chạm để phóng to
               </div>

@@ -28,7 +28,7 @@ export function SpaceHighlightSection() {
             return (
               <InteractiveCard key={feature.id} delay={index * 0.08} className="p-4 sm:p-5">
                 <div className="flex items-start gap-4">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-red/20 text-brand-gold sm:size-12">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-red/15 text-brand-red sm:size-12">
                     <Icon className="size-5 sm:size-6" aria-hidden />
                   </span>
                   <div>
