@@ -74,4 +74,4 @@ Dashboard: https://vercel.com/tran-sons-projects-703bf65b/oc-dem-chu-dinh/settin
 - [ ] QA trên **staging** (`develop` URL)
 - [ ] CI xanh trên PR `develop` → `main`
 - [ ] Env Production đủ trên Vercel
-- [ ] Merge → kiểm tra https://oc-dem-chu-dinh.vercel.app
+- [ ] Merge → kiểm tra https://ocdemchudinh.vercel.app
