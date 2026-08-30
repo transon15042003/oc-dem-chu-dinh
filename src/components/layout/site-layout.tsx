@@ -48,7 +48,7 @@ export function SiteLayout({ children }: SiteLayoutProps) {
         <TopBar />
         <Header currentPath={pathname} />
       </div>
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 pb-32 sm:pb-0">{children}</main>
       <Footer />
       <FloatingActions />
     </>

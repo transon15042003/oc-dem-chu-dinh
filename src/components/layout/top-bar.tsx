@@ -1,21 +1,21 @@
 import { Flame, Phone } from "lucide-react";
 
+import { MarqueeText } from "@/components/shared/marquee-text";
 import { siteConfig } from "@/config/site";
 import { formatHotline, hotlineHref, publicEnv } from "@/lib/env";
 
 export function TopBar() {
   const hotline = publicEnv.hotline;
   const formattedHotline = hotline ? formatHotline(hotline) : "Chưa cấu hình";
+  const tagline = `${siteConfig.name} | Phục vụ xuyên đêm ${siteConfig.hours}`;
 
   return (
     <div className="border-b border-brand-gold/20 bg-brand-red text-on-red">
-      <div className="mx-auto flex max-w-7xl flex-nowrap items-center justify-between gap-3 px-4 py-2 text-xs sm:gap-4 sm:text-sm">
-        <p className="flex min-w-0 items-center gap-2 font-medium uppercase tracking-wide">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 text-xs sm:gap-4 sm:text-sm">
+        <p className="flex min-w-0 flex-1 items-center gap-2 font-medium uppercase tracking-wide">
           <Flame className="size-4 shrink-0 text-brand-gold-on-red" aria-hidden />
-          <span className="hidden truncate sm:inline">
-            {siteConfig.name} | Phục vụ xuyên đêm {siteConfig.hours}
-          </span>
-          <span className="truncate sm:hidden">Phục vụ xuyên đêm 16h - 04h</span>
+          <MarqueeText className="sm:hidden">{tagline}</MarqueeText>
+          <span className="hidden truncate sm:inline">{tagline}</span>
         </p>
 
         <a

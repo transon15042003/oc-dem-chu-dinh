@@ -2,14 +2,13 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import {
-  CalendarDays,
-  MapPin,
-  MessageCircle,
-  Navigation,
-  Phone,
-} from "lucide-react";
+import { CalendarDays, Phone } from "lucide-react";
 
+import {
+  GoogleMapsIcon,
+  MessengerIcon,
+  ZaloIcon,
+} from "@/components/icons/brand-icons";
 import { bookingSectionId } from "@/config/site";
 import { formatHotline, hotlineHref, publicEnv } from "@/lib/env";
 import { resolveMapDirectionsUrl } from "@/lib/maps";
@@ -28,46 +27,34 @@ type FloatingAction = {
   disabled?: boolean;
 };
 
-const toneClasses: Record<FloatingActionTone, string> = {
-  hotline:
-    "border-emerald-500/40 bg-emerald-600 text-white shadow-emerald-600/30 hover:bg-emerald-500",
-  maps: "border-sky-500/40 bg-sky-600 text-white shadow-sky-600/30 hover:bg-sky-500",
-  zalo: "border-[#0068FF]/40 bg-[#0068FF] text-white shadow-[#0068FF]/30 hover:bg-[#0058d6]",
-  booking:
-    "border-brand-gold bg-brand-gold text-brand-dark shadow-brand-gold/40 hover:bg-brand-gold/90",
-  messenger:
-    "border-[#0084FF]/40 bg-[#0084FF] text-white shadow-[#0084FF]/30 hover:bg-[#0074e0]",
-};
+const brandIconTones: FloatingActionTone[] = ["maps", "zalo", "messenger"];
 
-function ActionButton({
+function IconButton({
   action,
-  mobile = false,
+  className,
 }: {
   action: FloatingAction;
-  mobile?: boolean;
+  className?: string;
 }) {
-  const className = cn(
-    "flex items-center justify-center border shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl",
-    mobile
-      ? "min-h-12 flex-1 flex-col gap-1 rounded-xl px-1 py-2 text-[11px] font-bold sm:text-xs"
-      : "size-14 rounded-2xl",
-    toneClasses[action.tone],
-    action.tone === "booking" && !mobile && "animate-pulse ring-2 ring-brand-gold/50",
-    action.disabled && "pointer-events-none opacity-50",
-  );
+  const usesBrandIcon = brandIconTones.includes(action.tone);
 
-  const content = mobile ? (
-    <>
+  const content = usesBrandIcon ? (
+    <span className="flex size-10 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-black/5">
       {action.icon}
-      <span className="leading-none">{action.shortLabel}</span>
-    </>
+    </span>
   ) : (
     action.icon
   );
 
+  const sharedClass = cn(
+    "flex items-center justify-center transition-transform hover:scale-105",
+    action.disabled && "pointer-events-none opacity-50",
+    className,
+  );
+
   if (action.disabled) {
     return (
-      <span className={className} aria-label={action.label} title={action.label}>
+      <span className={sharedClass} aria-label={action.label} title={action.label}>
         {content}
       </span>
     );
@@ -79,7 +66,7 @@ function ActionButton({
         href={action.href}
         target="_blank"
         rel="noopener noreferrer"
-        className={className}
+        className={sharedClass}
         aria-label={action.label}
         title={action.label}
       >
@@ -89,7 +76,7 @@ function ActionButton({
   }
 
   return (
-    <Link href={action.href} className={className} aria-label={action.label} title={action.label}>
+    <Link href={action.href} className={sharedClass} aria-label={action.label} title={action.label}>
       {content}
     </Link>
   );
@@ -97,9 +84,10 @@ function ActionButton({
 
 export function FloatingActions() {
   const hotline = publicEnv.hotline;
+  const formattedHotline = hotline ? formatHotline(hotline) : null;
   const mapDirectionsUrl = resolveMapDirectionsUrl("cn1");
 
-  const actions: FloatingAction[] = [
+  const secondaryActions: FloatingAction[] = [
     ...(mapDirectionsUrl
       ? [
           {
@@ -107,7 +95,7 @@ export function FloatingActions() {
             label: "Tìm đường Google Maps",
             shortLabel: "Maps",
             href: mapDirectionsUrl,
-            icon: <Navigation className={cn("size-5 sm:size-6")} aria-hidden />,
+            icon: <GoogleMapsIcon />,
             external: true,
             tone: "maps" as const,
           },
@@ -118,58 +106,109 @@ export function FloatingActions() {
       label: "Chat Zalo",
       shortLabel: "Zalo",
       href: publicEnv.zaloUrl || "#",
-      icon: <MessageCircle className="size-5 sm:size-6" aria-hidden />,
+      icon: <ZaloIcon />,
       external: Boolean(publicEnv.zaloUrl),
       tone: "zalo",
       disabled: !publicEnv.zaloUrl,
     },
-    ...(hotline
-      ? [
-          {
-            id: "hotline",
-            label: `Gọi hotline ${formatHotline(hotline)}`,
-            shortLabel: "Gọi",
-            href: hotlineHref(hotline),
-            icon: <Phone className="size-5 sm:size-6" aria-hidden />,
-            tone: "hotline" as const,
-          },
-        ]
-      : []),
-    {
-      id: "booking",
-      label: "Đặt bàn ngay",
-      shortLabel: "Đặt",
-      href: `/#${bookingSectionId}`,
-      icon: <CalendarDays className="size-5 sm:size-6" aria-hidden />,
-      tone: "booking",
-    },
     {
       id: "messenger",
       label: "Messenger",
-      shortLabel: "MSG",
+      shortLabel: "Messenger",
       href: publicEnv.messengerUrl || "#",
-      icon: <MessageCircle className="size-5 sm:size-6" aria-hidden />,
+      icon: <MessengerIcon />,
       external: Boolean(publicEnv.messengerUrl),
       tone: "messenger",
       disabled: !publicEnv.messengerUrl,
+    },
+    {
+      id: "booking",
+      label: "Đặt bàn ngay",
+      shortLabel: "Đặt bàn",
+      href: `/#${bookingSectionId}`,
+      icon: <CalendarDays className="size-5 text-brand-dark" aria-hidden />,
+      tone: "booking",
     },
   ];
 
   return (
     <>
-      <div className="fixed right-0 bottom-0 left-0 z-50 flex gap-1 border-t border-border/80 bg-brand-dark/95 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md sm:hidden">
-        {actions.map((action) => (
-          <ActionButton key={action.id} action={action} mobile />
-        ))}
+      {/* Mobile — hotline nổi bật + các kênh liên lạc */}
+      <div className="fixed right-0 bottom-0 left-0 z-50 border-t border-brand-gold/30 bg-brand-dark/95 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-md sm:hidden">
+        {hotline ? (
+          <a
+            href={hotlineHref(hotline)}
+            className="mb-2 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-red px-4 py-3 text-sm font-black uppercase text-on-red shadow-lg ring-2 ring-brand-gold/50"
+            aria-label={`Gọi hotline ${formattedHotline}`}
+          >
+            <Phone className="size-5 shrink-0" aria-hidden />
+            <span>Đặt ngay</span>
+            <span className="font-bold">{formattedHotline}</span>
+          </a>
+        ) : null}
+
+        <div className="flex items-center justify-center gap-2">
+          {secondaryActions.map((action) => (
+            <div
+              key={action.id}
+              className={cn(
+                "flex min-h-11 flex-1 flex-col items-center justify-center gap-1 rounded-xl border border-border/80 bg-brand-dark-soft px-1 py-1.5",
+                action.tone === "booking" && "border-brand-gold/40 bg-brand-gold/15",
+              )}
+            >
+              <IconButton action={action} />
+              <span className="text-[10px] font-bold leading-none">{action.shortLabel}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="fixed right-4 bottom-4 z-50 hidden flex-col items-end gap-3 sm:flex">
-        {actions.map((action) => (
+      {/* Desktop — cột phải, nút gọi nổi bật như site gốc */}
+      <div className="fixed right-3 bottom-4 z-50 hidden flex-col items-end gap-2.5 sm:flex">
+        {secondaryActions.slice(0, 2).map((action) => (
           <div key={action.id} className="group flex items-center gap-2">
             <span className="pointer-events-none translate-x-2 rounded-full border border-border bg-card/95 px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 shadow-md transition group-hover:translate-x-0 group-hover:opacity-100">
               {action.label}
             </span>
-            <ActionButton action={action} />
+            <span className="rounded-full border border-brand-gold/30 bg-brand-dark-soft p-1 shadow-lg">
+              <IconButton action={action} />
+            </span>
+          </div>
+        ))}
+
+        {hotline ? (
+          <a
+            href={hotlineHref(hotline)}
+            className="group flex items-center gap-2"
+            aria-label={`Gọi hotline ${formattedHotline}`}
+            title={`Gọi hotline ${formattedHotline}`}
+          >
+            <span className="pointer-events-none translate-x-2 rounded-full border border-border bg-card/95 px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 shadow-md transition group-hover:translate-x-0 group-hover:opacity-100">
+              Gọi hotline {formattedHotline}
+            </span>
+            <span className="flex items-center gap-2 rounded-full bg-brand-red px-5 py-3.5 text-on-red shadow-xl ring-2 ring-brand-gold/60 transition-transform hover:scale-105">
+              <Phone className="size-5 shrink-0 animate-pulse" aria-hidden />
+              <span className="text-sm font-black uppercase tracking-wide">Đặt ngay</span>
+              <span className="text-sm font-bold">{formattedHotline}</span>
+            </span>
+          </a>
+        ) : null}
+
+        {secondaryActions.slice(2).map((action) => (
+          <div key={action.id} className="group flex items-center gap-2">
+            <span className="pointer-events-none translate-x-2 rounded-full border border-border bg-card/95 px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 shadow-md transition group-hover:translate-x-0 group-hover:opacity-100">
+              {action.label}
+            </span>
+            <span
+              className={cn(
+                "rounded-full border p-1 shadow-lg",
+                action.tone === "booking"
+                  ? "border-brand-gold bg-brand-gold"
+                  : "border-brand-gold/30 bg-brand-dark-soft",
+              )}
+            >
+              <IconButton action={action} />
+            </span>
           </div>
         ))}
       </div>

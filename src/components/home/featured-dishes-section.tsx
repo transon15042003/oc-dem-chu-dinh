@@ -6,6 +6,10 @@ import { motion } from "framer-motion";
 import { Flame, ZoomIn } from "lucide-react";
 
 import { SectionHeading } from "@/components/shared/section-heading";
+import {
+  carouselNavButtonClass,
+  ScrollCarouselShell,
+} from "@/components/shared/scroll-carousel-shell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,12 +35,10 @@ export function FeaturedDishesSection() {
           description="Hải sản & ốc nướng sốt độc quyền được chế biến nóng hổi ngay khi khách gọi món"
         />
 
-        <Carousel
-          opts={{ align: "start", loop: true }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-4">
-            {featuredDishes.map((dish, index) => (
+        <ScrollCarouselShell hint="Vuốt để xem thêm món">
+          <Carousel opts={{ align: "start", loop: true }} className="w-full">
+            <CarouselContent className="-ml-4">
+              {featuredDishes.map((dish, index) => (
               <CarouselItem
                 key={dish.id}
                 className="basis-full pl-4 sm:basis-1/2 lg:basis-1/3"
@@ -102,9 +104,16 @@ export function FeaturedDishesSection() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-0 hidden border-border bg-brand-dark-soft text-brand-gold hover:bg-brand-red hover:text-on-red sm:flex" />
-          <CarouselNext className="right-0 hidden border-border bg-brand-dark-soft text-brand-gold hover:bg-brand-red hover:text-on-red sm:flex" />
-        </Carousel>
+            <CarouselPrevious
+              hideWhenDisabled={false}
+              className={cn(carouselNavButtonClass, "left-0")}
+            />
+            <CarouselNext
+              hideWhenDisabled={false}
+              className={cn(carouselNavButtonClass, "right-0")}
+            />
+          </Carousel>
+        </ScrollCarouselShell>
 
         <div className="text-center">
           <Button

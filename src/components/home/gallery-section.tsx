@@ -7,6 +7,7 @@ import { Play, ZoomIn } from "lucide-react";
 import { InteractiveCard } from "@/components/shared/interactive-card";
 import { ImageLightbox } from "@/components/shared/image-lightbox";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { ScrollCarouselShell } from "@/components/shared/scroll-carousel-shell";
 import { experienceVideos, galleryImages } from "@/data/homepage";
 import { cn } from "@/lib/utils";
 
@@ -46,40 +47,80 @@ export function ExperienceSection() {
             ) : null}
           </div>
 
-          <div className="order-2 max-h-none space-y-3 overflow-y-auto pr-1 sm:max-h-[360px] lg:order-none lg:max-h-[420px]">
-            {experienceVideos.map((video, index) => (
-              <button
-                key={video.id}
-                type="button"
-                onClick={() => setActiveVideoId(video.id)}
-                className={cn(
-                  "group flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all",
-                  activeVideoId === video.id
-                    ? "border-brand-gold/50 bg-brand-gold/10 shadow-[0_0_20px_rgba(242,178,51,0.15)]"
-                    : "border-border bg-brand-dark hover:border-brand-gold/30 hover:bg-foreground/5",
-                )}
-              >
-                <div className="relative size-20 shrink-0 overflow-hidden rounded-lg">
-                  <Image
-                    src={video.poster}
-                    alt={video.title}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-110"
-                    sizes="80px"
-                  />
-                  <span className="absolute inset-0 flex items-center justify-center bg-ink/40">
-                    <Play className="size-6 text-icon-on-ink" />
-                  </span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-bold text-foreground">{video.title}</p>
-                  <p className="text-xs text-brand-gold-on-ink">{video.branch}</p>
-                  <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-                    Video {index + 1}/{experienceVideos.length}
-                  </p>
-                </div>
-              </button>
-            ))}
+          <div className="order-2 lg:order-none">
+            <ScrollCarouselShell className="lg:hidden" hint="Vuốt để chọn video">
+              <div className="flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [scroll-snap-type:x_mandatory] [&::-webkit-scrollbar]:hidden">
+                {experienceVideos.map((video, index) => (
+                  <button
+                    key={video.id}
+                    type="button"
+                    onClick={() => setActiveVideoId(video.id)}
+                    className={cn(
+                      "group flex w-[min(85vw,280px)] shrink-0 snap-start items-center gap-3 rounded-xl border p-3 text-left transition-all",
+                      activeVideoId === video.id
+                        ? "border-brand-gold/50 bg-brand-gold/10 shadow-[0_0_20px_rgba(242,178,51,0.15)]"
+                        : "border-border bg-brand-dark hover:border-brand-gold/30 hover:bg-foreground/5",
+                    )}
+                  >
+                    <div className="relative size-16 shrink-0 overflow-hidden rounded-lg">
+                      <Image
+                        src={video.poster}
+                        alt={video.title}
+                        fill
+                        className="object-cover transition-transform group-hover:scale-110"
+                        sizes="64px"
+                      />
+                      <span className="absolute inset-0 flex items-center justify-center bg-ink/40">
+                        <Play className="size-5 text-icon-on-ink" />
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="line-clamp-2 text-sm font-bold text-foreground">{video.title}</p>
+                      <p className="text-xs text-brand-gold-on-ink">{video.branch}</p>
+                      <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+                        Video {index + 1}/{experienceVideos.length}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </ScrollCarouselShell>
+
+            <div className="hidden max-h-[420px] space-y-3 overflow-y-auto pr-1 lg:block">
+              {experienceVideos.map((video, index) => (
+                <button
+                  key={video.id}
+                  type="button"
+                  onClick={() => setActiveVideoId(video.id)}
+                  className={cn(
+                    "group flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all",
+                    activeVideoId === video.id
+                      ? "border-brand-gold/50 bg-brand-gold/10 shadow-[0_0_20px_rgba(242,178,51,0.15)]"
+                      : "border-border bg-brand-dark hover:border-brand-gold/30 hover:bg-foreground/5",
+                  )}
+                >
+                  <div className="relative size-20 shrink-0 overflow-hidden rounded-lg">
+                    <Image
+                      src={video.poster}
+                      alt={video.title}
+                      fill
+                      className="object-cover transition-transform group-hover:scale-110"
+                      sizes="80px"
+                    />
+                    <span className="absolute inset-0 flex items-center justify-center bg-ink/40">
+                      <Play className="size-6 text-icon-on-ink" />
+                    </span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-bold text-foreground">{video.title}</p>
+                    <p className="text-xs text-brand-gold-on-ink">{video.branch}</p>
+                    <p className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+                      Video {index + 1}/{experienceVideos.length}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

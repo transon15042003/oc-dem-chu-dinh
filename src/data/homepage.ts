@@ -45,6 +45,7 @@ export type EventService = {
   perks: string[];
   icon: LucideIcon;
   accent: string;
+  featured?: boolean;
 };
 
 export type ExperienceVideo = {
@@ -218,6 +219,7 @@ export const eventServices: EventService[] = [
     title: "SINH NHẬT",
     icon: Cake,
     accent: "from-pink-500/20 to-brand-red/20",
+    featured: true,
     perks: [
       "Miễn Phí Decor bảng tên sinh nhật",
       "Trình Chiếu Màn led 250inch",

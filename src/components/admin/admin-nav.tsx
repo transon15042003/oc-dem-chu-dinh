@@ -52,7 +52,7 @@ export function AdminNav({ role, displayName, email }: AdminNavProps) {
           <span className="block text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
             Admin
           </span>
-          <span className="block text-sm font-bold leading-tight">Ốc ĐCM</span>
+          <span className="block text-sm font-bold leading-tight">ADMIN Ốc</span>
         </Link>
 
         <nav className="flex max-w-[min(100vw-9.5rem,40rem)] items-center justify-center gap-0.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] sm:max-w-[min(100vw-14rem,42rem)] sm:gap-1 [&::-webkit-scrollbar]:hidden">

@@ -5,6 +5,10 @@ import { Quote, Star } from "lucide-react";
 import { InteractiveCard } from "@/components/shared/interactive-card";
 import { SectionHeading } from "@/components/shared/section-heading";
 import {
+  carouselNavButtonClass,
+  ScrollCarouselShell,
+} from "@/components/shared/scroll-carousel-shell";
+import {
   Carousel,
   CarouselContent,
   CarouselItem,
@@ -12,6 +16,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { reviews } from "@/data/homepage";
+import { cn } from "@/lib/utils";
 
 export function ReviewsSection() {
   return (
@@ -23,9 +28,10 @@ export function ReviewsSection() {
           description="Hơn 270+ nhận xét 5 sao từ thực khách tại 3 chi nhánh Sài Gòn"
         />
 
-        <Carousel opts={{ align: "start", loop: true }} className="w-full">
-          <CarouselContent className="-ml-4 py-2">
-            {reviews.map((review, index) => (
+        <ScrollCarouselShell hint="Vuốt để xem thêm đánh giá">
+          <Carousel opts={{ align: "start", loop: true }} className="w-full">
+            <CarouselContent className="-ml-4 py-2">
+              {reviews.map((review, index) => (
               <CarouselItem
                 key={review.id}
                 className="basis-full pl-4 md:basis-1/2 xl:basis-1/3"
@@ -58,9 +64,16 @@ export function ReviewsSection() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-0 hidden border-border bg-brand-dark-soft text-brand-gold hover:bg-brand-red hover:text-on-red sm:flex" />
-          <CarouselNext className="right-0 hidden border-border bg-brand-dark-soft text-brand-gold hover:bg-brand-red hover:text-on-red sm:flex" />
-        </Carousel>
+            <CarouselPrevious
+              hideWhenDisabled={false}
+              className={cn(carouselNavButtonClass, "left-0")}
+            />
+            <CarouselNext
+              hideWhenDisabled={false}
+              className={cn(carouselNavButtonClass, "right-0")}
+            />
+          </Carousel>
+        </ScrollCarouselShell>
       </div>
     </section>
   );
